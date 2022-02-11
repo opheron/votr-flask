@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from os import getenv
+
 # import requests
 from forms import *
 
@@ -114,4 +116,5 @@ def users_polls():
 
 
 if __name__ == "__main__":
+    port = int(getenv("PORT"), 8000)
     app.run()
