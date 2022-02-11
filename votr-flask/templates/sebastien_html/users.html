@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootswatch Darkly + Bootstrap CSS -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+
+    <!-- Votr CSS -->
+    <link href="assets/css/styles.css" rel="stylesheet" />
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <title>Votr - Database Admin</title>
+  <script async src='/cdn-cgi/bm/cv/669835187/api.js'></script></head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Votr Database Admin</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarColor03"
+          aria-controls="navbarColor03"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor03">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html"
+                >Home
+              </a>
+            </li>
+            <a class="nav-link" href="darkly-reference.html"
+            >Theme Reference</a
+          >
+          </li>
+            <li class="nav-item ">
+              <a class="nav-link active" href="users.html">Users</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="polls.html">Polls</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="votes.html">Votes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="payments.html">Payments</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="users_polls.html">Users_Polls</a>
+            </li>
+          </ul>
+          <form class="d-flex">
+            <input
+              class="form-control me-sm-2"
+              type="text"
+              placeholder="Search"
+            />
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">
+              Search
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <main role="main">
+        <div class="container"><h1>Users</h1>
+            <table class="table table-striped table-dark">
+              <thead>
+                <tr>
+                  <th scope="col">user_id</th>
+                  <th scope="col">username</th>
+                  <th scope="col">email_address</th>
+                  <th scope="col">site_permissions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</td>
+                  <td>chonga</td>
+                  <td>chonga@oregonstate.edu</td>
+                  <td>[user, admin, superadmin]</td>
+                </tr>
+                <tr>
+                  <th scope="row">2</td>
+                  <td>Sebastian</td>
+                  <td>allenseb@oregonstate.edu</td>
+                  <td>[user, admin, superadmin]</td>
+                </tr>
+                <tr>
+                  <th scope="row">3</td>
+                  <td>guest</td>
+                  <td>guest@voter.com</td>
+                  <td>[guest]</td>
+                </tr>
+                <tr>
+                  <th scope="row">4</td>
+                  <td>Buddy Holly</td>
+                  <td>guest@voter.com</td>
+                  <td>[guest]</td>
+                </tr>
+              </tbody>
+              </table>
+        
+            <form>
+              <h3>Add New User</h3>
+              <table class="table table-striped table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">user_id</th>
+                    <th scope="col">username</th>
+                    <th scope="col">email_address</th>
+                    <th scope="col">site_permissions</th>
+                  </tr>
+                  <tbody>
+                    <tr>
+                      <th scope="row"><i>auto incremented</i></td>
+                      <td>
+                        <div class="mb-3">
+                          <label for="users-create-username" class="form-label mb-3">username</label>
+                          <input type="text" class="form-control" id="users-create-username" aria-describedby="create-username-help" placeholder="Ex: personOne"> <!-- not sure what 'type' to use here-->
+                          <div id="create-username-help" class="form-text">varchar</div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-3">
+                          <label for="users-create-email_address" class="form-label mb-3">email_address</label>
+                          <input type="text" class="form-control" id="users-create-email_address" aria-describedby="create-email_address-help" placeholder="Ex: personOne@email.com"> <!-- not sure what 'type' to use here-->
+                          <div id="create-email_address-help" class="form-text">varchar</div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-3">
+                          <label for="users-create-site-permissions" class="form-label mb-3">site_permissions</label>
+                          <input type="text" class="form-control" id="users-create-site-permissions" aria-describedby="create-site-permissions-help" placeholder="Ex: &quot;permission 1&quot; AND &quot;permission 2&quot;"> <!-- not sure what 'type' to use here-->
+                          <div id="create-site-permissions-help" class="form-text">set</div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+              </table>
+        
+              <button type="submit" class="btn btn-primary">Create New User</button>
+            </form>
+            <form>
+              <h3>Delete a User</h3>
+              <div class="btn-group"> <!--class button-group changes the width, if theres a better way, you can update this-->
+                  <select class="form-select" aria-label="Delete User ID">
+                    <option selected>User ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
+                    <option value="1">User 1</option>
+                    <option value="2">User 2</option>
+                    <option value="3">User 3</option>
+                    <option value="4">User 4</option>
+                  </select>
+              </div>
+  
+              <button type="submit" class="btn btn-primary">Delete</button><!--dont know about type here-->
+            </form>          
+            <form>
+              <h3>Search Users</h3>
+              <div class="btn-group"> <!--class button-group changes the width of the folllowing selects, if theres a better way, you can update this-->
+                <select class="form-select" aria-label="Search User ID">
+                  <option selected>User ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
+                  <option value="1">User 1</option>
+                  <option value="2">User 2</option>
+                  <option value="3">User 3</option>
+                  <option value="4">User 4</option>
+                </select>
+                <select class="form-select" aria-label="Search Username">
+                  <option selected>Username</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
+                  <option value="1">chonga</option> <!--some such select menus will need a null option, this one does not, as no vote will be without a poll-->
+                  <option value="2">Sebastian</option>
+                  <option value="3">guest</option>
+                  <option value="4">Buddy Holly</option>
+                </select>
+                <select class="form-select" aria-label="Search Email Address">
+                  <option selected>Username</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
+                  <option value="1">chonga@oregonstate.edu</option> <!--some such select menus will need a null option, this one does not, as no vote will be without a poll-->
+                  <option value="2">allenseb@oregonstate.edu</option>
+                  <option value="3">guest@voter.com</option>
+                  <option value="4">guest@voter.com</option>
+                </select>
+              </div>
+              <label for="site-permissions-search">site_permissions: </label>
+              <input type="text" style="display: inline; width: 20%; padding-bottom:9px;" class="form-control" id="site-permissions-search" placeholder="Ex: &quot;permission 1&quot; AND &quot;permission 2&quot;"> <!-- not sure what 'type' to use here--> <!--style part was just to make it inline, if you know a better way you can update, or just add this part to the css-->
+
+              <button type="submit" class="btn btn-primary">Search</button><!--dont know about type here-->
+            </form>
+            <form>
+              <h3>Update a User</h3>
+              <table class="table table-striped table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">user_id</th>
+                    <th scope="col">username</th>
+                    <th scope="col">email_address</th>
+                    <th scope="col">site_permissions</th>
+                  </tr>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="mb-3">
+                          <label for="users-update-user-id" class="form-label mb-3">select user_id to be updated</label>
+                          <select class="form-select" id="user-update-user-id" aria-label="Update User ID">
+                            <option selected>User ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
+                            <option value="1">User 1</option>
+                            <option value="2">User 2</option>
+                            <option value="3">User 3</option>
+                            <option value="4">User 4</option>
+                          </select>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-3">
+                          <label for="users-update-username" class="form-label mb-3">update to username</label>
+                          <input type="text" class="form-control" id="users-update-username" aria-describedby="update-username-help" placeholder="Ex: personOne"> <!-- not sure what 'type' to use here-->
+                          <div id="update-username-help" class="form-text">varchar</div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-3">
+                          <label for="users-update-email_address" class="form-label mb-3">update to email_address</label>
+                          <input type="text" class="form-control" id="users-update-email_address" aria-describedby="update-email_address-help" placeholder="Ex: personOne@email.com"> <!-- not sure what 'type' to use here-->
+                          <div id="update-email_address-help" class="form-text">varchar</div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-3">
+                          <label for="users-update-site-permissions" class="form-label mb-3">update to site_permissions</label>
+                          <input type="text" class="form-control" id="users-update-site-permissions" aria-describedby="update-site-permissions-help" placeholder="Ex: &quot;permission 1&quot; AND &quot;permission 2&quot;"> <!-- not sure what 'type' to use here-->
+                          <div id="update-site-permissions-help" class="form-text">set</div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+              </table>
+        
+              <button type="submit" class="btn btn-primary">Update User</button>
+            </form>
+        </div>
+
+        </div>
+        
+        
+    </main>
+
+  <script type="text/javascript">(function(){window['__CF$cv$params']={r:'6db998cc2bb25f88',m:'k62P9Mt4jqt_yB5wCYc87o8x13JVxuPWSkSC2NPAv.w-1644540771-0-Ab7pb4koAnP4CsD4l5IoHeszuZzqg903kb9I9LZF0y/3sk7mFhgzDjTbQh/KcuE0+FU/jhTr6BwW1Vi2VBSnekCTvZ+l4kwuru6bdNx1YEC9dNv3haHhrVdeSZGYylMaDAkNi+FfAEyk6COiHPEnKR1eKpLXRjdpCUDV+xCGjlUFiAjPGyRQYw08RimtaUGivA==',s:[0x26c9fa618c,0x8a9668abc9],}})();</script></body>
+</html>
+    

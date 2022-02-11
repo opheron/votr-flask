@@ -10,38 +10,20 @@ from flask import (
     url_for,
 )
 
-# from flask_login import login_required, login_user, logout_user
 
-# from votr_cc_flask.extensions import login_manager
-
-# from votr_cc_flask.public.forms import LoginForm, CreateUserForm
-# from votr_cc_flask.user.forms import RegisterForm
-# from votr_cc_flask.user.models import User
-# from votr_cc_flask.utils import flash_errors
-
-# blueprint = Blueprint("public", __name__, static_folder="../static")
-blueprint = Blueprint("public", __name__)
-
-
-# @login_manager.user_loader
-# def load_user(user_id):
-#     """Load user by ID."""
-#     return User.get_by_id(int(user_id))
-
-
-@blueprint.route("/")
+@app.route("/")
 def home():
     """Home page."""
     return render_template("public/home.html")
 
 
-@blueprint.route("/about/")
+@app.route("/about")
 def about():
     """About page."""
     return render_template("public/about.html")
 
 
-@blueprint.route("/users/", methods=["GET", "POST"])
+@app.route("/users", methods=["GET", "POST"])
 def users():
     return "Hi"
     # """Users CRUD page"""

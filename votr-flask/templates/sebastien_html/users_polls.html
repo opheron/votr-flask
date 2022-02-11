@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootswatch Darkly + Bootstrap CSS -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+
+    <!-- Votr CSS -->
+    <link href="assets/css/styles.css" rel="stylesheet" />
+    <!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <title>Votr - Database Admin</title>
+  <script async src='/cdn-cgi/bm/cv/669835187/api.js'></script></head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Votr Database Admin</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarColor03"
+          aria-controls="navbarColor03"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor03">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html"
+                >Home
+              </a>
+            </li>
+            <a class="nav-link" href="darkly-reference.html"
+            >Theme Reference</a
+          >
+          </li>
+            <li class="nav-item ">
+              <a class="nav-link" href="users.html">Users</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="polls.html">Polls</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="votes.html">Votes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="payments.html">Payments</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="users_polls.html">Users_Polls</a>
+            </li>
+          </ul>
+          <form class="d-flex">
+            <input
+              class="form-control me-sm-2"
+              type="text"
+              placeholder="Search"
+            />
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">
+              Search
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <main role="main">
+
+        <div class="container"><h1>Users_Polls</h1>
+            <table class="table table-striped table-dark">
+              <thead>
+                <tr class="table">
+                  <th scope="col">user_poll_id</th>
+                  <th scope="col">user_id</th>
+                  <th scope="col">poll_id</th>
+                  <th scope="col">user_permissions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</td>
+                  <td>3</td>
+                  <td>4</td>
+                  <td>[poll creator]</td>
+                </tr>
+                <tr>
+                  <th scope="row">2</td>
+                  <td>2</td>
+                  <td>4</td>
+                  <td>[collaborator, admin, superadmin]</td>
+                </tr>
+                <tr>
+                  <th scope="row">3</td>
+                  <td>4</td>
+                  <td>1</td>
+                  <td>[poll creator]</td>
+                </tr>
+                <tr>
+                  <th scope="row">4</td>
+                  <td>2</td>
+                  <td>2</td>
+                  <td>[poll creator, admin, superadmin]</td>
+                </tr>
+                <tr>
+                  <th scope="row">5</td>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>[collaborator, admin, superadmin]</td>
+                </tr>
+                <tr>
+                  <th scope="row">6</td>
+                  <td>4</td>
+                  <td>3</td>
+                  <td>[poll creator]</td>
+                </tr>
+              </tbody>
+              </table>
+        
+            <form>
+              <h3>Add New User_Poll</h3>
+              <table class="table table-striped table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">user_poll_id</th>
+                    <th scope="col">user_id</th>
+                    <th scope="col">poll_id</th>
+                    <th scope="col">user_permissions</th>
+                  </tr>
+                  <tbody>
+                    <tr>
+                      <th scope="row"><i>auto incremented</i></td>
+                      <td>
+                        <div class="mb-3">
+                          <label for="users-polls-create-user-poll-user-id" class="form-label mb-3">user_id</label>
+                          <select class="form-select" id="users-polls-create-user-poll-user-id" aria-label="create User ID">
+                            <option selected>User ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
+                            <option value="1">User 1</option> <!--some such select menus will need a null option, this one does not, as no user-poll will be without a poll-->
+                            <option value="2">User 2</option>
+                            <option value="3">User 3</option>
+                            <option value="4">User 4</option>
+                          </select>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-3">
+                          <label for="users-polls-create-user-poll-poll-id" class="form-label mb-3">poll_id</label>
+                          <select class="form-select" id="users-polls-create-user-poll-poll-id" aria-label="create Poll ID">
+                            <option selected>Poll ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
+                            <option value="1">Poll 1</option> <!--some such select menus will need a null option, this one does not, as no user-poll will be without a poll-->
+                            <option value="2">Poll 2</option>
+                            <option value="3">Poll 3</option>
+                            <option value="4">Poll 4</option>
+                          </select>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-3">
+                          <label for="users-polls-create-user-permissions" class="form-label mb-3">user_permissions</label>
+                          <input type="text" class="form-control" id="users-polls-create-user-permissions" aria-describedby="create-user-permissions-help" placeholder="Ex: &quot;permission 1&quot; AND &quot;permission 2&quot;"> <!-- not sure what 'type' to use here-->
+                          <div id="create-user-permissions-help" class="form-text">set</div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+              </table>
+        
+              <button type="submit" class="btn btn-primary">Create New User_Poll</button>
+            </form>
+            <form>
+              <h3>Delete a User_Poll</h3>
+              <div class="btn-group"> <!--class button-group changes the width, if theres a better way, you can update this-->
+                  <select class="form-select" aria-label="Delete User_Poll ID">
+                    <option selected>User_Poll ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
+                    <option value="1">User_Poll 1</option>
+                    <option value="2">User_Poll 2</option>
+                    <option value="3">User_Poll 3</option>
+                    <option value="4">User_Poll 4</option>
+                    <option value="5">User_Poll 5</option>
+                    <option value="6">User_Poll 6</option>
+                  </select>
+              </div>
+  
+              <button type="submit" class="btn btn-primary">Delete</button><!--dont know about type here-->
+            </form>          
+            <form>
+              <h3>Search Users_Polls</h3>
+              <div class="btn-group"> <!--class button-group changes the width of the folllowing selects, if theres a better way, you can update this-->
+                <select class="form-select" aria-label="Search User_Poll ID">
+                  <option selected>User_Poll ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
+                  <option value="1">User_Poll 1</option>
+                  <option value="2">User_Poll 2</option>
+                  <option value="3">User_Poll 3</option>
+                  <option value="4">User_Poll 4</option>
+                  <option value="5">User_Poll 5</option>
+                  <option value="6">User_Poll 6</option>
+                </select>
+                <select class="form-select" aria-label="Search Poll ID">
+                  <option selected>Poll ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
+                  <option value="1">Poll 1</option>
+                  <option value="2">Poll 2</option>
+                  <option value="3">Poll 3</option>
+                  <option value="4">Poll 4</option>
+                </select>
+                <select class="form-select" aria-label="Search User ID">
+                  <option selected>User ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
+                  <option value="1">User 1</option>
+                  <option value="2">User 2</option>
+                  <option value="3">User 3</option>
+                  <option value="4">User 4</option>
+                </select>
+              </div>
+              <label for="user-permissions-search">user_permissions: </label>
+              <input type="text" style="display: inline; width: 20%; padding-bottom:9px;" class="form-control" id="user-permissions-search" placeholder="Ex: &quot;permission 1&quot; AND &quot;permission 2&quot;"> <!-- not sure what 'type' to use here--> <!--style part was just to make it inline, if you know a better way you can update, or just add this part to the css-->
+
+              <button type="submit" class="btn btn-primary">Search</button><!--dont know about type here-->
+            </form>
+            <form>
+              <h3>Update a User_Poll</h3>
+              <table class="table table-striped table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">user_poll_id</th>
+                    <th scope="col">user_id</th>
+                    <th scope="col">poll_id</th>
+                    <th scope="col">user_permissions</th>
+                  </tr>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="mb-3">
+                          <label for="users-polls-update-user-poll-id" class="form-label mb-3">select user_poll_id to be updated</label>
+                          <select class="form-select" id="users-polls-update-user-poll-id" aria-label="Update User_Poll ID">
+                            <option selected>User_Poll ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
+                            <option value="1">User_Poll 1</option>
+                            <option value="2">User_Poll 2</option>
+                            <option value="3">User_Poll 3</option>
+                            <option value="4">User_Poll 4</option>
+                            <option value="5">User_Poll 5</option>
+                            <option value="6">User_Poll 6</option>
+                          </select>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-3">
+                          <label for="users-polls-update-user-poll-user-id" class="form-label mb-3">update to user_id</label>
+                          <select class="form-select" id="users-polls-update-user-poll-user-id" aria-label="Update User ID">
+                            <option selected>No Update</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
+                            <option value="1">User 1</option> <!--some such select menus will need a null option, this one does not, as no user-poll will be without a poll-->
+                            <option value="2">User 2</option>
+                            <option value="3">User 3</option>
+                            <option value="4">User 4</option>
+                          </select>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-3">
+                          <label for="users-polls-update-user-poll-poll-id" class="form-label mb-3">update to poll_id</label>
+                          <select class="form-select" id="users-polls-update-user-poll-poll-id" aria-label="Update Poll ID">
+                            <option selected>No Update</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
+                            <option value="1">Poll 1</option> <!--some such select menus will need a null option, this one does not, as no user-poll will be without a poll-->
+                            <option value="2">Poll 2</option>
+                            <option value="3">Poll 3</option>
+                            <option value="4">Poll 4</option>
+                          </select>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="mb-3">
+                          <label for="users-polls-update-user-permissions" class="form-label mb-3">update to user_permissions</label>
+                          <input type="text" class="form-control" id="users-polls-update-user-permissions" aria-describedby="user-permissions-help" placeholder="Ex: &quot;permission 1&quot; AND &quot;permission 2&quot;"> <!-- not sure what 'type' to use here-->
+                          <div id="user-permissions-help" class="form-text">set</div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+              </table>
+        
+              <button type="submit" class="btn btn-primary">Update User_Poll</button>
+            </form>
+        </div>
+
+        </div>
+        
+        
+            </main>
+
+  <script type="text/javascript">(function(){window['__CF$cv$params']={r:'6db998e25d015f88',m:'Jgw4V304R14vG2LqbQuiu4r1wj79hTIeHC2ua0VNIZM-1644540774-0-AeChvRbjj49ddEDACl+e1C0mEOzLtoOLNdYqoq+z4F7t0BKnRDH4h57S7lF1cQv9jsb2jwO9F0OtS0yPlTStnANskQEioN3EnnsEgIodqLfrL/j2eCEXvIms5W54vnLtWzibqPhiEECRFewSc8S8BYWJlnLEAMtMm15fq/9Rp9EM7wKFEK7g+BPBhjj7S88ZBDxMCAW+RPi0NAjYhAkO6ao=',s:[0x06c472a3ca,0xb6291293e6],}})();</script></body>
+</html>

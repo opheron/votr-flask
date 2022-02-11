@@ -25,59 +25,63 @@
     <!-- Mobile viewport optimized: h5bp.com/viewport -->
     <meta name="viewport" content="width=device-width" />
 
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static', filename='assets/css/bootstrap.css') }}"
-    />
-
     <!-- Bootswatch Darkly + Bootstrap CSS -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootswatch@5.1.3/dist/darkly/bootstrap.css"
+      type="text/css"
+      href="{{ url_for('static', filename='assets/css/bootswatch.css') }}"
     />
+
+    <!-- Bootswatch Theme Reference custom CSS -->
+    {% if url_for(request.endpoint, **request.view_args) == "/darkly_reference"
+    %}
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='assets/css/bootswatch_custom.min.css') }}"
+    />
+
+    {% endif %}
 
     <!-- Votr CSS -->
     <link
       href="{{ url_for('static', filename='assets/css/styles.css') }}"
+      type="text/css"
       rel="stylesheet"
     />
 
     {% endblock %}
   </head>
   <body class="{% block body_class %}{% endblock %}">
-    {% block body %} {% with form=form %} {% include "nav.html" %} {% endwith %}
+    {% block body %} {% include "nav.html" %}
 
     <header>{% block header %}{% endblock %}</header>
 
-    <main role="main">
-      {% with messages = get_flashed_messages(with_categories=true) %} {% if
-      messages %}
-      <div class="row">
-        <div class="col-md-12">
-          {% for category, message in messages %}
-          <div class="alert alert-{{ category }}">
-            <a class="close" title="Close" href="#" data-dismiss="alert"
-              >&times;</a
-            >
-            {{ message }}
-          </div>
-          <!-- end .alert -->
-          {% endfor %}
+    <div
+      class="container-large container mx-auto mt-4 col-8"
+      id="main-container"
+    >
+      <main role="main">
+        <div class="row">
+          <div class="col-md-12"></div>
         </div>
-        <!-- end col-md -->
-      </div>
-      <!-- end row -->
-      {% endif %} {% endwith %} {% block content %}{% endblock %}
-    </main>
 
-    {% include "footer.html" %}
+        {% block content %}{% endblock %}
+      </main>
 
-    <!-- JavaScript at the bottom for fast page loading -->
-    <script src="{{ url_for('static', filename='assets/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/jquery-3.6.0.min.js') }}"></script>
-    {% block js %}{% endblock %}
-    <!-- end scripts -->
-    {% endblock %}
+      {% include "footer.html" %}
+
+      <!-- JavaScript at the bottom for fast page loading -->
+
+      {% block js %}{% endblock %}
+      <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"
+      ></script>
+      <!-- end scripts -->
+      {% endblock %}
+    </div>
   </body>
 </html>
