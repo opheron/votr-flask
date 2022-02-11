@@ -11,8 +11,8 @@ from flask import Flask, render_template, url_for, request, redirect
 
 # load_dotenv()
 
-# app = Flask(__name__)
-app = Flask("votr-flask")
+
+app = Flask(__name__)
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 # app.config["DEBUG"] = True
 # app.debug = True
