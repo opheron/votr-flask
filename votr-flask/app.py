@@ -11,7 +11,8 @@ from flask import Flask, render_template, url_for, request, redirect
 
 # load_dotenv()
 
-app = Flask(__name__)
+# app = Flask(__name__)
+app = Flask("votr-flask")
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 # app.config["DEBUG"] = True
 # app.debug = True
@@ -113,4 +114,4 @@ def users_polls():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
