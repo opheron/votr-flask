@@ -1,1 +1,1 @@
-web: gunicorn votr_flask.wsgi
+web: gunicorn app:app
