@@ -61,4 +61,6 @@ env/
 **/.DS_Store
 
 # VS Code
+.code-workplace
 **/.code-workplace
+votr-flask.code-workspace
