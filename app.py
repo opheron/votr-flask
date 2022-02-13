@@ -109,10 +109,10 @@ def payments():
     return render_template("payments.html")
 
 
-@app.route("/users_polls/")
-def users_polls():
-    """Users_Polls CRUD page."""
-    return render_template("users_polls.html")
+@app.route("/user_poll_settings/")
+def user_poll_settings():
+    """User_Poll_Settings CRUD page."""
+    return render_template("user_poll_settings.html")
 
 
 if __name__ == "__main__":
