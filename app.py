@@ -116,5 +116,5 @@ def user_poll_settings():
 
 
 if __name__ == "__main__":
-    port = int(getenv("PORT"), 8000)
+    # port = int(getenv("PORT"), 8000)
     app.run()
