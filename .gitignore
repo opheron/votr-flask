@@ -64,3 +64,6 @@ env/
 .code-workplace
 **/.code-workplace
 votr-flask.code-workspace
+
+# App
+*.env

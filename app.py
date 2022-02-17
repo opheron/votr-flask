@@ -7,16 +7,22 @@ from forms import *
 
 from flask import Flask, render_template, url_for, request, redirect
 
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 
 # from flask_sqlalchemy import SQLAlchemy
 
-# load_dotenv()
-
+load_dotenv()
 
 app = Flask(__name__)
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
-# app.config["DEBUG"] = True
+app.config["DEBUG"] = getenv("FLASK_ENV")
+app.config["FLASK_APP"] = getenv("FLASK_APP")
+app.config["SECRET_KEY"] = getenv("SECRET_KEY")
+# FLASK_APP=app.py
+# FLASK_ENV=development
+# FLASK_DEBUG=1
+# SECRET_KEY = secret-key-for-dev-only
+# CSRF_ENABLED = True
 # app.debug = True
 # app.config.update(
 #     DEBUG=True, SECRET_KEY="secret-key-for-development-only", CSRF_ENABLED=True
