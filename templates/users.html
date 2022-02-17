@@ -26,8 +26,7 @@
               type="checkbox"
               value=""
               id="flexCheckDefault"
-              checked=""
-              data-com.bitwarden.browser.user-edited="yes"
+              disabled
             />
             <label class="form-check-label" for="flexCheckDefault">
               guest
@@ -39,6 +38,7 @@
               type="checkbox"
               value=""
               id="flexCheckDefault"
+              disabled
             />
             <label class="form-check-label" for="flexCheckDefault">
               user
@@ -50,6 +50,8 @@
               type="checkbox"
               value=""
               id="flexCheckDefault"
+              checked=""
+              disabled
             />
             <label class="form-check-label" for="flexCheckDefault">
               admin
@@ -61,6 +63,8 @@
               type="checkbox"
               value=""
               id="flexCheckDefault"
+              checked=""
+              disabled
             />
             <label class="form-check-label" for="flexCheckDefault">
               superadmin
@@ -72,25 +76,25 @@
         <td>Sebastian</td>
         <td>allenseb@oregonstate.edu</td>
         <td>              <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked="" data-com.bitwarden.browser.user-edited="yes">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
           <label class="form-check-label" for="flexCheckDefault">
             guest
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
           <label class="form-check-label" for="flexCheckDefault">
             user
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked="" disabled>
           <label class="form-check-label" for="flexCheckDefault">
             admin
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked="" disabled>
           <label class="form-check-label" for="flexCheckDefault">
             superadmin
           </label>
@@ -101,25 +105,25 @@
         <td>guest</td>
         <td>guest@voter.com</td>
         <td>              <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked="" data-com.bitwarden.browser.user-edited="yes">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked="" disabled>
           <label class="form-check-label" for="flexCheckDefault">
             guest
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
           <label class="form-check-label" for="flexCheckDefault">
             user
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
           <label class="form-check-label" for="flexCheckDefault">
             admin
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
           <label class="form-check-label" for="flexCheckDefault">
             superadmin
           </label>
@@ -130,25 +134,25 @@
         <td>Buddy Holly</td>
         <td>guest@voter.com</td>
         <td>              <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked="" data-com.bitwarden.browser.user-edited="yes">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
           <label class="form-check-label" for="flexCheckDefault">
             guest
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked="" disabled>
           <label class="form-check-label" for="flexCheckDefault">
             user
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
           <label class="form-check-label" for="flexCheckDefault">
             admin
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
           <label class="form-check-label" for="flexCheckDefault">
             superadmin
           </label>
@@ -210,7 +214,7 @@
           </td>
           <td>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked="" data-com.bitwarden.browser.user-edited="yes">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked="">
                 <label class="form-check-label" for="flexCheckDefault">
                   guest
                 </label>
@@ -296,15 +300,6 @@
         <option value="4">guest@voter.com</option>
       </select>
     </div>
-    <label for="site-permissions-search">site_permissions: </label>
-    <input
-      type="text"
-      style="display: inline; width: 20%; padding-bottom: 9px"
-      class="form-control"
-      id="site-permissions-search"
-      placeholder='Ex: "permission 1" AND "permission 2"'
-    />
-    <!-- not sure what 'type' to use here-->
     <!--style part was just to make it inline, if you know a better way you can update, or just add this part to the css-->
 
     <button type="submit" class="btn btn-primary">Search</button
@@ -385,14 +380,31 @@
               <label for="users-update-site-permissions" class="form-label mb-3"
                 >update to site_permissions</label
               >
-              <input
-                type="text"
-                class="form-control"
-                id="users-update-site-permissions"
-                aria-describedby="update-site-permissions-help"
-                placeholder='Ex: "permission 1" AND "permission 2"'
-              />
-              <!-- not sure what 'type' to use here-->
+              
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked="">
+                <label class="form-check-label" for="flexCheckDefault">
+                  guest
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                  user
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                  admin
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                  superadmin
+                </label>
+              </div>
               <div id="update-site-permissions-help" class="form-text">set</div>
             </div>
           </td>
