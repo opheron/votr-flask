@@ -1,12 +1,31 @@
 {% extends "layout.html" %} {% block content %}
 
 <h1 class="display-3">Votr Database Admin</h1>
-
-<br />
-<br />
-<br />
-<br />
-<br />
+<div class="alert alert-light">
+    <a href="{{ url_for('users')}}" class="alert-link"><h1>Users</h1></a>
+    <p>an end user of Votr.</p>
+    <p>in this page you may search the present Users table, as well as insert new rows, and update or delete the present rows.</p>
+</div>
+<div class="alert alert-light">
+    <a href="{{ url_for('polls')}}" class="alert-link"><h1>Polls</h1></a>
+    <p>a poll created by an end user of Votr.</p>
+    <p>in this page you may search the present Polls table, as well as insert new rows, and update or delete the present rows.</p>
+</div>
+<div class="alert alert-light">
+    <a href="{{ url_for('votes')}}" class="alert-link"><h1>Votes</h1></a>
+    <p>a vote made by an end user of Votr in a poll.</p>
+    <p>in this page you may search the present Votes table, as well as insert new rows, and update or delete the present rows.</p>
+</div>
+<div class="alert alert-light">
+    <a href="{{ url_for('payments')}}" class="alert-link"><h1>Payments</h1></a>
+    <p>a payment made by an end user of Votr.</p>
+    <p>in this page you may search the present Payments table, as well as insert new rows, and update or delete the present rows.</p>
+</div>
+<div class="alert alert-light">
+    <a href="{{ url_for('user_poll_settings')}}" class="alert-link"><h1>User_Poll_Settings</h1></a>
+    <p>represents the information connected between a user and a poll (e.g. access & permissions). This table bridges the M:M relationship between users and polls.</p>
+    <p>in this page you may search the present User_Poll_Settings table, as well as insert new rows, and update or delete the present rows.</p>
+</div>
 <br />
 <br />
 <br />
