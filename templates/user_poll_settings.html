@@ -1,7 +1,10 @@
 {% extends "layout.html" %}{% block content %}
 
 <div class="container">
-  <h1>User_Poll_Settings</h1>
+  <div class="alert alert-light">
+    <h1>User_Poll_Settings</h1> 
+    <p>represents the information connected between a user and a poll (e.g. access & permissions). This is just a table to bridge the M:M relationship between users and polls, and is not considered an entity for this database.</p>
+  </div>
   <table class="table table-striped table-dark">
     <thead>
       <tr>
