@@ -2,8 +2,12 @@
 
 <div class="container">
   <div class="alert alert-light">
-    <h1>User_Poll_Settings</h1> 
-    <p>represents the information connected between a user and a poll (e.g. access & permissions). This table bridges the M:M relationship between users and polls.</p>
+    <h1>User_Poll_Settings</h1>
+    <p>
+      represents the information connected between a user and a poll (e.g.
+      access & permissions). This table bridges the M:M relationship between
+      users and polls.
+    </p>
   </div>
   <table class="table table-striped table-dark">
     <thead>
@@ -71,7 +75,14 @@
           <th scope="col">user_poll_setting_id</th>
           <th scope="col">user_id</th>
           <th scope="col">poll_id</th>
-          <th scope="col">user_permissions</th>
+          <th
+            scope="col"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="User's permissions for poll"
+          >
+            user_permissions
+          </th>
         </tr>
       </thead>
 
@@ -227,7 +238,14 @@
           <th scope="col">user_poll_setting_id</th>
           <th scope="col">user_id</th>
           <th scope="col">poll_id</th>
-          <th scope="col">user_permissions</th>
+          <th
+            scope="col"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="User's permissions for poll"
+          >
+            user_permissions
+          </th>
         </tr>
       </thead>
 
