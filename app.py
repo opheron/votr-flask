@@ -9,6 +9,9 @@ from flask import Flask, render_template, url_for, request, redirect
 
 from dotenv import load_dotenv
 
+from sqlalchemy import create_engine, MetaData, Table, Column, Numeric, Integer, VARCHAR
+from sqlalchemy.engine import result, Engine
+
 # from flask_sqlalchemy import SQLAlchemy
 
 load_dotenv()
@@ -18,6 +21,13 @@ app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 app.config["DEBUG"] = getenv("FLASK_ENV")
 app.config["FLASK_APP"] = getenv("FLASK_APP")
 app.config["SECRET_KEY"] = getenv("SECRET_KEY")
+
+# app.config[
+#     "SQLALCHEMY_DATABASE_URI"
+# ] = "mysql+pymysql://root:@localhost:3306/votr_flask"
+# mysql+pymysql://<username>:<password>@<host>/<dbname>[?<options>]
+
+
 # FLASK_APP=app.py
 # FLASK_ENV=development
 # FLASK_DEBUG=1
@@ -28,10 +38,15 @@ app.config["SECRET_KEY"] = getenv("SECRET_KEY")
 #     DEBUG=True, SECRET_KEY="secret-key-for-development-only", CSRF_ENABLED=True
 # )
 # app.config.from_object(os.environ["APP_SETTINGS"])
-# app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+
 # db = SQLAlchemy(app)
 
 # from models import *
+
+
+# establish connections
+db_engine = create_engine("mysql+pymysql://root:@localhost:3306/votr_flask", echo=True)
 
 
 @app.route("/")
@@ -119,6 +134,18 @@ def payments():
 def user_poll_settings():
     """User_Poll_Settings CRUD page."""
     return render_template("user_poll_settings.html")
+
+
+@app.route("/test_db/")
+def test_db():
+    """Database test page."""
+    # reflect = db.reflect()
+
+    connection = db_engine.connect()
+    users_query = "SELECT * FROM Users"
+    result = connection.execute(users_query).fetchall()
+
+    return render_template("test_db.html", result=result)
 
 
 if __name__ == "__main__":
