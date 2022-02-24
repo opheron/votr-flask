@@ -73,7 +73,10 @@ def users():
     """Users CRUD page"""
     create_user_form = CreateUserForm(request.form)
     if request.method == "GET":
-        return render_template("users.html", create_user_form=create_user_form)
+        connection = db_engine.connect()
+        users_query = "SELECT * FROM Users"
+        all_users = connection.execute(users_query).fetchall()
+        return render_template("users.html", all_users=all_users)
     elif request.method == "POST":
 
         if True:
