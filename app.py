@@ -12,6 +12,8 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine, MetaData, Table, Column, Numeric, Integer, VARCHAR
 from sqlalchemy.engine import result, Engine
 
+from wtforms import Form, BooleanField, StringField, validators, EmailField
+
 # from flask_sqlalchemy import SQLAlchemy
 
 load_dotenv()
@@ -68,15 +70,34 @@ def darkly_reference():
     return render_template("darkly_reference.html")
 
 
+class AddNewUserForm(Form):
+    username = StringField("username", [validators.Length(min=1, max=254)])
+    email_address = EmailField("email_address", [validators.Length(min=6, max=254)])
+    site_permissions_guest = BooleanField("site_permisions_guest", default="checked")
+    site_permissions_user = BooleanField("site_permisions_user")
+    site_permissions_admin = BooleanField("site_permisions_admin")
+    site_permissions_superadmin = BooleanField("site_permisions_superadmin")
+
+
 @app.route("/users", methods=["GET", "POST"])
 def users():
     """Users CRUD page"""
-    create_user_form = CreateUserForm(request.form)
+    # create_user_form = CreateUserForm(request.form)
     if request.method == "GET":
+
+        # TODO: Separate this out into another function
+        # get all users
         connection = db_engine.connect()
         users_query = "SELECT * FROM Users"
         all_users = connection.execute(users_query).fetchall()
-        return render_template("users.html", all_users=all_users)
+        connection.close()
+
+        # add new user form
+        add_new_user_form = AddNewUserForm(request.form)
+
+        return render_template(
+            "users.html", all_users=all_users, add_new_user_form=add_new_user_form
+        )
     elif request.method == "POST":
 
         if True:
@@ -94,7 +115,7 @@ def users():
         else:
             flash_errors(create_user_form)
             return redirect(url_for("public.users"))
-    return render_template("users.html", create_user_form=create_user_form)
+    # return render_template("users.html", create_user_form=create_user_form)
 
 
 # @blueprint.route("/register/", methods=["GET", "POST"])
