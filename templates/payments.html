@@ -15,126 +15,53 @@
           </tr>
         </thead>
         <tbody>
+          {% for payment in all_payments %}
+    
           <tr>
-            <th scope="row">1</td>
-            <td>3</td>
-            <td>0.0</td>
-            <td> <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked="" disabled>
-              <label class="form-check-label" for="flexCheckDefault">
-                test
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
-              <label class="form-check-label" for="flexCheckDefault">
-                free trial
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked="" disabled>
-              <label class="form-check-label" for="flexCheckDefault">
-                subscription
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
-              <label class="form-check-label" for="flexCheckDefault">
-                donation
-              </label>
-            </div></td>
+            <th scope="row">{{ payment["payment_id"] }}</th>
+            <td>{{ payment["user_id"] }}</td>
+            <td>{{ payment["amount_usd"] }}</td>
+            <td>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value=""
+                id="flexCheckDefault" {% if "test" in payment["payment_purposes"] %}
+                checked="" {% endif %} disabled />
+                <label class="form-check-label" for="flexCheckDefault">
+                  test
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value=""
+                id="flexCheckDefault" {% if "free_trial" in payment["payment_purposes"] %}
+                checked="" {% endif %} disabled />
+                <label class="form-check-label" for="flexCheckDefault">
+                  free trial
+                </label>
+              </div>
+    
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value=""
+                id="flexCheckDefault" {% if "subscription" in payment["payment_purposes"] %}
+                checked="" {% endif %} disabled />
+                <label class="form-check-label" for="flexCheckDefault">
+                  subscription
+                </label>
+              </div>
+    
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value=""
+                id="flexCheckDefault" {% if "donation" in payment["payment_purposes"]
+                %} checked="" {% endif %} disabled />
+                <label class="form-check-label" for="flexCheckDefault">
+                  donation
+                </label>
+              </div>
+            </td>
           </tr>
-          <tr>
-            <th scope="row">2</td>
-            <td>4</td>
-            <td>0.0</td>
-            <td> <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
-              <label class="form-check-label" for="flexCheckDefault">
-                test
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked="" disabled>
-              <label class="form-check-label" for="flexCheckDefault">
-                free trial
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked="" disabled>
-              <label class="form-check-label" for="flexCheckDefault">
-                subscription
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
-              <label class="form-check-label" for="flexCheckDefault">
-                donation
-              </label>
-            </div></td>
-          </tr>
-          <tr>
-            <th scope="row">3</td>
-            <td>4</td>
-            <td>5.0</td>
-            <td> <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
-              <label class="form-check-label" for="flexCheckDefault">
-                test
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
-              <label class="form-check-label" for="flexCheckDefault">
-                free trial
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked="" disabled>
-              <label class="form-check-label" for="flexCheckDefault">
-                subscription
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
-              <label class="form-check-label" for="flexCheckDefault">
-                donation
-              </label>
-            </div></td>
-          </tr>
-          <tr>
-            <th scope="row">4</td>
-            <td>4</td>
-            <td>5.0</td>
-            <td> <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
-              <label class="form-check-label" for="flexCheckDefault">
-                test
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
-              <label class="form-check-label" for="flexCheckDefault">
-                free trial
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked="" disabled>
-              <label class="form-check-label" for="flexCheckDefault">
-                subscription
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
-              <label class="form-check-label" for="flexCheckDefault">
-                donation
-              </label>
-            </div></td>
-          </tr>
+          {% endfor %}
         </tbody>
         </table>
       </div>
-  
       <div class="container">
       <form>
         <h3>Add New Payment</h3>
@@ -148,56 +75,57 @@
             </tr>
             <tbody>
               <tr>
-                <th scope="row"><i>auto incremented</i></td>
+                <th scope="row"><i>auto incremented</i></th>
+                
                 <td>
                   <div class="mb-3">
-                    <label for="payments-create-payment-user-id" class="form-label mb-3">user_id</label>
-                    <select class="form-select" id="payments-create-payment-user-id" aria-describedby="create-user-id-help" aria-label="create User ID">
-                      <option selected>User ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                      <option value="0">NULL</option>
-                      <option value="1">User 1</option>
-                      <option value="2">User 2</option>
-                      <option value="3">User 3</option>
-                      <option value="4">User 4</option>
-                    </select>
-                    <div id="create-user-id-help" class="form-text">Relationship Nullable</div>
+                    <!--TODO: get auto populating-->
+                    <!-- USER ID LABEL -->
+                    {{ add_new_payment_form.user_id.label(class="form-label mb-3") }}
+                    <!-- USER ID FIELD -->
+                    {{ add_new_payment_form.user_id( class="form-select")}}
+                    <div id="create-user_id-help" class="form-text">FK</div>
                   </div>
                 </td>
                 <td>
                   <div class="mb-3">
-                    <label for="payments-create-amount-usd" class="form-label mb-3">amount_usd</label>
-                    <input type="text" class="form-control" id="payments-create-amount-usd" aria-describedby="create-amount-usd-help" placeholder="Ex: 1.20"> <!-- not sure what 'type' to use here-->
-                    <div id="create-amount-usd-help" class="form-text">decimal</div>
+                    <!-- AMOUNT USD LABEL -->
+                    {{ add_new_payment_form.amount_usd.label(class="form-label mb-3")
+                    }}
+                    <!-- AMOUNT USD FIELD -->
+                    {{ add_new_payment_form.amount_usd( class="form-control",
+                    placeholder="Ex: 2.50") }}
+                    <div id="create-amount_usd-help" class="form-text">
+                      decimal
+                    </div>
                   </div>
                 </td>
                 <td>
-                  <div class="mb-3">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" >
-                      <label class="form-check-label" for="flexCheckDefault">
-                        test
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" >
-                      <label class="form-check-label" for="flexCheckDefault">
-                        free trial
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" >
-                      <label class="form-check-label" for="flexCheckDefault">
-                        subscription
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" >
-                      <label class="form-check-label" for="flexCheckDefault">
-                        donation
-                      </label>
-                    </div>
-                    <div id="create-payment-purposes-help" class="form-text">set</div>
+                  <div class="form-check">
+                    <!-- FIELD -->
+                    {{add_new_payment_form.payment_purposes_test(class="form-check")}}
+                    <!-- LABEL -->
+                    {{ add_new_payment_form.payment_purposes_test.label }}
                   </div>
+                  <div class="form-check">
+                    <!-- FIELD -->
+                    {{add_new_payment_form.payment_purposes_free_trial(class="form-check")}}
+                    <!-- LABEL -->
+                    {{ add_new_payment_form.payment_purposes_free_trial.label }}
+                  </div>
+                  <div class="form-check">
+                    <!-- FIELD -->
+                    {{add_new_payment_form.payment_purposes_subscription(class="form-check")}}
+                    <!-- LABEL -->
+                    {{ add_new_payment_form.payment_purposes_subscription.label }}
+                  </div>
+                  <div class="form-check">
+                    <!-- FIELD -->
+                    {{add_new_payment_form.payment_purposes_donation(class="form-check")}}
+                    <!-- LABEL -->
+                    {{ add_new_payment_form.payment_purposes_donation.label }}
+                  </div>
+                  <div id="payments-payment_purposes-help" class="form-text">set</div>
                 </td>
               </tr>
             </tbody>
