@@ -15,66 +15,16 @@
                 </tr>
               </thead>
               <tbody>
+                {% for vote in all_votes %}
+
                 <tr>
-                  <th scope="row">1</td>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>[lima, fava, pinto]</td>
+                  <th scope="row">{{ vote["vote_id"] }}</th>
+                  <td>{{ vote["poll_id"] }}</td>
+                  <td>{{ vote["user_id"] }}</td>
+                  <td>{{ vote["vote_values"] }}</td>
                 </tr>
-                <tr>
-                  <th scope="row">2</td>
-                  <td>1</td>
-                  <td>2</td>
-                  <td>[pinto, lima, fava]</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</td>
-                  <td>1</td>
-                  <td>3</td>
-                  <td>[pinto, fava, lima]</td>
-                </tr>
-                <tr>
-                  <th scope="row">4</td>
-                  <td>1</td>
-                  <td>4</td>
-                  <td>[fava, pinto, lima]</td>
-                </tr>
-                <tr>
-                  <th scope="row">5</td>
-                  <td>2</td>
-                  <td>1</td>
-                  <td>andrew chong</td>
-                </tr>
-                <tr>
-                  <th scope="row">6</td>
-                  <td>2</td>
-                  <td>2</td>
-                  <td>sebastian allen</td>
-                </tr>
-                <tr>
-                  <th scope="row">7</td>
-                  <td>3</td>
-                  <td>1</td>
-                  <td>[science, the wheel, fire, sliced bread]</td>
-                </tr>
-                <tr>
-                  <th scope="row">8</td>
-                  <td>3</td>
-                  <td>2</td>
-                  <td>[fire, science, the wheel, sliced bread]</td>
-                </tr>
-                <tr>
-                  <th scope="row">9</td>
-                  <td>3</td>
-                  <td>4</td>
-                  <td>[sliced bread, the wheel, fire, science]</td>
-                </tr>
-                <tr>
-                  <th scope="row">10</td>
-                  <td>4</td>
-                  <td>3</td>
-                  <td>2</td>
-                </tr>
+          
+                {% endfor %}
               </tbody>
             </table>
             </div>

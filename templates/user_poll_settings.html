@@ -26,329 +26,51 @@
       </tr>
     </thead>
     <tbody>
+      {% for user_poll_setting in all_user_poll_settings %}
+
       <tr>
-        <th scope="row">1</th>
-        <td>3</td>
-        <td>4</td>
-        <td><div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            collaborator
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            poll creator
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            checked=""
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            admin
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            superadmin
-          </label></td>
+        <th scope="row">{{ user_poll_setting["user_poll_setting_id"] }}</th>
+        <td>{{ user_poll_setting["user_id"] }}</td>
+        <td>{{ user_poll_setting["poll_id"] }}</td>
+        <td>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value=""
+            id="flexCheckDefault" {% if "collaborator" in user_poll_setting["user_permissions"] %}
+            checked="" {% endif %} disabled />
+            <label class="form-check-label" for="flexCheckDefault">
+              collaborator
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value=""
+            id="flexCheckDefault" {% if "poll_creator" in user_poll_setting["user_permissions"] %}
+            checked="" {% endif %} disabled />
+            <label class="form-check-label" for="flexCheckDefault">
+              poll creator
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value=""
+            id="flexCheckDefault" {% if "admin" in user_poll_setting["user_permissions"] %}
+            checked="" {% endif %} disabled />
+            <label class="form-check-label" for="flexCheckDefault">
+              admin
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value=""
+            id="flexCheckDefault" {% if "superadmin" in user_poll_setting["user_permissions"]
+            %} checked="" {% endif %} disabled />
+            <label class="form-check-label" for="flexCheckDefault">
+              superadmin
+            </label>
+          </div>
+        </td>
       </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>2</td>
-        <td>4</td>
-        <td><div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            collaborator
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            poll creator
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            checked=""
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            admin
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            checked=""
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            superadmin
-          </label></td>
-      </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td>4</td>
-        <td>1</td>
-        <td><div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            collaborator
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            poll creator
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            checked=""
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            admin
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            checked=""
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            superadmin
-          </label></td>
-      </tr>
-      <tr>
-        <th scope="row">4</th>
-        <td>2</td>
-        <td>2</td>
-        <td><div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            collaborator
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            poll creator
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            checked=""
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            admin
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            checked=""
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            superadmin
-          </label></td>
-      </tr>
-      <tr>
-        <th scope="row">5</th>
-        <td>1</td>
-        <td>2</td>
-        <td><div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            collaborator
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            poll creator
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            checked=""
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            admin
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            checked=""
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            superadmin
-          </label></td>
-      </tr>
-      <tr>
-        <th scope="row">6</th>
-        <td>4</td>
-        <td>3</td>
-        <td><div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            collaborator
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            poll creator
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            checked=""
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            admin
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            checked=""
-            disabled
-          />
-          <label class="form-check-label" for="flexCheckDefault">
-            superadmin
-          </label></td>
-      </tr>
+
+      {% endfor %}
     </tbody>
   </table>
 </div>

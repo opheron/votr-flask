@@ -78,7 +78,41 @@ def darkly_reference():
     """Darkly theme reference."""
     return render_template("darkly_reference.html")
 
+# TODO: update addNewPollForm to work, 
+class AddNewPollForm(Form):
+    poll_title = StringField(
+        "poll title",
+        [validators.Length(min=1, max=254)],
+        render_kw={"class": "mb-3 form-control"},
+    )
+    poll_type = EmailField(# this is a enum of type: enum('single_transferable', 'popular', 'ranked_choice')
+        "poll type",
+        [validators.Length(min=6, max=254)],
+        render_kw={"class": "form-control"},
+    )
+    poll_voting_choices = BooleanField(# this is a json array of format JSON_ARRAY('lima','fava','pinto')
+        id="site_permissions_guest",
+        name="guest",
+        label="guest",
+        default="checked",
+        render_kw={"class": "form-check-input"},
+    )
 
+# TODO: update addNewVoteForm to work, 
+class AddNewVoteForm(Form):
+    poll_id = SelectField(# this is a to be dynamically updated select feild of poll_id's
+        "poll id",
+        [validators.Length(min=1, max=254)],
+        render_kw={"class": "mb-3 form-control"},
+    )
+    user_id = SelectField(# this is a to be dynamically updated select feild of user_id's
+        "user id",
+        [validators.Length(min=6, max=254)],
+        render_kw={"class": "form-control"},
+    )
+    vote_values = BooleanField(# this is a json object of form JSON_OBJECT('andrew chong', 1, 'sebastian allen', 0)
+        id="vote_values",
+    )
 class AddNewUserForm(Form):
     username = StringField(
         "username",
@@ -110,8 +144,43 @@ class AddNewUserForm(Form):
         default="checked",
     )
 
+<<<<<<< HEAD
 
 class AddNewPaymentForm(FlaskForm):
+=======
+class AddNewUserPollSettingForm(Form):
+    user_id = StringField(
+        "user_id",
+        [validators.Length(min=1, max=254)],
+        render_kw={"class": "mb-3 form-control"},
+    )
+    poll_id = EmailField(
+        "poll_id",
+        [validators.Length(min=6, max=254)],
+        render_kw={"class": "form-control"},
+    )
+    user_permissions_collaborator = BooleanField(
+        id="user_permissions_collaborator",
+        name="guest",
+        label="guest",
+        default="checked",
+        render_kw={"class": "form-check-input"},
+    )
+    user_permissions_poll_creator = BooleanField(
+        id="user_permissions_poll_creator", name="user", label="user"
+    )
+    user_permissions_admin = BooleanField(
+        id="user_permissions_admin", name="admin", label="admin", default="checked"
+    )
+    user_permissions_superadmin = BooleanField(
+        id="user_permissions_superadmin",
+        name="superadmin",
+        label="superadmin",
+        default="checked",
+    )
+
+class AddNewPaymentForm(Form):
+>>>>>>> c9148ce548f179a7875c5922a55318126abe4bf7
     # TODO: get user_id dynamically updating, update validator for amount_usd (not negative?)
     user_id = SelectField("user_id", coerce=int)
     amount_usd = DecimalField("amount_usd", places=2)
@@ -241,16 +310,74 @@ def find_user_by_id():
 #     return render_template("public/register.html", form=form)
 
 
-@app.route("/polls/")
+# @app.route("/polls/")
+# def polls():
+#     """Polls CRUD page."""
+#     return render_template("polls.html")
+
+
+@app.route("/polls/", methods=["GET", "POST"])
 def polls():
-    """Polls CRUD page."""
-    return render_template("polls.html")
+    """Polls CRUD page"""
+    # create_poll_form = CreatePollForm(request.form)
+    if request.method == "GET":
+
+        # get all Polls
+        connection = db_engine.connect()
+        polls_query = "SELECT * FROM Polls"
+        all_polls = connection.execute(polls_query).fetchall()
+        connection.close()
+
+        # add new poll form
+        add_new_poll_form = AddNewPollForm(request.form)
+
+        return render_template(
+            "polls.html", all_polls=all_polls, add_new_poll_form=add_new_poll_form
+        )
+    elif request.method == "POST":
+        # TODO: get forms working
+        if True:
+            # flash("Created new poll!", "success")
+            return redirect(url_for("polls"))
+        else:
+            flash_errors(create_user_form)
+            return redirect(url_for("public.users"))
+    # return render_template("users.html", create_user_form=create_user_form)
 
 
-@app.route("/votes/")
+# @app.route("/votes/")
+# def votes():
+#     """Votes CRUD page."""
+#     return render_template("votes.html")
+
+@app.route("/votes/", methods=["GET", "POST"])
 def votes():
-    """Votes CRUD page."""
-    return render_template("votes.html")
+    """Votes CRUD page"""
+    # create_vote_form = CreateVoteForm(request.form)
+    if request.method == "GET":
+
+        # get all Votes
+        connection = db_engine.connect()
+        votes_query = "SELECT * FROM Votes"
+        all_votes = connection.execute(votes_query).fetchall()
+        connection.close()
+
+        # add new vote form
+        add_new_vote_form = AddNewVoteForm(request.form)
+
+        return render_template(
+            "votes.html", all_votes=all_votes, add_new_vote_form=add_new_vote_form
+        )
+    elif request.method == "POST":
+        # TODO: get forms working
+        if True:
+            # flash("Created new vote!", "success")
+            return redirect(url_for("votes"))
+        else:
+            flash_errors(create_user_form)
+            return redirect(url_for("public.users"))
+    # return render_template("users.html", create_user_form=create_user_form)
+
 
 
 # TODO: delete
@@ -265,9 +392,6 @@ def payments():
     """Payments CRUD page"""
     # add_new_payment_form = CreatepPymentForm(request.form) ----
     if request.method == "GET":
-
-        # TODO: Separate this out into another function
-        # get all Payments
         connection = db_engine.connect()
         payments_query = "SELECT * FROM Payments"
         all_payments = connection.execute(payments_query).fetchall()
@@ -301,10 +425,40 @@ def payments():
     # return render_template("users.html", create_user_form=create_user_form)
 
 
-@app.route("/user_poll_settings/")
+# app.route("/user_poll_settings/")
+# def user_poll_settings():
+#     """User_Poll_Settings CRUD page."""
+#     return render_template("user_poll_settings.html")
+
+
+@app.route("/user_poll_settings/", methods=["GET", "POST"])
 def user_poll_settings():
-    """User_Poll_Settings CRUD page."""
-    return render_template("user_poll_settings.html")
+    """User_Poll_Settings CRUD page"""
+    # create_user_poll_setting_form = CreateUserPollSettingForm(request.form)
+    if request.method == "GET":
+
+        # get all User_Poll_Settings
+        connection = db_engine.connect()
+        user_poll_settings_query = "SELECT * FROM User_Poll_Settings"
+        all_user_poll_settings = connection.execute(user_poll_settings_query).fetchall()
+        connection.close()
+
+        # add new user_poll_setting form
+        add_new_user_poll_setting_form = AddNewUserPollSettingForm(request.form)
+
+        return render_template(
+            "user_poll_settings.html", all_user_poll_settings=all_user_poll_settings, add_new_user_poll_setting_form=add_new_user_poll_setting_form
+        )
+    elif request.method == "POST":
+        # TODO: get forms working
+        if True:
+            # flash("Created new user_poll_setting!", "success")
+            return redirect(url_for("user_poll_settings"))
+        else:
+            flash_errors(create_user_form)
+            return redirect(url_for("public.users"))
+    # return render_template("users.html", create_user_form=create_user_form)
+
 
 
 @app.route("/test_db/")
