@@ -5,7 +5,7 @@ from os import getenv
 # import requests
 from forms import *
 
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, jsonify
 
 from dotenv import load_dotenv
 
@@ -74,7 +74,7 @@ class AddNewUserForm(Form):
     username = StringField(
         "username",
         [validators.Length(min=1, max=254)],
-        render_kw={"class": "mb-3 form-control"},
+        render_kw={"class": "form-control"},
     )
     email_address = EmailField(
         "email_address",
@@ -139,6 +139,22 @@ def users():
             flash_errors(create_user_form)
             return redirect(url_for("public.users"))
     # return render_template("users.html", create_user_form=create_user_form)
+
+
+def find_user_by_id(user_id):
+    connection = db_engine.connect()
+    user_query = f"SELECT FROM Users WHERE ID = {user_id}"
+    user = connection.execute(user_query).first()
+    connection.close()
+    return user
+
+
+@app.route("/find_user_by_id", methods=["POST"])
+def find_user_by_id():
+    """Select user by ID"""
+    if request.method == "POST":
+        user_id = request.form["user_id"]
+        return jsonify(find_user_by_id(user_id))
 
 
 # @blueprint.route("/register/", methods=["GET", "POST"])
