@@ -147,40 +147,6 @@ class AddNewUserForm(Form):
 <<<<<<< HEAD
 
 class AddNewPaymentForm(FlaskForm):
-=======
-class AddNewUserPollSettingForm(Form):
-    user_id = StringField(
-        "user_id",
-        [validators.Length(min=1, max=254)],
-        render_kw={"class": "mb-3 form-control"},
-    )
-    poll_id = EmailField(
-        "poll_id",
-        [validators.Length(min=6, max=254)],
-        render_kw={"class": "form-control"},
-    )
-    user_permissions_collaborator = BooleanField(
-        id="user_permissions_collaborator",
-        name="guest",
-        label="guest",
-        default="checked",
-        render_kw={"class": "form-check-input"},
-    )
-    user_permissions_poll_creator = BooleanField(
-        id="user_permissions_poll_creator", name="user", label="user"
-    )
-    user_permissions_admin = BooleanField(
-        id="user_permissions_admin", name="admin", label="admin", default="checked"
-    )
-    user_permissions_superadmin = BooleanField(
-        id="user_permissions_superadmin",
-        name="superadmin",
-        label="superadmin",
-        default="checked",
-    )
-
-class AddNewPaymentForm(Form):
->>>>>>> c9148ce548f179a7875c5922a55318126abe4bf7
     # TODO: get user_id dynamically updating, update validator for amount_usd (not negative?)
     user_id = SelectField("user_id", coerce=int)
     amount_usd = DecimalField("amount_usd", places=2)
