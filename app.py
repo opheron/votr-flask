@@ -5,23 +5,14 @@ from os import getenv
 # import requests
 from forms import *
 
-from flask import Flask, render_template, url_for, request, redirect, jsonify
+from flask import Flask, render_template, url_for, request, redirect
 
 from dotenv import load_dotenv
 
 from sqlalchemy import create_engine, MetaData, Table, Column, Numeric, Integer, VARCHAR
 from sqlalchemy.engine import result, Engine
 
-from flask_wtf import FlaskForm
-
-from wtforms import (
-    Form,
-    BooleanField,
-    StringField,
-    validators,
-    EmailField,
-    DecimalField,
-)
+from wtforms import Form, BooleanField, StringField, validators, EmailField, DecimalField
 
 # from flask_sqlalchemy import SQLAlchemy
 
@@ -117,7 +108,7 @@ class AddNewUserForm(Form):
     username = StringField(
         "username",
         [validators.Length(min=1, max=254)],
-        render_kw={"class": "form-control"},
+        render_kw={"class": "mb-3 form-control"},
     )
     email_address = EmailField(
         "email_address",
@@ -169,7 +160,7 @@ class AddNewUserPollSettingForm(Form):
         id="user_permissions_admin", name="admin", label="admin", default="checked"
     )
     user_permissions_superadmin = BooleanField(
-        id="user_permissions_superadmin",
+        id="user_permissions_admin",
         name="superadmin",
         label="superadmin",
         default="checked",
@@ -177,8 +168,8 @@ class AddNewUserPollSettingForm(Form):
 
 class AddNewPaymentForm(Form):
     # TODO: get user_id dynamically updating, update validator for amount_usd (not negative?)
-    user_id = SelectField("user_id", coerce=int)
-    amount_usd = DecimalField("amount_usd", places=2)
+    user_id = SelectField('user_id', coerce=int)
+    amount_usd = DecimalField("amount_usd", places = 2)
     payment_purposes_test = BooleanField("test", default="checked")
     payment_purposes_free_trial = BooleanField("free trial")
     payment_purposes_subscription = BooleanField("subscription")
@@ -199,12 +190,13 @@ def users():
         connection.close()
 
         # add new user form
-        add_new_user_form = AddNewUserForm()
+        add_new_user_form = AddNewUserForm(request.form)
 
         return render_template(
             "users.html", all_users=all_users, add_new_user_form=add_new_user_form
         )
     elif request.method == "POST":
+
         if True:
             # flash("Created new user!", "success")
             return redirect(url_for("users"))
@@ -221,70 +213,6 @@ def users():
             flash_errors(create_user_form)
             return redirect(url_for("public.users"))
     # return render_template("users.html", create_user_form=create_user_form)
-
-
-@app.route("/add_new_user", methods=["POST"])
-def add_new_user():
-    # if request.method == "POST" and "add-new-user" in request.form:
-    add_new_user_form = AddNewPaymentForm()
-    if add_new_user_form.validate_on_submit():
-        # TODO: Switch this to "if form.validate_on_submit():" after finishing
-        connection = db_engine.connect()
-        new_user = {}
-        new_user["username"] = add_new_user_form.username.data
-        new_user["email_address"] = add_new_user_form.email_address.data
-        new_user["site_permissions"] = ""
-        add_new_user_query = f"INSERT INTO Users (username, email_address, site_permissions) VALUES ({new_user['username']}, {new_user['email_address']}, {new_user['site_permissions']})"
-        connection.execute(add_new_user_query)
-        connection.close()
-    else:
-        return redirect(url_for("users"))
-
-    username = StringField(
-        "username",
-        [validators.Length(min=1, max=254)],
-        render_kw={"class": "form-control"},
-    )
-    email_address = EmailField(
-        "email_address",
-        [validators.Length(min=6, max=254)],
-        render_kw={"class": "form-control"},
-    )
-    site_permissions_guest = BooleanField(
-        id="site_permissions_guest",
-        name="guest",
-        label="guest",
-        default="checked",
-        render_kw={"class": "form-check-input"},
-    )
-    site_permissions_user = BooleanField(
-        id="site_permissions_user", name="user", label="user"
-    )
-    site_permissions_admin = BooleanField(
-        id="site_permissions_admin", name="admin", label="admin", default="checked"
-    )
-    site_permissions_superadmin = BooleanField(
-        id="site_permissions_superadmin",
-        name="superadmin",
-        label="superadmin",
-        default="checked",
-    )
-
-
-def find_user_by_id(user_id):
-    connection = db_engine.connect()
-    user_query = f"SELECT FROM Users WHERE ID = {user_id}"
-    user = connection.execute(user_query).first()
-    connection.close()
-    return user
-
-
-@app.route("/find_user_by_id", methods=["POST"])
-def find_user_by_id():
-    """Select user by ID"""
-    if request.method == "POST":
-        user_id = request.form["user_id"]
-        return jsonify(find_user_by_id(user_id))
 
 
 # @blueprint.route("/register/", methods=["GET", "POST"])
@@ -374,7 +302,6 @@ def votes():
     # return render_template("users.html", create_user_form=create_user_form)
 
 
-
 # TODO: delete
 # @app.route("/payments/")
 # def payments():
@@ -396,9 +323,7 @@ def payments():
         add_new_payment_form = AddNewPaymentForm(request.form)
 
         return render_template(
-            "payments.html",
-            all_payments=all_payments,
-            add_new_payment_form=add_new_payment_form,
+            "payments.html", all_payments=all_payments, add_new_payment_form=add_new_payment_form
         )
     elif request.method == "POST":
         # TODO: also not working yet, dont know where to start
