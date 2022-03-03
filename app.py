@@ -88,6 +88,22 @@ class AddNewPollForm(Form):
         default="checked",
         render_kw={"class": "form-check-input"},
     )
+
+# TODO: update addNewVoteForm to work, 
+class AddNewVoteForm(Form):
+    poll_id = SelectField(# this is a to be dynamically updated select feild of poll_id's
+        "poll id",
+        [validators.Length(min=1, max=254)],
+        render_kw={"class": "mb-3 form-control"},
+    )
+    user_id = SelectField(# this is a to be dynamically updated select feild of user_id's
+        "user id",
+        [validators.Length(min=6, max=254)],
+        render_kw={"class": "form-control"},
+    )
+    vote_values = BooleanField(# this is a json object of form JSON_OBJECT('andrew chong', 1, 'sebastian allen', 0)
+        id="vote_values",
+    )
 class AddNewUserForm(Form):
     username = StringField(
         "username",
@@ -221,10 +237,39 @@ def polls():
     # return render_template("users.html", create_user_form=create_user_form)
 
 
-@app.route("/votes/")
+# @app.route("/votes/")
+# def votes():
+#     """Votes CRUD page."""
+#     return render_template("votes.html")
+
+@app.route("/votes/", methods=["GET", "POST"])
 def votes():
-    """Votes CRUD page."""
-    return render_template("votes.html")
+    """Votes CRUD page"""
+    # create_vote_form = CreateVoteForm(request.form)
+    if request.method == "GET":
+
+        # get all Votes
+        connection = db_engine.connect()
+        votes_query = "SELECT * FROM Votes"
+        all_votes = connection.execute(votes_query).fetchall()
+        connection.close()
+
+        # add new vote form
+        add_new_vote_form = AddNewVoteForm(request.form)
+
+        return render_template(
+            "votes.html", all_votes=all_votes, add_new_vote_form=add_new_vote_form
+        )
+    elif request.method == "POST":
+        # TODO: get forms working
+        if True:
+            # flash("Created new vote!", "success")
+            return redirect(url_for("votes"))
+        else:
+            flash_errors(create_user_form)
+            return redirect(url_for("public.users"))
+    # return render_template("users.html", create_user_form=create_user_form)
+
 
 # TODO: delete
 # @app.route("/payments/")
