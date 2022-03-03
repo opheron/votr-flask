@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from os import getenv
 
 # import requests
@@ -78,19 +80,20 @@ def darkly_reference():
     """Darkly theme reference."""
     return render_template("darkly_reference.html")
 
-# TODO: update addNewPollForm to work, 
+
+# TODO: update addNewPollForm to work,
 class AddNewPollForm(Form):
     poll_title = StringField(
         "poll title",
         [validators.Length(min=1, max=254)],
         render_kw={"class": "mb-3 form-control"},
     )
-    poll_type = EmailField(# this is a enum of type: enum('single_transferable', 'popular', 'ranked_choice')
+    poll_type = EmailField(  # this is a enum of type: enum('single_transferable', 'popular', 'ranked_choice')
         "poll type",
         [validators.Length(min=6, max=254)],
         render_kw={"class": "form-control"},
     )
-    poll_voting_choices = BooleanField(# this is a json array of format JSON_ARRAY('lima','fava','pinto')
+    poll_voting_choices = BooleanField(  # this is a json array of format JSON_ARRAY('lima','fava','pinto')
         id="site_permissions_guest",
         name="guest",
         label="guest",
@@ -98,22 +101,29 @@ class AddNewPollForm(Form):
         render_kw={"class": "form-check-input"},
     )
 
-# TODO: update addNewVoteForm to work, 
+
+# TODO: update addNewVoteForm to work,
 class AddNewVoteForm(Form):
-    poll_id = SelectField(# this is a to be dynamically updated select feild of poll_id's
-        "poll id",
-        [validators.Length(min=1, max=254)],
-        render_kw={"class": "mb-3 form-control"},
+    poll_id = (
+        SelectField(  # this is a to be dynamically updated select feild of poll_id's
+            "poll id",
+            [validators.Length(min=1, max=254)],
+            render_kw={"class": "mb-3 form-control"},
+        )
     )
-    user_id = SelectField(# this is a to be dynamically updated select feild of user_id's
-        "user id",
-        [validators.Length(min=6, max=254)],
-        render_kw={"class": "form-control"},
+    user_id = (
+        SelectField(  # this is a to be dynamically updated select feild of user_id's
+            "user id",
+            [validators.Length(min=6, max=254)],
+            render_kw={"class": "form-control"},
+        )
     )
-    vote_values = BooleanField(# this is a json object of form JSON_OBJECT('andrew chong', 1, 'sebastian allen', 0)
+    vote_values = BooleanField(  # this is a json object of form JSON_OBJECT('andrew chong', 1, 'sebastian allen', 0)
         id="vote_values",
     )
-class AddNewUserForm(Form):
+
+
+class AddNewUserForm(FlaskForm):
     username = StringField(
         "username",
         [validators.Length(min=1, max=254)],
@@ -144,38 +154,8 @@ class AddNewUserForm(Form):
         default="checked",
     )
 
-class AddNewUserPollSettingForm(Form):
-    user_id = StringField(
-        "user_id",
-        [validators.Length(min=1, max=254)],
-        render_kw={"class": "mb-3 form-control"},
-    )
-    poll_id = EmailField(
-        "poll_id",
-        [validators.Length(min=6, max=254)],
-        render_kw={"class": "form-control"},
-    )
-    user_permissions_collaborator = BooleanField(
-        id="user_permissions_collaborator",
-        name="guest",
-        label="guest",
-        default="checked",
-        render_kw={"class": "form-check-input"},
-    )
-    user_permissions_poll_creator = BooleanField(
-        id="user_permissions_poll_creator", name="user", label="user"
-    )
-    user_permissions_admin = BooleanField(
-        id="user_permissions_admin", name="admin", label="admin", default="checked"
-    )
-    user_permissions_superadmin = BooleanField(
-        id="user_permissions_superadmin",
-        name="superadmin",
-        label="superadmin",
-        default="checked",
-    )
 
-class AddNewPaymentForm(Form):
+class AddNewPaymentForm(FlaskForm):
     # TODO: get user_id dynamically updating, update validator for amount_usd (not negative?)
     user_id = SelectField("user_id", coerce=int)
     amount_usd = DecimalField("amount_usd", places=2)
@@ -205,7 +185,6 @@ def users():
             "users.html", all_users=all_users, add_new_user_form=add_new_user_form
         )
     elif request.method == "POST":
-
         if True:
             # flash("Created new user!", "success")
             return redirect(url_for("users"))
@@ -227,49 +206,24 @@ def users():
 @app.route("/add_new_user", methods=["POST"])
 def add_new_user():
     # if request.method == "POST" and "add-new-user" in request.form:
-    add_new_user_form = AddNewPaymentForm()
-    if add_new_user_form.validate_on_submit():
+    add_new_user_form = AddNewUserForm()
+    add_new_user_form.validate_on_submit
+    if request.method == "POST":
+        # if request.method == "POST":
         # TODO: Switch this to "if form.validate_on_submit():" after finishing
         connection = db_engine.connect()
         new_user = {}
         new_user["username"] = add_new_user_form.username.data
         new_user["email_address"] = add_new_user_form.email_address.data
         new_user["site_permissions"] = ""
-        add_new_user_query = f"INSERT INTO Users (username, email_address, site_permissions) VALUES ({new_user['username']}, {new_user['email_address']}, {new_user['site_permissions']})"
+        logging.debug(f"new_user: {new_user}")
+        add_new_user_query = f"INSERT INTO Users (username, email_address, site_permissions) VALUES (\"{new_user['username']}\", \"{new_user['email_address']}\", \"{new_user['site_permissions']}\")"
+        logging.debug(add_new_user_query)
         connection.execute(add_new_user_query)
         connection.close()
+        return redirect(url_for("users"))
     else:
         return redirect(url_for("users"))
-
-    username = StringField(
-        "username",
-        [validators.Length(min=1, max=254)],
-        render_kw={"class": "form-control"},
-    )
-    email_address = EmailField(
-        "email_address",
-        [validators.Length(min=6, max=254)],
-        render_kw={"class": "form-control"},
-    )
-    site_permissions_guest = BooleanField(
-        id="site_permissions_guest",
-        name="guest",
-        label="guest",
-        default="checked",
-        render_kw={"class": "form-check-input"},
-    )
-    site_permissions_user = BooleanField(
-        id="site_permissions_user", name="user", label="user"
-    )
-    site_permissions_admin = BooleanField(
-        id="site_permissions_admin", name="admin", label="admin", default="checked"
-    )
-    site_permissions_superadmin = BooleanField(
-        id="site_permissions_superadmin",
-        name="superadmin",
-        label="superadmin",
-        default="checked",
-    )
 
 
 def find_user_by_id(user_id):
@@ -286,7 +240,6 @@ def find_user_by_id():
     if request.method == "POST":
         user_id = request.form["user_id"]
         return jsonify(find_user_by_id(user_id))
-
 
 
 # @blueprint.route("/register/", methods=["GET", "POST"])
@@ -347,6 +300,7 @@ def polls():
 #     """Votes CRUD page."""
 #     return render_template("votes.html")
 
+
 @app.route("/votes/", methods=["GET", "POST"])
 def votes():
     """Votes CRUD page"""
@@ -374,7 +328,6 @@ def votes():
             flash_errors(create_user_form)
             return redirect(url_for("public.users"))
     # return render_template("users.html", create_user_form=create_user_form)
-
 
 
 # TODO: delete
@@ -444,7 +397,9 @@ def user_poll_settings():
         add_new_user_poll_setting_form = AddNewUserPollSettingForm(request.form)
 
         return render_template(
-            "user_poll_settings.html", all_user_poll_settings=all_user_poll_settings, add_new_user_poll_setting_form=add_new_user_poll_setting_form
+            "user_poll_settings.html",
+            all_user_poll_settings=all_user_poll_settings,
+            add_new_user_poll_setting_form=add_new_user_poll_setting_form,
         )
     elif request.method == "POST":
         # TODO: get forms working
@@ -455,7 +410,6 @@ def user_poll_settings():
             flash_errors(create_user_form)
             return redirect(url_for("public.users"))
     # return render_template("users.html", create_user_form=create_user_form)
-
 
 
 @app.route("/test_db/")
