@@ -71,12 +71,35 @@ def darkly_reference():
 
 
 class AddNewUserForm(Form):
-    username = StringField("username", [validators.Length(min=1, max=254)])
-    email_address = EmailField("email_address", [validators.Length(min=6, max=254)])
-    site_permissions_guest = BooleanField("site_permisions_guest", default="checked")
-    site_permissions_user = BooleanField("site_permisions_user")
-    site_permissions_admin = BooleanField("site_permisions_admin")
-    site_permissions_superadmin = BooleanField("site_permisions_superadmin")
+    username = StringField(
+        "username",
+        [validators.Length(min=1, max=254)],
+        render_kw={"class": "mb-3 form-control"},
+    )
+    email_address = EmailField(
+        "email_address",
+        [validators.Length(min=6, max=254)],
+        render_kw={"class": "form-control"},
+    )
+    site_permissions_guest = BooleanField(
+        id="site_permissions_guest",
+        name="guest",
+        label="guest",
+        default="checked",
+        render_kw={"class": "form-check-input"},
+    )
+    site_permissions_user = BooleanField(
+        id="site_permissions_user", name="user", label="user"
+    )
+    site_permissions_admin = BooleanField(
+        id="site_permissions_admin", name="admin", label="admin", default="checked"
+    )
+    site_permissions_superadmin = BooleanField(
+        id="site_permissions_superadmin",
+        name="superadmin",
+        label="superadmin",
+        default="checked",
+    )
 
 
 @app.route("/users", methods=["GET", "POST"])

@@ -68,6 +68,7 @@
           </div>
         </td>
       </tr>
+
       {% endfor %}
     </tbody>
   </table>
@@ -111,19 +112,19 @@
               placeholder="Ex: personOne"
             />
             #}
+            <div class="mb-3 form-group row">
             <div class="mb-3">
               <!-- USERNAME LABEL -->
-              {{ add_new_user_form.username.label(class="form-label mb-3") }}
+              {{ add_new_user_form.username.label(class="form-label") }}
               <!-- USERNAME FIELD -->
-              {{ add_new_user_form.username( class="form-control",
-              placeholder="Ex: personOne") }}
+              {{ add_new_user_form.username( placeholder="Ex: personOne") }}
               <div id="create-username-help" class="form-text">varchar</div>
             </div>
           </td>
           <td>
-            <div class="mb-3">
+            <div class="mb-3 form-group row">
               <!-- EMAIL ADDRESS LABEL -->
-              {{ add_new_user_form.email_address.label(class="form-label mb-3")
+              {{ add_new_user_form.email_address.label(class="form-label")
               }}
               <!-- EMAIL ADDRESS FIELD -->
               {{ add_new_user_form.username( class="form-control",
@@ -136,29 +137,30 @@
           <td>
             <div class="form-check">
               <!-- FIELD -->
-              {{add_new_user_form.site_permissions_guest(class="form-check")}}
+              {{add_new_user_form.site_permissions_guest(class="form-check-input")}}
               <!-- LABEL -->
-              {{ add_new_user_form.site_permissions_guest.label }}
+              {{ add_new_user_form.site_permissions_guest.label(name="guest", class="form-check-label") }}
             </div>
             <div class="form-check">
               <!-- FIELD -->
-              {{add_new_user_form.site_permissions_user(class="form-check")}}
+              {{add_new_user_form.site_permissions_user(class="form-check-input" )}}
               <!-- LABEL -->
-              {{ add_new_user_form.site_permissions_user.label }}
+              {{ add_new_user_form.site_permissions_user.label(class="form-check-label") }}
             </div>
             <div class="form-check">
               <!-- FIELD -->
-              {{add_new_user_form.site_permissions_admin(class="form-check")}}
+              {{add_new_user_form.site_permissions_admin(class="form-check-input")}}
               <!-- LABEL -->
-              {{ add_new_user_form.site_permissions_admin.label }}
+              {{ add_new_user_form.site_permissions_admin.label(class="form-check-label") }}
             </div>
             <div class="form-check">
               <!-- FIELD -->
-              {{add_new_user_form.site_permissions_superadmin(class="form-check")}}
+              {{add_new_user_form.site_permissions_superadmin(class="form-check-input")}}
               <!-- LABEL -->
-              {{ add_new_user_form.site_permissions_superadmin.label }}
+              {{ add_new_user_form.site_permissions_superadmin.label(class="form-check-label") }}
             </div>
             <div id="users-site_permissions-help" class="form-text">set</div>
+            </div>
           </td>
         </tr>
       </tbody>
