@@ -135,6 +135,37 @@ class AddNewUserForm(Form):
         default="checked",
     )
 
+class AddNewUserPollSettingForm(Form):
+    user_id = StringField(
+        "user_id",
+        [validators.Length(min=1, max=254)],
+        render_kw={"class": "mb-3 form-control"},
+    )
+    poll_id = EmailField(
+        "poll_id",
+        [validators.Length(min=6, max=254)],
+        render_kw={"class": "form-control"},
+    )
+    user_permissions_collaborator = BooleanField(
+        id="user_permissions_collaborator",
+        name="guest",
+        label="guest",
+        default="checked",
+        render_kw={"class": "form-check-input"},
+    )
+    user_permissions_poll_creator = BooleanField(
+        id="user_permissions_poll_creator", name="user", label="user"
+    )
+    user_permissions_admin = BooleanField(
+        id="user_permissions_admin", name="admin", label="admin", default="checked"
+    )
+    user_permissions_superadmin = BooleanField(
+        id="user_permissions_superadmin",
+        name="superadmin",
+        label="superadmin",
+        default="checked",
+    )
+
 class AddNewPaymentForm(Form):
     # TODO: get user_id dynamically updating, update validator for amount_usd (not negative?)
     user_id = SelectField('user_id', coerce=int)
@@ -314,10 +345,40 @@ def payments():
     # return render_template("users.html", create_user_form=create_user_form)
 
 
-@app.route("/user_poll_settings/")
+# app.route("/user_poll_settings/")
+# def user_poll_settings():
+#     """User_Poll_Settings CRUD page."""
+#     return render_template("user_poll_settings.html")
+
+
+@app.route("/user_poll_settings/", methods=["GET", "POST"])
 def user_poll_settings():
-    """User_Poll_Settings CRUD page."""
-    return render_template("user_poll_settings.html")
+    """User_Poll_Settings CRUD page"""
+    # create_user_poll_setting_form = CreateUserPollSettingForm(request.form)
+    if request.method == "GET":
+
+        # get all User_Poll_Settings
+        connection = db_engine.connect()
+        user_poll_settings_query = "SELECT * FROM User_Poll_Settings"
+        all_user_poll_settings = connection.execute(user_poll_settings_query).fetchall()
+        connection.close()
+
+        # add new user_poll_setting form
+        add_new_user_poll_setting_form = AddNewUserPollSettingForm(request.form)
+
+        return render_template(
+            "user_poll_settings.html", all_user_poll_settings=all_user_poll_settings, add_new_user_poll_setting_form=add_new_user_poll_setting_form
+        )
+    elif request.method == "POST":
+        # TODO: get forms working
+        if True:
+            # flash("Created new user_poll_setting!", "success")
+            return redirect(url_for("user_poll_settings"))
+        else:
+            flash_errors(create_user_form)
+            return redirect(url_for("public.users"))
+    # return render_template("users.html", create_user_form=create_user_form)
+
 
 
 @app.route("/test_db/")
