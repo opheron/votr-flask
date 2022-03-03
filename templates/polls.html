@@ -15,30 +15,16 @@
             </tr>
           </thead>
           <tbody>
+            {% for poll in all_polls %}
+
             <tr>
-              <th scope="row">1</th>
-              <td>which bean?</td>
-              <td>single_transferable</td>
-              <td>[lima, fava, pinto]</td>
+              <th scope="row">{{ poll["poll_id"] }}</th>
+              <td>{{ poll["poll_title"] }}</td>
+              <td>{{ poll["poll_type"] }}</td>
+              <td>{{ poll["poll_voting_choices"] }}</td>
             </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>elect the group leader</td>
-              <td>popular</td>
-              <td>[andrew chong, sebastian allen]</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>which is better</td>
-              <td>ranked_choice</td>
-              <td>[the wheel, sliced bread, fire, science]</td>
-            </tr>
-            <tr>
-              <th scope="row">4</th>
-              <td>test question</td>
-              <td>popular</td>
-              <td>[1, 2, 3, 4, 5]</td>
-            </tr>
+      
+            {% endfor %}
           </tbody>
         </table>
      </div>

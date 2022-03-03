@@ -69,7 +69,25 @@ def darkly_reference():
     """Darkly theme reference."""
     return render_template("darkly_reference.html")
 
-
+# TODO: update addNewPollForm to work, 
+class AddNewPollForm(Form):
+    poll_title = StringField(
+        "poll title",
+        [validators.Length(min=1, max=254)],
+        render_kw={"class": "mb-3 form-control"},
+    )
+    poll_type = EmailField(# this is a enum of type: enum('single_transferable', 'popular', 'ranked_choice')
+        "poll type",
+        [validators.Length(min=6, max=254)],
+        render_kw={"class": "form-control"},
+    )
+    poll_voting_choices = BooleanField(# this is a json array of format JSON_ARRAY('lima','fava','pinto')
+        id="site_permissions_guest",
+        name="guest",
+        label="guest",
+        default="checked",
+        render_kw={"class": "form-check-input"},
+    )
 class AddNewUserForm(Form):
     username = StringField(
         "username",
@@ -168,10 +186,39 @@ def users():
 #     return render_template("public/register.html", form=form)
 
 
-@app.route("/polls/")
+# @app.route("/polls/")
+# def polls():
+#     """Polls CRUD page."""
+#     return render_template("polls.html")
+
+
+@app.route("/polls/", methods=["GET", "POST"])
 def polls():
-    """Polls CRUD page."""
-    return render_template("polls.html")
+    """Polls CRUD page"""
+    # create_poll_form = CreatePollForm(request.form)
+    if request.method == "GET":
+
+        # get all Polls
+        connection = db_engine.connect()
+        polls_query = "SELECT * FROM Polls"
+        all_polls = connection.execute(polls_query).fetchall()
+        connection.close()
+
+        # add new poll form
+        add_new_poll_form = AddNewPollForm(request.form)
+
+        return render_template(
+            "polls.html", all_polls=all_polls, add_new_poll_form=add_new_poll_form
+        )
+    elif request.method == "POST":
+        # TODO: get forms working
+        if True:
+            # flash("Created new poll!", "success")
+            return redirect(url_for("polls"))
+        else:
+            flash_errors(create_user_form)
+            return redirect(url_for("public.users"))
+    # return render_template("users.html", create_user_form=create_user_form)
 
 
 @app.route("/votes/")
@@ -191,9 +238,6 @@ def payments():
     """Payments CRUD page"""
     # add_new_payment_form = CreatepPymentForm(request.form) ----
     if request.method == "GET":
-
-        # TODO: Separate this out into another function
-        # get all Payments
         connection = db_engine.connect()
         payments_query = "SELECT * FROM Payments"
         all_payments = connection.execute(payments_query).fetchall()
