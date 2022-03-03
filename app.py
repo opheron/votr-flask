@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine, MetaData, Table, Column, Numeric, Integer, VARCHAR
 from sqlalchemy.engine import result, Engine
 
-from wtforms import Form, BooleanField, StringField, validators, EmailField
+from wtforms import Form, BooleanField, StringField, validators, EmailField, DecimalField
 
 # from flask_sqlalchemy import SQLAlchemy
 
@@ -101,6 +101,15 @@ class AddNewUserForm(Form):
         default="checked",
     )
 
+class AddNewPaymentForm(Form):
+    # TODO: get user_id dynamically updating, update validator for amount_usd (not negative?)
+    user_id = SelectField('user_id', coerce=int)
+    amount_usd = DecimalField("amount_usd", places = 2)
+    payment_purposes_test = BooleanField("test", default="checked")
+    payment_purposes_free_trial = BooleanField("free trial")
+    payment_purposes_subscription = BooleanField("subscription")
+    payment_purposes_donation = BooleanField("donation")
+
 
 @app.route("/users", methods=["GET", "POST"])
 def users():
@@ -186,11 +195,50 @@ def votes():
     """Votes CRUD page."""
     return render_template("votes.html")
 
+# TODO: delete
+# @app.route("/payments/")
+# def payments():
+#     """Payments CRUD page."""
+#     return render_template("payments.html")
 
-@app.route("/payments/")
+
+@app.route("/payments/", methods=["GET", "POST"])
 def payments():
-    """Payments CRUD page."""
-    return render_template("payments.html")
+    """Payments CRUD page"""
+    # add_new_payment_form = CreatepPymentForm(request.form) ----
+    if request.method == "GET":
+
+        # TODO: Separate this out into another function
+        # get all Payments
+        connection = db_engine.connect()
+        payments_query = "SELECT * FROM Payments"
+        all_payments = connection.execute(payments_query).fetchall()
+        connection.close()
+
+        # TODO: add new ptayment form - not working yet, the select list is not dynamic
+        add_new_payment_form = AddNewPaymentForm(request.form)
+
+        return render_template(
+            "payments.html", all_payments=all_payments, add_new_payment_form=add_new_payment_form
+        )
+    elif request.method == "POST":
+        # TODO: also not working yet, dont know where to start
+        if True:
+            # flash("Created new user!", "success")
+            return redirect(url_for("payments"))
+        # if create_user_form.validate_on_submit():
+        #     User.create(
+        #         username=create_user_form.username.data,
+        #         email=create_user_form.email.data,
+        #         password=create_user_form.password.data,
+        #         active=create_user_form,
+        #     )
+        #     flash("Created new user!", "success")
+        #     return redirect(url_for("public.users"))
+        else:
+            flash_errors(create_payment_form)
+            return redirect(url_for("public.payments"))
+    # return render_template("users.html", create_user_form=create_user_form)
 
 
 @app.route("/user_poll_settings/")
