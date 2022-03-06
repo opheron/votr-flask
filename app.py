@@ -145,7 +145,9 @@ class AddNewUserForm(FlaskForm):
         id="site_permissions_user", name="user", label="user"
     )
     site_permissions_admin = BooleanField(
-        id="site_permissions_admin", name="admin", label="admin", default="checked"
+        id="site_permissions_admin",
+        name="admin",
+        label="admin",
     )
     site_permissions_superadmin = BooleanField(
         id="site_permissions_superadmin",
@@ -208,17 +210,84 @@ def add_new_user():
     # if request.method == "POST" and "add-new-user" in request.form:
     add_new_user_form = AddNewUserForm()
     add_new_user_form.validate_on_submit
-    if request.method == "POST":
-        # if request.method == "POST":
-        # TODO: Switch this to "if form.validate_on_submit():" after finishing
+    # NOTE: Use the next line if you need to test w/out form validation stopping
+    # if request.method == "POST":
+    if add_new_user_form.validate_on_submit():
         connection = db_engine.connect()
-        new_user = {}
-        new_user["username"] = add_new_user_form.username.data
-        new_user["email_address"] = add_new_user_form.email_address.data
-        new_user["site_permissions"] = ""
-        logging.debug(f"new_user: {new_user}")
-        add_new_user_query = f"INSERT INTO Users (username, email_address, site_permissions) VALUES (\"{new_user['username']}\", \"{new_user['email_address']}\", \"{new_user['site_permissions']}\")"
-        logging.debug(add_new_user_query)
+        new_user = {
+            "username": add_new_user_form.username.data,
+            "email_address": add_new_user_form.email_address.data,
+        }
+
+        # Permissions are tricky because of the sql string has to be exact with punctuation like commas and quotes
+        new_user_site_permissions_set = (
+            add_new_user_form.site_permissions_guest.data,
+            add_new_user_form.site_permissions_user.data,
+            add_new_user_form.site_permissions_admin.data,
+            add_new_user_form.site_permissions_superadmin.data,
+        )
+        new_user[
+            "site_permissions_guest"
+        ] = add_new_user_form.site_permissions_guest.data
+        new_user["site_permissions_user"] = add_new_user_form.site_permissions_user.data
+        new_user[
+            "site_permissions_admin"
+        ] = add_new_user_form.site_permissions_admin.data
+        new_user[
+            "site_permissions_superadmin"
+        ] = add_new_user_form.site_permissions_superadmin.data
+
+        # Need to make a single proper sql string for site_permissions
+        site_permissions_set = ("guest", "user", "admin", "superadmin")
+        new_user_sqlstr_site_permissions = ""
+        new_user_permissions_indices = list(
+            filter(
+                lambda x: new_user_site_permissions_set[x] == True,
+                range(len(new_user_site_permissions_set)),
+            )
+        )
+        app.logger.debug(
+            f"new_user_permissions_indices: {new_user_permissions_indices}"
+        )
+        new_user_sqlstr_site_permissions = ""
+        match new_user_site_permissions_set.count(True):
+            case 0:
+                pass
+            case 1:
+                new_user_sqlstr_site_permissions = (
+                    f"{site_permissions_set[new_user_site_permissions_set.index(True)]}"
+                )
+            case 2:
+                new_user_sqlstr_site_permissions = (
+                    f"{site_permissions_set[new_user_permissions_indices[0]]},"
+                    f"{site_permissions_set[new_user_permissions_indices[1]]}"
+                )
+            case 3:
+                new_user_sqlstr_site_permissions = (
+                    f"{site_permissions_set[new_user_permissions_indices[0]]},"
+                    f"{site_permissions_set[new_user_permissions_indices[1]]},"
+                    f"{site_permissions_set[new_user_permissions_indices[2]]}"
+                )
+            case 4:
+                new_user_sqlstr_site_permissions = "guest,user,admin,superadmin"
+
+            # Default case should never occur
+            case _:
+                app.logger.warn(f"Default case for site permissions bug!")
+                app.logger.debug(f"new_user_sqlstr_site_permissions")
+                connection.close()
+                return redirect(url_for("users"))
+
+        app.logger.debug(f"{new_user['site_permissions_guest']}")
+        app.logger.debug(f"{new_user['site_permissions_user']}")
+        app.logger.debug(f"{new_user['site_permissions_admin']}")
+        app.logger.debug(f"{new_user['site_permissions_superadmin']}")
+        app.logger.debug(
+            f"new_user_sqlstr_site_permissions: {new_user_sqlstr_site_permissions}"
+        )
+        app.logger.debug(f"new_user: {new_user}")
+        add_new_user_query = f"INSERT INTO Users (username, email_address, site_permissions) VALUES ('{new_user['username']}', '{new_user['email_address']}', '{new_user_sqlstr_site_permissions}')"
+        app.logger.debug(add_new_user_query)
         connection.execute(add_new_user_query)
         connection.close()
         return redirect(url_for("users"))
@@ -240,30 +309,6 @@ def find_user_by_id():
     if request.method == "POST":
         user_id = request.form["user_id"]
         return jsonify(find_user_by_id(user_id))
-
-
-# @blueprint.route("/register/", methods=["GET", "POST"])
-# def register():
-#     """Register new user."""
-#     form = RegisterForm(request.form)
-#     if form.validate_on_submit():
-#         User.create(
-#             username=form.username.data,
-#             email=form.email.data,
-#             password=form.password.data,
-#             active=True,
-#         )
-#         flash("Thank you for registering. You can now log in.", "success")
-#         return redirect(url_for("public.home"))
-#     else:
-#         flash_errors(form)
-#     return render_template("public/register.html", form=form)
-
-
-# @app.route("/polls/")
-# def polls():
-#     """Polls CRUD page."""
-#     return render_template("polls.html")
 
 
 @app.route("/polls/", methods=["GET", "POST"])

@@ -81,7 +81,7 @@
 <div>
   <form name="add-new-user" method="POST" action="/add_new_user">
     {{ add_new_user_form.csrf_token }}
-    <h3>Add New User</h3>
+    <h3>FINALIZED Add New User</h3>
     <table class="table table-striped table-dark">
       <thead>
         <tr>
@@ -128,7 +128,7 @@
               {{ add_new_user_form.email_address.label(class="form-label")
               }}
               <!-- EMAIL ADDRESS FIELD -->
-              {{ add_new_user_form.username( class="form-control", value="newUserOne@emailaddress.com",
+              {{ add_new_user_form.email_address( class="form-control", value="newUserOne@emailaddress.com",
               placeholder="Ex: personOne@website.com") }}
               <div id="create-email_address-help" class="form-text">
                 varchar
