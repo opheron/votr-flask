@@ -204,16 +204,11 @@
   <form>
     <h3>Delete a Setting</h3>
     <div class="btn-group">
-      <!--class button-group changes the width, if theres a better way, you can update this-->
-      <select class="form-select" aria-label="Delete User_poll_setting ID">
+      <select name="delete-setting-by-id" class="form-select" aria-label="Delete Setting ID">
         <option selected>Setting ID</option>
-        <!--i dont know how wer are going to have this automatically populate with the available id's-->
-        <option value="1">Setting 1</option>
-        <option value="2">Setting 2</option>
-        <option value="3">Setting 3</option>
-        <option value="4">Setting 4</option>
-        <option value="5">Setting 5</option>
-        <option value="6">Setting 6</option>
+        {% for user_poll_setting in all_user_poll_settings %}
+        <option value="{{ user_poll_setting["user_poll_setting_id"] }}">{{ user_poll_setting["user_poll_setting_id"] }}</option>
+        {% endfor %}
       </select>
     </div>
 
@@ -226,35 +221,12 @@
   <form>
     <h3>Search Setting</h3>
     <div class="btn-group">
-      <!--class button-group changes the width of the folllowing selects, if theres a better way, you can update this-->
-      <select class="form-select" aria-label="Search Setting ID">
+      <select name="search-setting-by-id" class="form-select" aria-label="Search Setting ID">
         <option selected>Setting ID</option>
-        <!--i dont know how wer are going to have this automatically populate with the available id's-->
-        <option value="1">Setting 1</option>
-        <option value="2">Setting 2</option>
-        <option value="3">Setting 3</option>
-        <option value="4">Setting 4</option>
-        <option value="5">Setting 5</option>
-        <option value="6">Setting 6</option>
+        {% for user_poll_setting in all_user_poll_settings %}
+        <option value="{{ user_poll_setting["user_poll_setting_id"] }}">{{ user_poll_setting["user_poll_setting_id"] }}</option>
+        {% endfor %}
       </select>
-      <select class="form-select" aria-label="Search Poll ID">
-        <option selected>Poll ID</option>
-        <!--i dont know how wer are going to have this automatically populate with the available id's-->
-        <option value="1">Poll 1</option>
-        <option value="2">Poll 2</option>
-        <option value="3">Poll 3</option>
-        <option value="4">Poll 4</option>
-      </select>
-      <select class="form-select" aria-label="Search User ID">
-        <option selected>User ID</option>
-        <!--i dont know how wer are going to have this automatically populate with the available id's-->
-        <option value="1">User 1</option>
-        <option value="2">User 2</option>
-        <option value="3">User 3</option>
-        <option value="4">User 4</option>
-      </select>
-    </div>
-    
     <button type="submit" class="btn btn-primary">Search</button
     ><!--dont know about type here-->
   </form>

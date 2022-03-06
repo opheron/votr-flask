@@ -85,20 +85,13 @@
 <div class="container">
           <form>
             <h3>Delete a Vote</h3>
-            <div class="btn-group"> <!--class button-group changes the width, if theres a better way, you can update this-->
-                <select class="form-select" aria-label="Delete Vote ID">
-                  <option selected>Vote ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                  <option value="1">Vote 1</option>
-                  <option value="2">Vote 2</option>
-                  <option value="3">Vote 3</option>
-                  <option value="4">Vote 4</option>
-                  <option value="5">Vote 5</option>
-                  <option value="6">Vote 6</option>
-                  <option value="7">Vote 7</option>
-                  <option value="8">Vote 8</option>
-                  <option value="9">Vote 9</option>
-                  <option value="10">Vote 10</option>
-                </select>
+            <div class="btn-group"> 
+              <select name="delete-vote-by-id" class="form-select" aria-label="Delete Vote ID">
+                <option selected>Vote ID</option>
+                {% for vote in all_votes %}
+                <option value="{{ vote["vote_id"] }}">{{ vote["vote_id"] }}</option>
+                {% endfor %}
+              </select>
             </div>
 
             <button type="submit" class="btn btn-primary">Delete</button><!--dont know about type here-->
@@ -109,37 +102,12 @@
           <form>
             <h3>Search Votes</h3>
             <div class="btn-group"> <!--class button-group changes the width of the folllowing selects, if theres a better way, you can update this-->
-              <select class="form-select" aria-label="Search Vote ID">
-                <option selected>Vote ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                <option value="1">Vote 1</option>
-                <option value="2">Vote 2</option>
-                <option value="3">Vote 3</option>
-                <option value="4">Vote 4</option>
-                <option value="5">Vote 5</option>
-                <option value="6">Vote 6</option>
-                <option value="7">Vote 7</option>
-                <option value="8">Vote 8</option>
-                <option value="9">Vote 9</option>
-                <option value="10">Vote 10</option>
+              <select name="search-vote-by-id" class="form-select" aria-label="Search Vote ID">
+                <option selected>Vote ID</option>
+                {% for vote in all_votes %}
+                <option value="{{ vote["vote_id"] }}">{{ vote["vote_id"] }}</option>
+                {% endfor %}
               </select>
-              <select class="form-select" aria-label="Search Poll ID">
-                <option selected>Poll ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                <option value="1">Poll 1</option>
-                <option value="2">Poll 2</option>
-                <option value="3">Poll 3</option>
-                <option value="4">Poll 4</option>
-              </select>
-              <select class="form-select" aria-label="Search User ID">
-                <option selected>User ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                <option value="1">User 1</option>
-                <option value="2">User 2</option>
-                <option value="3">User 3</option>
-                <option value="4">User 4</option>
-              </select>
-            </div>
-            <label for="vote-values-search">vote_values: </label>
-            <input type="text" style="display: inline; width: 20%; padding-bottom:9px;" class="form-control" id="vote-values-search" placeholder="Ex: &quot;option 1&quot; AND &quot;option2&quot;"> <!-- not sure what 'type' to use here--> <!--style part was just to make it inline, if you know a better way you can update, or just add this part to the css-->
-
             <button type="submit" class="btn btn-primary">Search</button><!--dont know about type here-->
           </form>
         </div>

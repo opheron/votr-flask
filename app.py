@@ -166,6 +166,16 @@ class AddNewPaymentForm(FlaskForm):
     payment_purposes_subscription = BooleanField("subscription")
     payment_purposes_donation = BooleanField("donation")
 
+class AddNewUserPollSettingForm(FlaskForm):
+    # TODO: Validation, actual functionality
+    user_poll_setting_id = StringField("user_poll_setting_id")
+    user_id = StringField("user_id")
+    poll_id = BooleanField("poll_id")
+    user_permissions_collaborator = BooleanField("collaborator")
+    user_permissions_poll_creator = BooleanField("poll creator")
+    user_permissions_admin = BooleanField("admin")
+    user_permissions_superadmin = BooleanField("superadmin")
+
 
 @app.route("/users", methods=["GET", "POST"])
 def users():

@@ -139,11 +139,11 @@
       <form>
         <h3>Delete a Payment</h3>
         <div class="btn-group"> <!--class button-group changes the width, if theres a better way, you can update this-->
-            <select class="form-select" aria-label="Delete Payment ID">
-              <option selected>Payment  ID</option>
+            <select name="delete-payment-by-id" class="form-select" aria-label="Delete Payment ID">
+              <option selected>Payment ID</option>
               <!--i dont know how wer are going to have this automatically populate with the available id's-->
               {% for payment in all_payments %}
-              <option value="{{ payment["payment_id"] }}">Payment  {{ payment["payment_id"] }}</option>
+              <option value="{{ payment["payment_id"] }}">{{ payment["payment_id"] }}</option>
               {% endfor %}
             </select>
       
@@ -156,12 +156,11 @@
     <div class="container">
       <form>
         <h3>Search Payments</h3>
-        <div class="btn-group"> <!--class button-group changes the width of the folllowing selects, if theres a better way, you can update this-->
-          <select class="form-select" aria-label="Delete Payment ID">
-            <option selected>Payment  ID</option>
-            <!--i dont know how wer are going to have this automatically populate with the available id's-->
+        <div class="btn-group">
+          <select name="delete-payment-by-id" class="form-select" aria-label="Delete Payment ID">
+            <option selected>Payment ID</option>
             {% for payment in all_payments %}
-            <option value="{{ payment["payment_id"] }}">Payment  {{ payment["payment_id"] }}</option>
+            <option value="{{ payment["payment_id"] }}">{{ payment["payment_id"] }}</option>
             {% endfor %}
           </select>
         <button type="submit" class="btn btn-primary">Search</button><!--dont know about type here-->
