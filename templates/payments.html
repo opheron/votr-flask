@@ -136,10 +136,10 @@
     </div>
 
     <div class="container">
-      <form>
+      <form action="/delete_payment">
         <h3>Delete a Payment</h3>
         <div class="btn-group"> <!--class button-group changes the width, if theres a better way, you can update this-->
-            <select name="delete-payment-by-id" class="form-select" aria-label="Delete Payment ID">
+            <select name="delete-payment-by-id" class="form-select" aria-label="Delete Payment ID" >
               <option selected>Payment ID</option>
               <!--i dont know how wer are going to have this automatically populate with the available id's-->
               {% for payment in all_payments %}
