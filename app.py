@@ -235,6 +235,7 @@ class DeletePaymentForm(FlaskForm):
     )
 
 
+
 class AddNewUserPollSettingForm(FlaskForm):
     user_id = SelectField(
         "user_id",  
@@ -319,6 +320,11 @@ def users():
 
         # TODO: Separate this out into another function
         # get all users
+
+        # with engine.connect() as connection:
+        # result = connection.execute(text("select username from users"))
+        # for row in result:
+        #     print("username:", row['username'])
         connection = db_engine.connect()
         users_query = "SELECT * FROM Users"
         all_users = connection.execute(users_query).fetchall()
@@ -353,7 +359,6 @@ def users():
 def add_new_user():
     # if request.method == "POST" and "add-new-user" in request.form:
     add_new_user_form = AddNewUserForm()
-    add_new_user_form.validate_on_submit
     # NOTE: Use the next line if you need to test w/out form validation stopping
     # if request.method == "POST":
     if add_new_user_form.validate_on_submit():
@@ -382,6 +387,7 @@ def add_new_user():
         ] = add_new_user_form.site_permissions_superadmin.data
 
         # Need to make a single proper sql string for site_permissions
+
         site_permissions_set = ("guest", "user", "admin", "superadmin")
         new_user_sqlstr_site_permissions = ""
         new_user_permissions_indices = list(
@@ -439,20 +445,104 @@ def add_new_user():
         return redirect(url_for("users"))
 
 
-def find_user_by_id(user_id):
-    connection = db_engine.connect()
-    user_query = f"SELECT FROM Users WHERE ID = {user_id}"
-    user = connection.execute(user_query).first()
-    connection.close()
-    return user
+def get_user_data_by_id(user_id):
+    """Get user data from db and return data as a dictionary"""
+    with db_engine.connect() as connection:
+        find_user_by_id_query = f"SELECT * FROM Users WHERE user_id = {user_id}"
+        find_user_by_id_query_result = connection.execute(
+            find_user_by_id_query
+        ).fetchone()
+        app.logger.debug(find_user_by_id_query_result)
+        # user_data = dict(
+        #     zip(
+        #         [
+        #             "user_id",
+        #             "username",
+        #             "email",
+        #         ],
+        #         find_user_by_id_query_result[0, 3],
+        #     )
+        # )
+        # user_data["site_permissions"] = {find_user_by_id_query_result.split(",")}
+        # return user_data
+        user_data = dict(find_user_by_id_query_result)
+        user_data["site_permissions"] = user_data["site_permissions"].split(",")
+        app.logger.debug(user_data)
+
+        return user_data
 
 
 @app.route("/find_user_by_id", methods=["POST"])
 def find_user_by_id():
     """Select user by ID"""
     if request.method == "POST":
-        user_id = request.form["user_id"]
-        return jsonify(find_user_by_id(user_id))
+        app.logger.debug(request.form)
+        user_id = request.form["users-find-by-id-id"]
+
+        # params = request.get_json()
+        # app.logger.debug(f"params: {params}")
+        # app.logger.debug(f"user_id: {user_id}")
+
+        # user_data = {result.meta_key: result.metag_value for result in results}
+
+        user_data = get_user_data_by_id(user_id)
+        app.logger.debug(user_data)
+        # user_data_dict = {kvp.meta_key: kvp.meta_value for kvp in user_data}
+        # user_data_dict = {user_id: user_id, username: username}
+
+        return jsonify(user_data)
+    else:
+        return redirect(url_for("users"))
+
+
+#  add_new_user_form = AddNewUserForm()
+#     # NOTE: Use the next line if you need to test w/out form validation stopping
+#     # if request.method == "POST":
+#     if add_new_user_form.validate_on_submit():
+#         connection = db_engine.connect()
+#         new_user = {
+#             "username": add_new_user_form.username.data,
+#             "email_address": add_new_user_form.email_address.data,
+#         }
+
+# # ###################
+
+#         # Permissions are tricky because of the sql string has to be exact with punctuation like commas and quotes
+#         new_user_site_permissions_set = (
+#             add_new_user_form.site_permissions_guest.data,
+#             add_new_user_form.site_permissions_user.data,
+#             add_new_user_form.site_permissions_admin.data,
+#             add_new_user_form.site_permissions_superadmin.data,
+#         )
+#         new_user[
+#             "site_permissions_guest"
+#         ] = add_new_user_form.site_permissions_guest.data
+#         new_user["site_permissions_user"] = add_new_user_form.site_permissions_user.data
+#         new_user[
+#             "site_permissions_admin"
+#         ] = add_new_user_form.site_permissions_admin.data
+#         new_user[
+#             "site_permissions_superadmin"
+#         ] = add_new_user_form.site_permissions_superadmin.data
+
+#         # Need to make a single proper sql string for site_permissions
+
+#         site_permissions_set = ("guest", "user", "admin", "superadmin")
+#         new_user_sqlstr_site_permissions = ""
+#         new_user_permissions_indices = list(
+#             filter(
+#                 lambda x: new_user_site_permissions_set[x] == True,
+#                 range(len(new_user_site_permissions_set)),
+#             )
+#         )
+#         app.logger.debug(
+#             f"new_user_permissions_indices: {new_user_permissions_indices}"
+#         )
+
+#         connection = db_engine.connect()
+# users_query = "SELECT * FROM Users"
+# all_users = connection.execute(users_query).fetchall()
+# connection.close()
 
 
 @app.route("/polls/", methods=["GET", "POST"])

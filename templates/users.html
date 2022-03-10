@@ -174,121 +174,6 @@
 <!-- END UPDATED ADD NEW USER -->
 
 <div>
-  <form name="add-new-user" method="POST" action="/add_new_user">
-    {{ add_new_user_form.csrf_token }}
-    <h3>Add New User</h3>
-    <table class="table table-striped table-dark">
-      <thead>
-        <tr>
-          <th scope="col">user_id</th>
-          <th scope="col">username</th>
-          <th scope="col">email_address</th>
-          <th
-            scope="col"
-            data-toggle="tooltip"
-            data-placement="top"
-            title="User's site-wide permissions"
-          >
-            site_permissions
-          </th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr>
-          <th scope="row"><i>auto incremented</i></th>
-          <td>
-            <div class="mb-3">
-              <label for="users-create-username" class="form-label mb-3"
-                >username</label
-              >
-              <input
-                type="text"
-                class="form-control"
-                id="users-create-username"
-                aria-describedby="create-username-help"
-                placeholder="Ex: personOne"
-              />
-              <!-- not sure what 'type' to use here-->
-              <div id="create-username-help" class="form-text">varchar</div>
-            </div>
-          </td>
-          <td>
-            <div class="mb-3">
-              <label for="users-create-email_address" class="form-label mb-3"
-                >email_address</label
-              >
-              <input
-                type="text"
-                class="form-control"
-                id="users-create-email_address"
-                aria-describedby="create-email_address-help"
-                placeholder="Ex: personOne@email.com"
-              />
-              <!-- not sure what 'type' to use here-->
-              <div id="create-email_address-help" class="form-text">
-                varchar
-              </div>
-            </div>
-          </td>
-          <td>
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                checked=""
-              />
-              <label class="form-check-label" for="flexCheckDefault">
-                guest
-              </label>
-            </div>
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-              />
-              <label class="form-check-label" for="flexCheckDefault">
-                user
-              </label>
-            </div>
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-              />
-              <label class="form-check-label" for="flexCheckDefault">
-                admin
-              </label>
-            </div>
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-              />
-              <label class="form-check-label" for="flexCheckDefault">
-                superadmin
-              </label>
-            </div>
-            <div id="users-site_permissions-help" class="form-text">set</div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <button type="submit" class="btn btn-primary">Create New User</button>
-    <input type="submit" value="Go">
-  </form>
-</div>
-
-<div>
   <form>
     <h3>Delete a User</h3>
     <div class="btn-group">
@@ -308,8 +193,7 @@
   </form>
 </div>
 
-<!-- START NEW SEARCH USERS FORM -->
-
+{#
 <div>
   <form>
     <h3>Search Users</h3>
@@ -341,14 +225,14 @@
     ><!--dont know about type here-->
   </form>
 </div>
+#}
 
 
-
-<!-- EXAMPLE ADD NEW USER FORM INTO SEARCH -->
+<!-- START NEW SEARCH USERS FORM  -->
 
 <div>
-  <form>
-    <h3>Search New User By ID - NEW</h3>
+  <form name="find-user-by-id-form" id = "find-user-by-id-form" method="POST" action="/find_user_by_id">
+    <h3>Find User By ID - NEW</h3>
     <table class="table table-striped table-dark">
       <thead>
         <tr>
@@ -369,9 +253,8 @@
       <tbody>
         <tr mb-3 form-group row>
           <th scope="row">
-          <select class="form-select" aria-label="Search User ID">
+          <select class="form-select" id="users-find-by-id-id" name="users-find-by-id-id" aria-label="Search User ID">
         <option selected>User ID</option>
-        <!--i dont know how wer are going to have this automatically populate with the available id's-->
         {% for user in all_users %}
         <option value="{{ user["user_id"] }}">{{ user["user_id"] }}</option>
         {% endfor %}
@@ -380,20 +263,58 @@
           </th>
           <td>
             <div class="mb-3">
-              username here
+
+        <!-- Username -->
+        <input type="text" id="users-find-by-id-username" name="name" class="form-control" size="10" placeholder="Username" readonly>
+
             </div>
           </td>
           <td>
             <div class="mb-3">
-              email address here
+              <input type="text" id="users-find-by-id-email" name="name" class="form-control" size="10" placeholder="Email" readonly>
             </div>
           </td>
+
+          <!-- START NEW SITE PERMISSIONS -->
+
+          <td>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="users-find-by-id-site-permissions-guest" disabled="">
+            <label class="form-check-label" for="flexCheckDefault">
+              guest
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="users-find-by-id-site-permissions-user" disabled="">
+            <label class="form-check-label" for="flexCheckDefault">
+              user
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="users-find-by-id-site-permissions-admin" disabled="">
+            <label class="form-check-label" for="flexCheckDefault">
+              admin
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="users-find-by-id-site-permissions-superadmin" disabled="">
+            <label class="form-check-label" for="flexCheckDefault">
+              superadmin
+            </label>
+          </div>
+          </td>
+        
+
+<!-- END NEW SITE PERMISSIONS -->
+{#
           <td>
             <div class="form-check">
               <!-- FIELD -->
-              {{add_new_user_form.site_permissions_guest(class="form-check-input")}}
+              <input type="checkbox" id="scales" name="search-user-by-id-site-permissions-guest" readonly>
               <!-- LABEL -->
-              {{ add_new_user_form.site_permissions_guest.label(name="guest", class="form-check-label") }}
+              <label class="form-label form-control" for="email_address">guest</label>
             </div>
             <div class="form-check">
               <!-- FIELD -->
@@ -416,11 +337,12 @@
             <div id="users-site_permissions-help" class="form-text">set</div>
             </div>
           </td>
+          #}
         </tr>
       </tbody>
     </table>
 
-    <button id="find-user-by-id" type="submit" class="btn btn-primary">Find User</button>
+    <button id="users-find-by-id-btn" type="submit" class="btn btn-primary">Find User</button>
   </form>
 </div>
 
