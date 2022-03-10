@@ -26,6 +26,8 @@ from wtforms import (
     EmailField,
     DecimalField,
 )
+from enum import Enum
+
 
 # from flask_sqlalchemy import SQLAlchemy
 
@@ -83,45 +85,26 @@ def darkly_reference():
     return render_template("darkly_reference.html")
 
 
-# TODO: update addNewPollForm to work,
-class AddNewPollForm(Form):
+
+class PollTypes(Enum):
+    single_transferable = 1
+    popular = 2
+    ranked_choice = 3
+
+class AddNewPollForm(FlaskForm):
     poll_title = StringField(
-        "poll title",
+        "poll_title",
         [validators.Length(min=1, max=254)],
-        render_kw={"class": "mb-3 form-control"},
-    )
-    poll_type = EmailField(  # this is a enum of type: enum('single_transferable', 'popular', 'ranked_choice')
-        "poll type",
-        [validators.Length(min=6, max=254)],
         render_kw={"class": "form-control"},
     )
-    poll_voting_choices = BooleanField(  # this is a json array of format JSON_ARRAY('lima','fava','pinto')
-        id="site_permissions_guest",
-        name="guest",
-        label="guest",
-        default="checked",
-        render_kw={"class": "form-check-input"},
+    poll_type = SelectField(
+        "poll_type", 
+        choices=[(member.value, name.capitalize()) for name, member in PollTypes.__members__.items()],
+        render_kw={"class": "form-control"},
     )
-
-
-# TODO: update addNewVoteForm to work,
-class AddNewVoteForm(Form):
-    poll_id = (
-        SelectField(  # this is a to be dynamically updated select feild of poll_id's
-            "poll id",
-            [validators.Length(min=1, max=254)],
-            render_kw={"class": "mb-3 form-control"},
-        )
-    )
-    user_id = (
-        SelectField(  # this is a to be dynamically updated select feild of user_id's
-            "user id",
-            [validators.Length(min=6, max=254)],
-            render_kw={"class": "form-control"},
-        )
-    )
-    vote_values = BooleanField(  # this is a json object of form JSON_OBJECT('andrew chong', 1, 'sebastian allen', 0)
-        id="vote_values",
+    poll_voting_choices = StringField(
+        "poll_voting_choices",
+        render_kw={"class": "form-control"},
     )
 
 
@@ -308,6 +291,23 @@ class DeleteUserPollSettingForm(FlaskForm):
     user_poll_setting_id = SelectField(
         "user_poll_setting_id", 
         coerce=int,
+        render_kw={"class": "form-control"},
+    )
+
+
+class AddNewVoteForm(FlaskForm):
+    poll_id = SelectField(
+        "poll_id", 
+        coerce=int,
+        render_kw={"class": "form-control"},
+    )
+    user_id = SelectField(
+        "user_id", 
+        coerce=int,
+        render_kw={"class": "form-control"},
+    )
+    vote_values = StringField(
+        "vote_values",
         render_kw={"class": "form-control"},
     )
 
@@ -545,6 +545,29 @@ def find_user_by_id():
 # connection.close()
 
 
+@app.route("/add_new_poll", methods=["POST"])
+def add_new_poll():
+    # if request.method == "POST" and "add-new-poll" in request.form:
+    add_new_poll_form = AddNewPollForm()
+    
+    # validation would be done here, but json arrays are hard to validate
+    if True:
+        connection = db_engine.connect()
+        new_poll = {
+            "poll_title": add_new_poll_form.poll_title.data,
+            "poll_type": add_new_poll_form.poll_type.data,
+            "poll_voting_choices": add_new_poll_form.poll_voting_choices.data,
+        }
+
+        # here we add the new poll to the table
+        add_new_poll_query = f"INSERT INTO Polls (poll_title, poll_type, poll_voting_choices) VALUES ('{new_poll['poll_title']}', {new_poll['poll_type']}, '{new_poll['poll_voting_choices']}')"
+        app.logger.debug(add_new_poll_query)
+        connection.execute(add_new_poll_query)
+        connection.close()
+        return redirect(url_for("polls"))
+    else:
+        return redirect(url_for("polls"))
+
 @app.route("/polls/", methods=["GET", "POST"])
 def polls():
     """Polls CRUD page"""
@@ -573,13 +596,35 @@ def polls():
             return redirect(url_for("public.users"))
     # return render_template("users.html", create_user_form=create_user_form)
 
+
+@app.route("/add_new_vote", methods=["POST"])
+def add_new_vote():
+    # if request.method == "POST" and "add-new-vote" in request.form:
+    add_new_vote_form = AddNewVoteForm()
+    
+    # validation would be done here, but json objects are hard to validate
+    if True:
+        connection = db_engine.connect()
+        new_vote = {
+            "user_id": add_new_vote_form.user_id.data,
+            "poll_id": add_new_vote_form.poll_id.data,
+            "vote_values": add_new_vote_form.vote_values.data,
+        }
+
+        # here we add the new vote to the table
+        add_new_vote_query = f"INSERT INTO Votes (user_id, poll_id, vote_values) VALUES ({new_vote['user_id']}, {new_vote['poll_id']}, '{new_vote['vote_values']}')"
+        app.logger.debug(add_new_vote_query)
+        connection.execute(add_new_vote_query)
+        connection.close()
+        return redirect(url_for("votes"))
+    else:
+        return redirect(url_for("votes"))
+
+
 @app.route("/votes/", methods=["GET", "POST"])
 def votes():
-    """Votes CRUD page"""
-    # create_vote_form = CreateVoteForm(request.form)
     if request.method == "GET":
-
-        # get all Votes
+        # fetch all payments and users to populate dynamic lists
         connection = db_engine.connect()
         votes_query = "SELECT * FROM Votes"
         all_votes = connection.execute(votes_query).fetchall()
@@ -589,11 +634,15 @@ def votes():
         all_polls = connection.execute(polls_query).fetchall()
         connection.close()
 
-        # add new vote form
+        #payment forms and select field population, users relationship is NULLABLE which has a value of -1; dealt with later
         add_new_vote_form = AddNewVoteForm(request.form)
+        add_new_vote_form.user_id.choices = [(g.user_id, g.user_id) for g in all_users]
+        add_new_vote_form.poll_id.choices = [(g.poll_id, g.poll_id) for g in all_polls]
 
         return render_template(
-            "votes.html", all_votes=all_votes, add_new_vote_form=add_new_vote_form
+            "votes.html",
+            all_votes=all_votes,
+            add_new_vote_form=add_new_vote_form,
         )
     elif request.method == "POST":
         return redirect(url_for("votes"))
