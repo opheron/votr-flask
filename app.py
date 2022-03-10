@@ -4,8 +4,6 @@ import logging
 
 from os import getenv
 
-from pymysql import NULL
-
 # import requests
 from forms import *
 
@@ -35,7 +33,7 @@ app = Flask(__name__)
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 app.config["DEBUG"] = getenv("FLASK_ENV")
 app.config["FLASK_APP"] = getenv("FLASK_APP")
-app.config["SECRET_KEY"] = 'getenv("SECRET_KEY")'
+app.config["SECRET_KEY"] = getenv("SECRET_KEY")
 
 # app.config[
 #     "SQLALCHEMY_DATABASE_URI"
@@ -160,80 +158,13 @@ class AddNewUserForm(FlaskForm):
 
 
 class AddNewPaymentForm(FlaskForm):
-    user_id = SelectField(
-        "user_id", 
-        coerce=int,
-        render_kw={"class": "form-control"},
-    )
-    amount_usd = DecimalField(
-        "amount_usd", places=2,
-        render_kw={"class": "form-control"},
-    )
-    payment_purposes_test = BooleanField(
-        id="payment_purposes_test",
-        name="test",
-        label="test",
-        default="checked",
-        render_kw={"class": "form-check-input"},
-    )
-    payment_purposes_free_trial = BooleanField(
-        id="payment_purposes_free_trial", name="free_trial", label="free trial"
-    )
-    payment_purposes_subscription = BooleanField(
-        id="payment_purposes_subscription",
-        name="subscription",
-        label="subscription",
-    )
-    payment_purposes_donation = BooleanField(
-        id="payment_purposes_donation",
-        name="donation",
-        label="donation",
-    )
-
-class UpdatePaymentForm(FlaskForm):
-    payment_id = SelectField(
-        "payment_id",  
-        coerce=int,
-        render_kw={"class": "form-control"},
-    )
-    user_id = SelectField(
-        "user_id",  
-        coerce=int,
-        render_kw={"class": "form-control"},
-    )
-    amount_usd = DecimalField(
-        "amount_usd", places=2,
-        render_kw={"class": "form-control"},
-    )
-    payment_purposes_test = BooleanField(
-        id="payment_purposes_test",
-        name="test",
-        label="test",
-        default="checked",
-        render_kw={"class": "form-check-input"},
-    )
-    payment_purposes_free_trial = BooleanField(
-        id="payment_purposes_free_trial", name="free_trial", label="free trial"
-    )
-    payment_purposes_subscription = BooleanField(
-        id="payment_purposes_subscription",
-        name="subscription",
-        label="subscription",
-    )
-    payment_purposes_donation = BooleanField(
-        id="payment_purposes_donation",
-        name="donation",
-        label="donation",
-    )
-
-class DeletePaymentForm(FlaskForm):
-    payment_id = SelectField(
-        "payment_id", 
-        choices=(1,1),
-        coerce=int,
-        render_kw={"class": "form-control"},
-    )
-
+    # TODO: get user_id dynamically updating, update validator for amount_usd (not negative?)
+    user_id = SelectField("user_id", coerce=int)
+    amount_usd = DecimalField("amount_usd", places=2)
+    payment_purposes_test = BooleanField("test", default="checked")
+    payment_purposes_free_trial = BooleanField("free trial")
+    payment_purposes_subscription = BooleanField("subscription")
+    payment_purposes_donation = BooleanField("donation")
 
 class AddNewUserPollSettingForm(FlaskForm):
     # TODO: Validation, actual functionality
@@ -461,107 +392,6 @@ def votes():
 #     return render_template("payments.html")
 
 
-@app.route("/add_new_payment", methods=["POST"])
-def add_new_payment():
-    # if request.method == "POST" and "add-new-payment" in request.form:
-    add_new_payment_form = AddNewPaymentForm()
-    # add_new_payment_form.validate_on_submit
-    # NOTE: Use the next line if you need to test w/out form validation stopping
-    # if request.method == "POST":
-    if add_new_payment_form.amount_usd.data != None:
-        connection = db_engine.connect()
-        new_payment = {
-            "user_id": add_new_payment_form.user_id.data,
-            "amount_usd": add_new_payment_form.amount_usd.data,
-        }
-        user_id = new_payment['user_id']
-        if new_payment['user_id'] == -1:
-            user_id = "NULL"
-
-
-        # Permissions are tricky because of the sql string has to be exact with punctuation like commas and quotes
-        new_payment_purposes_set = (
-            add_new_payment_form.payment_purposes_test.data,
-            add_new_payment_form.payment_purposes_free_trial.data,
-            add_new_payment_form.payment_purposes_subscription.data,
-            add_new_payment_form.payment_purposes_donation.data,
-        )
-        payment_purposes_set = ("test", "free_trial", "subscription", "donation")
-        first_true = True
-        string = ""
-        for x in range(len(new_payment_purposes_set)):
-            if new_payment_purposes_set[x]:
-                comma = ("," if not first_true else "")
-                string = f"{string}{comma}{payment_purposes_set[x]}"
-                first_true = False
-        app.logger.debug(f"new_payment: {new_payment}")
-        add_new_payment_query = f"INSERT INTO Payments (user_id, amount_usd, payment_purposes) VALUES ({user_id}, {new_payment['amount_usd']}, '{string}')"
-        app.logger.debug(add_new_payment_query)
-        connection.execute(add_new_payment_query)
-        connection.close()
-        return redirect(url_for("payments"))
-    else:
-        return redirect(url_for("payments"))
-
-
-@app.route("/update_payment", methods=["POST"])
-def update_payment():
-    # if request.method == "POST" and "add-new-payment" in request.form:
-    update_payment_form = UpdatePaymentForm()
-    # add_new_payment_form.validate_on_submit
-    # NOTE: Use the next line if you need to test w/out form validation stopping
-    # if request.method == "POST":
-    if update_payment_form.amount_usd.data != None:
-        connection = db_engine.connect()
-        new_payment = {
-            "user_id": update_payment_form.user_id.data,
-            "amount_usd": update_payment_form.amount_usd.data,
-        }
-        user_id = new_payment['user_id']
-        if new_payment['user_id'] == -1:
-            user_id = "NULL"
-
-
-        # Permissions are tricky because of the sql string has to be exact with punctuation like commas and quotes
-        new_payment_purposes_set = (
-            update_payment_form.payment_purposes_test.data,
-            update_payment_form.payment_purposes_free_trial.data,
-            update_payment_form.payment_purposes_subscription.data,
-            update_payment_form.payment_purposes_donation.data,
-        )
-        payment_purposes_set = ("test", "free_trial", "subscription", "donation")
-        first_true = True
-        string = ""
-        for x in range(len(new_payment_purposes_set)):
-            if new_payment_purposes_set[x]:
-                comma = ("," if not first_true else "")
-                string = f"{string}{comma}{payment_purposes_set[x]}"
-                first_true = False
-        app.logger.debug(f"new_payment: {new_payment}")
-        add_new_payment_query = f"UPDATE Payments SET user_id = {user_id}, amount_usd = {new_payment['amount_usd']}, payment_purposes = '{string}' WHERE payment_id = {update_payment_form.payment_id.data}"
-        app.logger.debug(add_new_payment_query)
-        connection.execute(add_new_payment_query)
-        connection.close()
-        return redirect(url_for("payments"))
-    else:
-        return redirect(url_for("payments"))
-
-
-
-@app.route("/delete_payment", methods=["POST"])
-def delete_payment():
-    # if request.method == "POST" and "delete-payment" in request.form:
-    delete_payment_form = DeletePaymentForm()
-    # add_new_payment_form.validate_on_submit
-    # NOTE: Use the next line if you need to test w/out form validation stopping
-    # if request.method == "POST":
-    connection = db_engine.connect()
-    add_new_payment_query = f"DELETE FROM Payments WHERE payment_id = {delete_payment_form.payment_id.data}"
-    connection.execute(add_new_payment_query)
-    connection.close()
-    return redirect(url_for("payments"))
-
-
 @app.route("/payments/", methods=["GET", "POST"])
 def payments():
     """Payments CRUD page"""
@@ -570,23 +400,15 @@ def payments():
         connection = db_engine.connect()
         payments_query = "SELECT * FROM Payments"
         all_payments = connection.execute(payments_query).fetchall()
-        users_query = "SELECT * FROM Users"
-        all_users = connection.execute(users_query).fetchall()
         connection.close()
 
+        # TODO: add new ptayment form - not working yet, the select list is not dynamic
         add_new_payment_form = AddNewPaymentForm(request.form)
-        add_new_payment_form.user_id.choices = [(-1,"NULL")]+[(g.user_id, g.user_id) for g in all_users]
-        delete_payment_form = DeletePaymentForm(request.form)
-        delete_payment_form.payment_id.choices = [(g.payment_id, g.payment_id) for g in all_payments]
-        update_payment_form = UpdatePaymentForm(request.form)
-        update_payment_form.user_id.choices = [(-1,"NULL")]+[(g.user_id, g.user_id) for g in all_users]
-        update_payment_form.payment_id.choices = [(g.payment_id, g.payment_id) for g in all_payments]
+
         return render_template(
             "payments.html",
             all_payments=all_payments,
             add_new_payment_form=add_new_payment_form,
-            delete_payment_form=delete_payment_form,
-            update_payment_form=update_payment_form,
         )
     elif request.method == "POST":
         # TODO: also not working yet, dont know where to start
