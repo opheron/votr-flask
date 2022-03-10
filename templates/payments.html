@@ -87,31 +87,21 @@
             <tr>
               <th scope="row"><i>auto incremented</i></th>
               <td>
-                {# TODO: Decide if aria-describedby is useful #} {#
-                ####################################### #} {# Old Input:
-                <input
-                  type="text"
-                  class="form-control"
-                  id="users-create-username"
-                  aria-describedby="create-username-help"
-                  placeholder="Ex: personOne"
-                />
-                #}
                 <div class="mb-3 form-group row">
                 <div class="mb-3">
-                  <!-- USERNAME LABEL -->
+                  <!-- user_id LABEL -->
                   {{ add_new_payment_form.user_id.label(class="form-label") }}
-                  <!-- USERNAME FIELD -->
+                  <!-- user_id FIELD -->
                   {{ add_new_payment_form.user_id(class="form-control" ) }}
                   <div id="create-user_id-help" class="form-text">FK</div>
                 </div>
               </td>
               <td>
                 <div class="mb-3 form-group row">
-                  <!-- EMAIL ADDRESS LABEL -->
+                  <!-- amount_usd LABEL -->
                   {{ add_new_payment_form.amount_usd.label(class="form-label")
                   }}
-                  <!-- EMAIL ADDRESS FIELD -->
+                  <!-- amount_usd FIELD -->
                   {{ add_new_payment_form.amount_usd( class="form-control",
                   placeholder="Ex: 5.99") }}
                   <div id="create-amount_usd-help" class="form-text">
@@ -171,9 +161,9 @@
               <td>
                 <div class="mb-3 form-group row">
                 <div class="mb-3">
-                  <!-- USERNAME LABEL -->
+                  <!-- payment_id LABEL -->
                   {{ delete_payment_form.payment_id.label(class="form-label") }}
-                  <!-- USERNAME FIELD -->
+                  <!-- payment_id FIELD -->
                   {{ delete_payment_form.payment_id(class="form-control" ) }}
                   <div id="create-payment_id-help" class="form-text">PK</div>
                 </div>
@@ -185,21 +175,6 @@
         <button name="delete-payment" type="submit" class="btn btn-primary">Delete Payment</button>
       </form>
     </div>
-
-    <div class="container">
-      <form>
-        <h3>Search Payments</h3>
-        <div class="btn-group">
-          <select name="delete-payment-by-id" class="form-select" aria-label="Delete Payment ID">
-            <option selected>Payment ID</option>
-            {% for payment in all_payments %}
-            <option value="{{ payment["payment_id"] }}">{{ payment["payment_id"] }}</option>
-            {% endfor %}
-          </select>
-        <button type="submit" class="btn btn-primary">Search</button><!--dont know about type here-->
-      </form>
-    </div>
-
 
     <div>
       <form name="update-payment" method="POST" action="/update_payment">
@@ -227,9 +202,9 @@
               <td>
                 <div class="mb-3 form-group row">
                 <div class="mb-3">
-                  <!-- USERNAME LABEL -->
+                  <!-- payment_id LABEL -->
                   {{ update_payment_form.payment_id.label(class="form-label") }}
-                  <!-- USERNAME FIELD -->
+                  <!-- payment_id FIELD -->
                   {{ update_payment_form.payment_id(class="form-control" ) }}
                   <div id="create-user_id-help" class="form-text">PK</div>
                 </div>
@@ -237,19 +212,19 @@
               <td>
                 <div class="mb-3 form-group row">
                 <div class="mb-3">
-                  <!-- USERNAME LABEL -->
+                  <!-- user_id LABEL -->
                   {{ update_payment_form.user_id.label(class="form-label") }}
-                  <!-- USERNAME FIELD -->
+                  <!-- user_id FIELD -->
                   {{ update_payment_form.user_id(class="form-control" ) }}
                   <div id="create-user_id-help" class="form-text">FK</div>
                 </div>
               </td>
               <td>
                 <div class="mb-3 form-group row">
-                  <!-- EMAIL ADDRESS LABEL -->
+                  <!-- amount_usd LABEL -->
                   {{ update_payment_form.amount_usd.label(class="form-label")
                   }}
-                  <!-- EMAIL ADDRESS FIELD -->
+                  <!-- amount_usd FIELD -->
                   {{ update_payment_form.amount_usd( class="form-control",
                   placeholder="Ex: 5.99") }}
                   <div id="create-amount_usd-help" class="form-text">

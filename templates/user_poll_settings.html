@@ -75,8 +75,9 @@
   </table>
 </div>
 
-<div class="container">
-  <form>
+<div>
+  <form name="add-new-user_poll_setting" method="POST" action="/add_new_user_poll_setting">
+    {{ add_new_user_poll_setting_form.csrf_token }}
     <h3>Add New Setting</h3>
     <table class="table table-striped table-dark">
       <thead>
@@ -84,14 +85,10 @@
           <th scope="col">user_poll_setting_id</th>
           <th scope="col">user_id</th>
           <th scope="col">poll_id</th>
-          <th
-            scope="col"
-            data-toggle="tooltip"
-            data-placement="top"
-            title="User's permissions for poll"
-          >
-            user_permissions
-          </th>
+          <th scope="col"
+          data-toggle="tooltip"
+          data-placement="top"
+          title="payment's purposes">user_permissions</th>
         </tr>
       </thead>
 
@@ -99,291 +96,90 @@
         <tr>
           <th scope="row"><i>auto incremented</i></th>
           <td>
+            <div class="mb-3 form-group row">
             <div class="mb-3">
-              <label
-                for="user-poll-settings-create-user-poll-user-id"
-                class="form-label mb-3"
-                >user_id</label
-              >
-              <select
-                class="form-select"
-                id="user-poll-settings-create-user-poll-user-id"
-                aria-label="create User ID"
-              >
-                <option selected>User ID</option>
-                <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                <option value="1">User 1</option>
-                <!--some such select menus will need a null option, this one does not, as no user-poll will be without a poll-->
-                <option value="2">User 2</option>
-                <option value="3">User 3</option>
-                <option value="4">User 4</option>
-              </select>
+              <!-- user_id LABEL -->
+              {{ add_new_user_poll_setting_form.user_id.label(class="form-label") }}
+              <!-- user_id FIELD -->
+              {{ add_new_user_poll_setting_form.user_id(class="form-control" ) }}
+              <div id="create-user_id-help" class="form-text">FK</div>
             </div>
           </td>
           <td>
-            <div class="mb-3">
-              <label
-                for="user-poll-settings-create-user-poll-poll-id"
-                class="form-label mb-3"
-                >poll_id</label
-              >
-              <select
-                class="form-select"
-                id="user-poll-settings-create-user-poll-poll-id"
-                aria-label="create Poll ID"
-              >
-                <option selected>Poll ID</option>
-                <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                <option value="1">Poll 1</option>
-                <!--some such select menus will need a null option, this one does not, as no user-poll will be without a poll-->
-                <option value="2">Poll 2</option>
-                <option value="3">Poll 3</option>
-                <option value="4">Poll 4</option>
-              </select>
+            <div class="mb-3 form-group row">
+              <!-- poll_id LABEL -->
+              {{ add_new_user_poll_setting_form.poll_id.label(class="form-label")
+              }}
+              <!-- poll_id FIELD -->
+              {{ add_new_user_poll_setting_form.poll_id( class="form-control")}}
+              <div id="create-poll_id-help" class="form-text">
+                FK
+              </div>
             </div>
           </td>
           <td>
-            <div class="mb-3">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                />
-                <label class="form-check-label" for="flexCheckDefault">
-                  collaborator
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                />
-                <label class="form-check-label" for="flexCheckDefault">
-                  poll creator
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                />
-                <label class="form-check-label" for="flexCheckDefault">
-                  admin
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-
-                />
-                <label class="form-check-label" for="flexCheckDefault">
-                  superadmin
-                </label>
-              <!-- not sure what 'type' to use here-->
+            <div class="form-check">
+              <!-- FIELD -->
+              {{add_new_user_poll_setting_form.user_permissions_collaborator(class="form-check-input", checked="")}}
+              <!-- LABEL -->
+              {{ add_new_user_poll_setting_form.user_permissions_collaborator.label(name="test", class="form-check-label") }}
             </div>
-            <div id="create-user-permissions-help" class="form-text">set</div>
+            <div class="form-check">
+              <!-- FIELD -->
+              {{add_new_user_poll_setting_form.user_permissions_poll_creator(class="form-check-input" )}}
+              <!-- LABEL -->
+              {{ add_new_user_poll_setting_form.user_permissions_poll_creator.label(class="form-check-label") }}
+            </div>
+            <div class="form-check">
+              <!-- FIELD -->
+              {{add_new_user_poll_setting_form.user_permissions_admin(class="form-check-input")}}
+              <!-- LABEL -->
+              {{ add_new_user_poll_setting_form.user_permissions_admin.label(class="form-check-label") }}
+            </div>
+            <div class="form-check">
+              <!-- FIELD -->
+              {{add_new_user_poll_setting_form.user_permissions_superadmin(class="form-check-input")}}
+              <!-- LABEL -->
+              {{ add_new_user_poll_setting_form.user_permissions_superadmin.label(class="form-check-label") }}
+            </div>
+            <div id="add_new_user_poll_setting-help" class="form-text">set</div>
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <button type="submit" class="btn btn-primary">Create New Setting</button>
+    <button name="create-new-add_new_user_poll_setting" type="submit" class="btn btn-primary">Create New Setting</button>
   </form>
 </div>
-
-<div class="container">
-  <form>
-    <h3>Delete a Setting</h3>
-    <div class="btn-group">
-      <select name="delete-setting-by-id" class="form-select" aria-label="Delete Setting ID">
-        <option selected>Setting ID</option>
-        {% for user_poll_setting in all_user_poll_settings %}
-        <option value="{{ user_poll_setting["user_poll_setting_id"] }}">{{ user_poll_setting["user_poll_setting_id"] }}</option>
-        {% endfor %}
-      </select>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Delete</button
-    ><!--dont know about type here-->
-  </form>
-</div>
-
-<div class="container">
-  <form>
-    <h3>Search Setting</h3>
-    <div class="btn-group">
-      <select name="search-setting-by-id" class="form-select" aria-label="Search Setting ID">
-        <option selected>Setting ID</option>
-        {% for user_poll_setting in all_user_poll_settings %}
-        <option value="{{ user_poll_setting["user_poll_setting_id"] }}">{{ user_poll_setting["user_poll_setting_id"] }}</option>
-        {% endfor %}
-      </select>
-    <button type="submit" class="btn btn-primary">Search</button
-    ><!--dont know about type here-->
-  </form>
-</div>
-
-<div class="container">
-  <form>
-    <h3>Update a Setting</h3>
+<div>
+  <form name="delete-user_poll_setting" method="POST" action="/delete_user_poll_setting">
+    {{ delete_user_poll_setting_form.csrf_token }}
+    <h3>Delete Setting</h3>
     <table class="table table-striped table-dark">
       <thead>
         <tr>
           <th scope="col">user_poll_setting_id</th>
-          <th scope="col">user_id</th>
-          <th scope="col">poll_id</th>
-          <th
-            scope="col"
-            data-toggle="tooltip"
-            data-placement="top"
-            title="User's permissions for poll"
-          >
-            user_permissions
-          </th>
         </tr>
       </thead>
 
       <tbody>
         <tr>
           <td>
+            <div class="mb-3 form-group row">
             <div class="mb-3">
-              <label
-                for="user-poll-settings-update-user-poll-id"
-                class="form-label mb-3"
-                >select user_poll_setting_id to be updated</label
-              >
-              <select
-                class="form-select"
-                id="user-poll-settings-update-user-poll-id"
-                aria-label="Update Setting ID"
-              >
-                <option selected>Setting ID</option>
-                <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                <option value="1">Setting 1</option>
-                <option value="2">Setting 2</option>
-                <option value="3">Setting 3</option>
-                <option value="4">Setting 4</option>
-                <option value="5">Setting 5</option>
-                <option value="6">Setting 6</option>
-              </select>
+              <!-- user_poll_setting_id LABEL -->
+              {{ delete_user_poll_setting_form.user_poll_setting_id.label(class="form-label") }}
+              <!-- user_poll_setting_id FIELD -->
+              {{ delete_user_poll_setting_form.user_poll_setting_id(class="form-control" ) }}
+              <div id="create-payment_id-help" class="form-text">PK</div>
             </div>
           </td>
-          <td>
-            <div class="mb-3">
-              <label
-                for="user-poll-settings-update-user-poll-user-id"
-                class="form-label mb-3"
-                >update to user_id</label
-              >
-              <select
-                class="form-select"
-                id="user-poll-settings-update-user-poll-user-id"
-                aria-label="Update User ID"
-              >
-                <option selected>No Update</option>
-                <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                <option value="1">User 1</option>
-                <!--some such select menus will need a null option, this one does not, as no user-poll will be without a poll-->
-                <option value="2">User 2</option>
-                <option value="3">User 3</option>
-                <option value="4">User 4</option>
-              </select>
-            </div>
-          </td>
-          <td>
-            <div class="mb-3">
-              <label
-                for="user-poll-settings-update-user-poll-poll-id"
-                class="form-label mb-3"
-                >update to poll_id</label
-              >
-              <select
-                class="form-select"
-                id="user-poll-settings-update-user-poll-poll-id"
-                aria-label="Update Poll ID"
-              >
-                <option selected>No Update</option>
-                <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                <option value="1">Poll 1</option>
-                <!--some such select menus will need a null option, this one does not, as no user-poll will be without a poll-->
-                <option value="2">Poll 2</option>
-                <option value="3">Poll 3</option>
-                <option value="4">Poll 4</option>
-              </select>
-            </div>
-          </td>
-          <td>
-            <div class="mb-3">
-              <label
-                for="user-poll-settings-update-user-permissions"
-                class="form-label mb-3"
-                aria-describedby="update-user-permissions-help">
-                  update to user_permissions</label
-              >
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                  
-                />
-                <label class="form-check-label" for="flexCheckDefault">
-                  collaborator
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                  
-                />
-                <label class="form-check-label" for="flexCheckDefault">
-                  poll creator
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                  
-                />
-                <label class="form-check-label" for="flexCheckDefault">
-                  admin
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                  
-                />
-                <label class="form-check-label" for="flexCheckDefault">
-                  superadmin
-                </label>
-            </div>
-            <div id="update-user-permissions-help" class="form-text">set</div>
-
         </tr>
       </tbody>
     </table>
 
-    <button type="submit" class="btn btn-primary">Update Setting</button>
+    <button name="delete-payment" type="submit" class="btn btn-primary">Delete Payment</button>
   </form>
 </div>
 

@@ -236,14 +236,79 @@ class DeletePaymentForm(FlaskForm):
 
 
 class AddNewUserPollSettingForm(FlaskForm):
-    # TODO: Validation, actual functionality
-    user_poll_setting_id = StringField("user_poll_setting_id")
-    user_id = StringField("user_id")
-    poll_id = BooleanField("poll_id")
-    user_permissions_collaborator = BooleanField("collaborator")
-    user_permissions_poll_creator = BooleanField("poll creator")
-    user_permissions_admin = BooleanField("admin")
-    user_permissions_superadmin = BooleanField("superadmin")
+    user_id = SelectField(
+        "user_id",  
+        coerce=int,
+        render_kw={"class": "form-control"},
+    )
+    poll_id = SelectField(
+        "poll_id",  
+        coerce=int,
+        render_kw={"class": "form-control"},
+    )
+    user_permissions_collaborator = BooleanField(
+        id="user_permissions_collaborator",
+        name="collaborator",
+        label="collaborator",
+        default="checked",
+        render_kw={"class": "form-check-input"},
+    )
+    user_permissions_poll_creator = BooleanField(
+        id="user_permissions_poll_creator", name="poll_creator", label="poll creator"
+    )
+    user_permissions_admin = BooleanField(
+        id="user_permissions_admin",
+        name="admin",
+        label="admin",
+    )
+    user_permissions_superadmin = BooleanField(
+        id="user_permissions_superadmin",
+        name="superadmin",
+        label="superadmin",
+    )
+class UpdateUserPollSettingForm(FlaskForm):
+    user_poll_setting_id = SelectField(
+        "user_poll_setting_id",  
+        coerce=int,
+        render_kw={"class": "form-control"},
+    )
+    user_id = SelectField(
+        "user_id",  
+        coerce=int,
+        render_kw={"class": "form-control"},
+    )
+    poll_id = SelectField(
+        "poll_id",  
+        coerce=int,
+        render_kw={"class": "form-control"},
+    )
+    user_permissions_collaborator = BooleanField(
+        id="user_permissions_collaborator",
+        name="collaborator",
+        label="collaborator",
+        default="checked",
+        render_kw={"class": "form-check-input"},
+    )
+    user_permissions_poll_creator = BooleanField(
+        id="user_permissions_poll_creator", name="poll_creator", label="poll creator"
+    )
+    user_permissions_admin = BooleanField(
+        id="user_permissions_admin",
+        name="admin",
+        label="admin",
+    )
+    user_permissions_superadmin = BooleanField(
+        id="user_permissions_superadmin",
+        name="superadmin",
+        label="superadmin",
+    )
+
+class DeleteUserPollSettingForm(FlaskForm):
+    user_poll_setting_id = SelectField(
+        "user_poll_setting_id", 
+        coerce=int,
+        render_kw={"class": "form-control"},
+    )
 
 
 @app.route("/users", methods=["GET", "POST"])
@@ -418,13 +483,6 @@ def polls():
             return redirect(url_for("public.users"))
     # return render_template("users.html", create_user_form=create_user_form)
 
-
-# @app.route("/votes/")
-# def votes():
-#     """Votes CRUD page."""
-#     return render_template("votes.html")
-
-
 @app.route("/votes/", methods=["GET", "POST"])
 def votes():
     """Votes CRUD page"""
@@ -435,6 +493,10 @@ def votes():
         connection = db_engine.connect()
         votes_query = "SELECT * FROM Votes"
         all_votes = connection.execute(votes_query).fetchall()
+        users_query = "SELECT * FROM Users"
+        all_users = connection.execute(users_query).fetchall()
+        polls_query = "SELECT * FROM Polls"
+        all_polls = connection.execute(polls_query).fetchall()
         connection.close()
 
         # add new vote form
@@ -444,30 +506,14 @@ def votes():
             "votes.html", all_votes=all_votes, add_new_vote_form=add_new_vote_form
         )
     elif request.method == "POST":
-        # TODO: get forms working
-        if True:
-            # flash("Created new vote!", "success")
-            return redirect(url_for("votes"))
-        else:
-            flash_errors(create_user_form)
-            return redirect(url_for("public.users"))
-    # return render_template("users.html", create_user_form=create_user_form)
-
-
-# TODO: delete
-# @app.route("/payments/")
-# def payments():
-#     """Payments CRUD page."""
-#     return render_template("payments.html")
-
+        return redirect(url_for("votes"))
 
 @app.route("/add_new_payment", methods=["POST"])
 def add_new_payment():
     # if request.method == "POST" and "add-new-payment" in request.form:
     add_new_payment_form = AddNewPaymentForm()
-    # add_new_payment_form.validate_on_submit
-    # NOTE: Use the next line if you need to test w/out form validation stopping
-    # if request.method == "POST":
+    
+    # only validation done is to check if the amount_usd is empty (it is the only field that can be empty on the page)
     if add_new_payment_form.amount_usd.data != None:
         connection = db_engine.connect()
         new_payment = {
@@ -479,7 +525,7 @@ def add_new_payment():
             user_id = "NULL"
 
 
-        # Permissions are tricky because of the sql string has to be exact with punctuation like commas and quotes
+        # here we set up the 'set' in the expected format EX: 'test,free_trial,donation'
         new_payment_purposes_set = (
             add_new_payment_form.payment_purposes_test.data,
             add_new_payment_form.payment_purposes_free_trial.data,
@@ -495,6 +541,8 @@ def add_new_payment():
                 string = f"{string}{comma}{payment_purposes_set[x]}"
                 first_true = False
         app.logger.debug(f"new_payment: {new_payment}")
+
+        # here we add the new payment to the table
         add_new_payment_query = f"INSERT INTO Payments (user_id, amount_usd, payment_purposes) VALUES ({user_id}, {new_payment['amount_usd']}, '{string}')"
         app.logger.debug(add_new_payment_query)
         connection.execute(add_new_payment_query)
@@ -508,9 +556,8 @@ def add_new_payment():
 def update_payment():
     # if request.method == "POST" and "add-new-payment" in request.form:
     update_payment_form = UpdatePaymentForm()
-    # add_new_payment_form.validate_on_submit
-    # NOTE: Use the next line if you need to test w/out form validation stopping
-    # if request.method == "POST":
+
+    # only validation done is to check if the amount_usd is empty (it is the only field that can be empty on the page)
     if update_payment_form.amount_usd.data != None:
         connection = db_engine.connect()
         new_payment = {
@@ -521,8 +568,7 @@ def update_payment():
         if new_payment['user_id'] == -1:
             user_id = "NULL"
 
-
-        # Permissions are tricky because of the sql string has to be exact with punctuation like commas and quotes
+        # here we set up the 'set' in the expected format EX: 'test,free_trial,donation'
         new_payment_purposes_set = (
             update_payment_form.payment_purposes_test.data,
             update_payment_form.payment_purposes_free_trial.data,
@@ -538,9 +584,10 @@ def update_payment():
                 string = f"{string}{comma}{payment_purposes_set[x]}"
                 first_true = False
         app.logger.debug(f"new_payment: {new_payment}")
-        add_new_payment_query = f"UPDATE Payments SET user_id = {user_id}, amount_usd = {new_payment['amount_usd']}, payment_purposes = '{string}' WHERE payment_id = {update_payment_form.payment_id.data}"
-        app.logger.debug(add_new_payment_query)
-        connection.execute(add_new_payment_query)
+        # here we update the payment at payment_id with the new payment data
+        update_payment_query = f"UPDATE Payments SET user_id = {user_id}, amount_usd = {new_payment['amount_usd']}, payment_purposes = '{string}' WHERE payment_id = {update_payment_form.payment_id.data}"
+        app.logger.debug(update_payment_query)
+        connection.execute(update_payment_query)
         connection.close()
         return redirect(url_for("payments"))
     else:
@@ -552,21 +599,18 @@ def update_payment():
 def delete_payment():
     # if request.method == "POST" and "delete-payment" in request.form:
     delete_payment_form = DeletePaymentForm()
-    # add_new_payment_form.validate_on_submit
-    # NOTE: Use the next line if you need to test w/out form validation stopping
-    # if request.method == "POST":
     connection = db_engine.connect()
-    add_new_payment_query = f"DELETE FROM Payments WHERE payment_id = {delete_payment_form.payment_id.data}"
-    connection.execute(add_new_payment_query)
+    # delete the payment at payment_id
+    delete_payment_query = f"DELETE FROM Payments WHERE payment_id = {delete_payment_form.payment_id.data}"
+    connection.execute(delete_payment_query)
     connection.close()
     return redirect(url_for("payments"))
 
 
 @app.route("/payments/", methods=["GET", "POST"])
 def payments():
-    """Payments CRUD page"""
-    # add_new_payment_form = CreatepPymentForm(request.form) ----
     if request.method == "GET":
+        # fetch all payments and users to populate dynamic lists
         connection = db_engine.connect()
         payments_query = "SELECT * FROM Payments"
         all_payments = connection.execute(payments_query).fetchall()
@@ -574,6 +618,7 @@ def payments():
         all_users = connection.execute(users_query).fetchall()
         connection.close()
 
+        #payment forms and select field population, users relationship is NULLABLE which has a value of -1; dealt with later
         add_new_payment_form = AddNewPaymentForm(request.form)
         add_new_payment_form.user_id.choices = [(-1,"NULL")]+[(g.user_id, g.user_id) for g in all_users]
         delete_payment_form = DeletePaymentForm(request.form)
@@ -589,30 +634,58 @@ def payments():
             update_payment_form=update_payment_form,
         )
     elif request.method == "POST":
-        # TODO: also not working yet, dont know where to start
-        if True:
-            # flash("Created new user!", "success")
-            return redirect(url_for("payments"))
-        # if create_user_form.validate_on_submit():
-        #     User.create(
-        #         username=create_user_form.username.data,
-        #         email=create_user_form.email.data,
-        #         password=create_user_form.password.data,
-        #         active=create_user_form,
-        #     )
-        #     flash("Created new user!", "success")
-        #     return redirect(url_for("public.users"))
-        else:
-            flash_errors(create_payment_form)
-            return redirect(url_for("public.payments"))
-    # return render_template("users.html", create_user_form=create_user_form)
+        return redirect(url_for("payments"))
 
+@app.route("/add_new_user_poll_setting", methods=["POST"])
+def add_new_user_poll_setting():
+    # if request.method == "POST" and "add-new-user_poll_setting" in request.form:
+    add_new_user_poll_setting_form = AddNewUserPollSettingForm()
+    
+    connection = db_engine.connect()
+    new_user_poll_setting = {
+        "user_id": add_new_user_poll_setting_form.user_id.data,
+        "poll_id": add_new_user_poll_setting_form.poll_id.data,
+    }
 
-# app.route("/user_poll_settings/")
-# def user_poll_settings():
-#     """User_Poll_Settings CRUD page."""
-#     return render_template("user_poll_settings.html")
+    # setting up the set in exact needed format EX: 'permission1,permission2'
+    new_user_poll_setting_permissions_set = (
+        add_new_user_poll_setting_form.user_permissions_collaborator.data,
+        add_new_user_poll_setting_form.user_permissions_poll_creator.data,
+        add_new_user_poll_setting_form.user_permissions_admin.data,
+        add_new_user_poll_setting_form.user_permissions_superadmin.data,
+    )
+    user_poll_setting_permissions_set = ("collaborator", "poll_creator", "admin", "superadmin")
+    first_true = True
+    string = ""
+    for x in range(len(new_user_poll_setting_permissions_set)):
+        if new_user_poll_setting_permissions_set[x]:
+            comma = ("," if not first_true else "")
+            string = f"{string}{comma}{user_poll_setting_permissions_set[x]}"
+            first_true = False
+    
+    # inserting the new user_poll_setting to it's table
+    add_new_user_poll_setting_query = f"INSERT INTO User_Poll_Settings (user_id, poll_id, user_permissions) VALUES ({new_user_poll_setting['user_id']}, {new_user_poll_setting['poll_id']}, '{string}')"
+    app.logger.debug(add_new_user_poll_setting_query)
+    connection.execute(add_new_user_poll_setting_query)
+    connection.close()
+    return redirect(url_for("user_poll_settings"))
 
+@app.route("/delete_user_poll_setting", methods=["POST"])
+def delete_user_poll_setting():
+    # if request.method == "POST" and "delete-user_poll_setting" in request.form:
+    delete_user_poll_setting_form = DeleteUserPollSettingForm()
+    connection = db_engine.connect()
+
+    # first we delete from user_poll_settings
+    delete_user_poll_setting_query = f"Delete FROM User_Poll_Settings WHERE user_poll_setting_id = {delete_user_poll_setting_form.user_poll_setting_id.data}"
+    connection.execute(delete_user_poll_setting_query)
+    # but a poll cannot be connected to no user, so any polls stranded by the previous deletion are also deleted along with their votes
+    delete_user_poll_setting_query = f"Delete FROM Votes where poll_id NOT IN (SELECT poll_id FROM User_Poll_Settings)"
+    connection.execute(delete_user_poll_setting_query)
+    delete_user_poll_setting_query = f"Delete FROM Polls where poll_id NOT IN (SELECT poll_id FROM User_Poll_Settings)"
+    connection.execute(delete_user_poll_setting_query)
+    connection.close()
+    return redirect(url_for("user_poll_settings"))
 
 @app.route("/user_poll_settings/", methods=["GET", "POST"])
 def user_poll_settings():
@@ -620,29 +693,31 @@ def user_poll_settings():
     # create_user_poll_setting_form = CreateUserPollSettingForm(request.form)
     if request.method == "GET":
 
-        # get all User_Poll_Settings
+        # get all User_Poll_Settings, and users and polls to fill dynamic 'select fields'
         connection = db_engine.connect()
         user_poll_settings_query = "SELECT * FROM User_Poll_Settings"
         all_user_poll_settings = connection.execute(user_poll_settings_query).fetchall()
+        users_query = "SELECT * FROM Users"
+        all_users = connection.execute(users_query).fetchall()
+        polls_query = "SELECT * FROM Polls"
+        all_polls = connection.execute(polls_query).fetchall()
         connection.close()
 
-        # add new user_poll_setting form
+        # user_poll_setting forms, and select field population
         add_new_user_poll_setting_form = AddNewUserPollSettingForm(request.form)
+        add_new_user_poll_setting_form.user_id.choices = [(g.user_id, g.user_id) for g in all_users]
+        add_new_user_poll_setting_form.poll_id.choices = [(g.poll_id, g.poll_id) for g in all_polls]
+        delete_user_poll_setting_form = DeleteUserPollSettingForm(request.form)
+        delete_user_poll_setting_form.user_poll_setting_id.choices = [(g.user_poll_setting_id, g.user_poll_setting_id) for g in all_user_poll_settings]
 
         return render_template(
             "user_poll_settings.html",
             all_user_poll_settings=all_user_poll_settings,
             add_new_user_poll_setting_form=add_new_user_poll_setting_form,
+            delete_user_poll_setting_form=delete_user_poll_setting_form,
         )
     elif request.method == "POST":
-        # TODO: get forms working
-        if True:
-            # flash("Created new user_poll_setting!", "success")
-            return redirect(url_for("user_poll_settings"))
-        else:
-            flash_errors(create_user_form)
-            return redirect(url_for("public.users"))
-    # return render_template("users.html", create_user_form=create_user_form)
+        return redirect(url_for("user_poll_settings"))
 
 
 @app.route("/test_db/")
