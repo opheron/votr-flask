@@ -38,8 +38,13 @@ app.config["SECRET_KEY"] = getenv("SECRET_KEY")
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
-# establish connections
-db_engine = create_engine("mysql+pymysql://root:@localhost:3306/votr_flask", echo=True)
+# create db engine
+if app.config["DEBUG"] == "production":
+    db_engine = create_engine(getenv("DATABASE_URL"), echo=True)
+else:
+    db_engine = create_engine(
+        "mysql+pymysql://root:@localhost:3306/votr_flask", echo=True
+    )
 
 
 @app.route("/")
