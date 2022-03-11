@@ -6,7 +6,6 @@ from os import getenv
 
 from pymysql import NULL
 
-# import requests
 from forms import *
 
 from flask import Flask, render_template, url_for, request, redirect, jsonify
@@ -19,7 +18,6 @@ from sqlalchemy.engine import result, Engine
 from flask_wtf import FlaskForm
 
 from wtforms import (
-    Form,
     BooleanField,
     StringField,
     validators,
@@ -27,7 +25,6 @@ from wtforms import (
     DecimalField,
 )
 from enum import Enum
-
 
 # from flask_sqlalchemy import SQLAlchemy
 
@@ -39,28 +36,7 @@ app.config["DEBUG"] = getenv("FLASK_ENV")
 app.config["FLASK_APP"] = getenv("FLASK_APP")
 app.config["SECRET_KEY"] = getenv("SECRET_KEY")
 
-# app.config[
-#     "SQLALCHEMY_DATABASE_URI"
-# ] = "mysql+pymysql://root:@localhost:3306/votr_flask"
-# mysql+pymysql://<username>:<password>@<host>/<dbname>[?<options>]
-
-
-# FLASK_APP=app.py
-# FLASK_ENV=development
-# FLASK_DEBUG=1
-# SECRET_KEY = secret-key-for-dev-only
-# CSRF_ENABLED = True
-# app.debug = True
-# app.config.update(
-#     DEBUG=True, SECRET_KEY="secret-key-for-development-only", CSRF_ENABLED=True
-# )
-# app.config.from_object(os.environ["APP_SETTINGS"])
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
-
-# db = SQLAlchemy(app)
-
-# from models import *
-
 
 # establish connections
 db_engine = create_engine("mysql+pymysql://root:@localhost:3306/votr_flask", echo=True)
@@ -69,7 +45,6 @@ db_engine = create_engine("mysql+pymysql://root:@localhost:3306/votr_flask", ech
 @app.route("/")
 def home():
     """Home page."""
-    # return "HI"
     return render_template("home.html")
 
 
@@ -85,11 +60,11 @@ def darkly_reference():
     return render_template("darkly_reference.html")
 
 
-
 class PollTypes(Enum):
     single_transferable = 1
     popular = 2
     ranked_choice = 3
+
 
 class AddNewPollForm(FlaskForm):
     poll_title = StringField(
@@ -98,8 +73,11 @@ class AddNewPollForm(FlaskForm):
         render_kw={"class": "form-control"},
     )
     poll_type = SelectField(
-        "poll_type", 
-        choices=[(member.value, name.capitalize()) for name, member in PollTypes.__members__.items()],
+        "poll_type",
+        choices=[
+            (member.value, name.capitalize())
+            for name, member in PollTypes.__members__.items()
+        ],
         render_kw={"class": "form-control"},
     )
     poll_voting_choices = StringField(
@@ -144,12 +122,13 @@ class AddNewUserForm(FlaskForm):
 
 class AddNewPaymentForm(FlaskForm):
     user_id = SelectField(
-        "user_id", 
+        "user_id",
         coerce=int,
         render_kw={"class": "form-control"},
     )
     amount_usd = DecimalField(
-        "amount_usd", places=2,
+        "amount_usd",
+        places=2,
         render_kw={"class": "form-control"},
     )
     payment_purposes_test = BooleanField(
@@ -173,19 +152,21 @@ class AddNewPaymentForm(FlaskForm):
         label="donation",
     )
 
+
 class UpdatePaymentForm(FlaskForm):
     payment_id = SelectField(
-        "payment_id",  
+        "payment_id",
         coerce=int,
         render_kw={"class": "form-control"},
     )
     user_id = SelectField(
-        "user_id",  
+        "user_id",
         coerce=int,
         render_kw={"class": "form-control"},
     )
     amount_usd = DecimalField(
-        "amount_usd", places=2,
+        "amount_usd",
+        places=2,
         render_kw={"class": "form-control"},
     )
     payment_purposes_test = BooleanField(
@@ -209,60 +190,24 @@ class UpdatePaymentForm(FlaskForm):
         label="donation",
     )
 
+
 class DeletePaymentForm(FlaskForm):
     payment_id = SelectField(
-        "payment_id", 
-        choices=(1,1),
+        "payment_id",
+        choices=(1, 1),
         coerce=int,
         render_kw={"class": "form-control"},
     )
-
 
 
 class AddNewUserPollSettingForm(FlaskForm):
     user_id = SelectField(
-        "user_id",  
+        "user_id",
         coerce=int,
         render_kw={"class": "form-control"},
     )
     poll_id = SelectField(
-        "poll_id",  
-        coerce=int,
-        render_kw={"class": "form-control"},
-    )
-    user_permissions_collaborator = BooleanField(
-        id="user_permissions_collaborator",
-        name="collaborator",
-        label="collaborator",
-        default="checked",
-        render_kw={"class": "form-check-input"},
-    )
-    user_permissions_poll_creator = BooleanField(
-        id="user_permissions_poll_creator", name="poll_creator", label="poll creator"
-    )
-    user_permissions_admin = BooleanField(
-        id="user_permissions_admin",
-        name="admin",
-        label="admin",
-    )
-    user_permissions_superadmin = BooleanField(
-        id="user_permissions_superadmin",
-        name="superadmin",
-        label="superadmin",
-    )
-class UpdateUserPollSettingForm(FlaskForm):
-    user_poll_setting_id = SelectField(
-        "user_poll_setting_id",  
-        coerce=int,
-        render_kw={"class": "form-control"},
-    )
-    user_id = SelectField(
-        "user_id",  
-        coerce=int,
-        render_kw={"class": "form-control"},
-    )
-    poll_id = SelectField(
-        "poll_id",  
+        "poll_id",
         coerce=int,
         render_kw={"class": "form-control"},
     )
@@ -287,9 +232,48 @@ class UpdateUserPollSettingForm(FlaskForm):
         label="superadmin",
     )
 
+
+class UpdateUserPollSettingForm(FlaskForm):
+    user_poll_setting_id = SelectField(
+        "user_poll_setting_id",
+        coerce=int,
+        render_kw={"class": "form-control"},
+    )
+    user_id = SelectField(
+        "user_id",
+        coerce=int,
+        render_kw={"class": "form-control"},
+    )
+    poll_id = SelectField(
+        "poll_id",
+        coerce=int,
+        render_kw={"class": "form-control"},
+    )
+    user_permissions_collaborator = BooleanField(
+        id="user_permissions_collaborator",
+        name="collaborator",
+        label="collaborator",
+        default="checked",
+        render_kw={"class": "form-check-input"},
+    )
+    user_permissions_poll_creator = BooleanField(
+        id="user_permissions_poll_creator", name="poll_creator", label="poll creator"
+    )
+    user_permissions_admin = BooleanField(
+        id="user_permissions_admin",
+        name="admin",
+        label="admin",
+    )
+    user_permissions_superadmin = BooleanField(
+        id="user_permissions_superadmin",
+        name="superadmin",
+        label="superadmin",
+    )
+
+
 class DeleteUserPollSettingForm(FlaskForm):
     user_poll_setting_id = SelectField(
-        "user_poll_setting_id", 
+        "user_poll_setting_id",
         coerce=int,
         render_kw={"class": "form-control"},
     )
@@ -297,12 +281,12 @@ class DeleteUserPollSettingForm(FlaskForm):
 
 class AddNewVoteForm(FlaskForm):
     poll_id = SelectField(
-        "poll_id", 
+        "poll_id",
         coerce=int,
         render_kw={"class": "form-control"},
     )
     user_id = SelectField(
-        "user_id", 
+        "user_id",
         coerce=int,
         render_kw={"class": "form-control"},
     )
@@ -549,7 +533,7 @@ def find_user_by_id():
 def add_new_poll():
     # if request.method == "POST" and "add-new-poll" in request.form:
     add_new_poll_form = AddNewPollForm()
-    
+
     # validation would be done here, but json arrays are hard to validate
     if True:
         connection = db_engine.connect()
@@ -567,6 +551,7 @@ def add_new_poll():
         return redirect(url_for("polls"))
     else:
         return redirect(url_for("polls"))
+
 
 @app.route("/polls/", methods=["GET", "POST"])
 def polls():
@@ -601,7 +586,7 @@ def polls():
 def add_new_vote():
     # if request.method == "POST" and "add-new-vote" in request.form:
     add_new_vote_form = AddNewVoteForm()
-    
+
     # validation would be done here, but json objects are hard to validate
     if True:
         connection = db_engine.connect()
@@ -634,7 +619,7 @@ def votes():
         all_polls = connection.execute(polls_query).fetchall()
         connection.close()
 
-        #payment forms and select field population, users relationship is NULLABLE which has a value of -1; dealt with later
+        # payment forms and select field population, users relationship is NULLABLE which has a value of -1; dealt with later
         add_new_vote_form = AddNewVoteForm(request.form)
         add_new_vote_form.user_id.choices = [(g.user_id, g.user_id) for g in all_users]
         add_new_vote_form.poll_id.choices = [(g.poll_id, g.poll_id) for g in all_polls]
@@ -647,11 +632,12 @@ def votes():
     elif request.method == "POST":
         return redirect(url_for("votes"))
 
+
 @app.route("/add_new_payment", methods=["POST"])
 def add_new_payment():
     # if request.method == "POST" and "add-new-payment" in request.form:
     add_new_payment_form = AddNewPaymentForm()
-    
+
     # only validation done is to check if the amount_usd is empty (it is the only field that can be empty on the page)
     if add_new_payment_form.amount_usd.data != None:
         connection = db_engine.connect()
@@ -659,10 +645,9 @@ def add_new_payment():
             "user_id": add_new_payment_form.user_id.data,
             "amount_usd": add_new_payment_form.amount_usd.data,
         }
-        user_id = new_payment['user_id']
-        if new_payment['user_id'] == -1:
+        user_id = new_payment["user_id"]
+        if new_payment["user_id"] == -1:
             user_id = "NULL"
-
 
         # here we set up the 'set' in the expected format EX: 'test,free_trial,donation'
         new_payment_purposes_set = (
@@ -676,7 +661,7 @@ def add_new_payment():
         string = ""
         for x in range(len(new_payment_purposes_set)):
             if new_payment_purposes_set[x]:
-                comma = ("," if not first_true else "")
+                comma = "," if not first_true else ""
                 string = f"{string}{comma}{payment_purposes_set[x]}"
                 first_true = False
         app.logger.debug(f"new_payment: {new_payment}")
@@ -703,8 +688,8 @@ def update_payment():
             "user_id": update_payment_form.user_id.data,
             "amount_usd": update_payment_form.amount_usd.data,
         }
-        user_id = new_payment['user_id']
-        if new_payment['user_id'] == -1:
+        user_id = new_payment["user_id"]
+        if new_payment["user_id"] == -1:
             user_id = "NULL"
 
         # here we set up the 'set' in the expected format EX: 'test,free_trial,donation'
@@ -719,7 +704,7 @@ def update_payment():
         string = ""
         for x in range(len(new_payment_purposes_set)):
             if new_payment_purposes_set[x]:
-                comma = ("," if not first_true else "")
+                comma = "," if not first_true else ""
                 string = f"{string}{comma}{payment_purposes_set[x]}"
                 first_true = False
         app.logger.debug(f"new_payment: {new_payment}")
@@ -733,14 +718,15 @@ def update_payment():
         return redirect(url_for("payments"))
 
 
-
 @app.route("/delete_payment", methods=["POST"])
 def delete_payment():
     # if request.method == "POST" and "delete-payment" in request.form:
     delete_payment_form = DeletePaymentForm()
     connection = db_engine.connect()
     # delete the payment at payment_id
-    delete_payment_query = f"DELETE FROM Payments WHERE payment_id = {delete_payment_form.payment_id.data}"
+    delete_payment_query = (
+        f"DELETE FROM Payments WHERE payment_id = {delete_payment_form.payment_id.data}"
+    )
     connection.execute(delete_payment_query)
     connection.close()
     return redirect(url_for("payments"))
@@ -757,14 +743,22 @@ def payments():
         all_users = connection.execute(users_query).fetchall()
         connection.close()
 
-        #payment forms and select field population, users relationship is NULLABLE which has a value of -1; dealt with later
+        # payment forms and select field population, users relationship is NULLABLE which has a value of -1; dealt with later
         add_new_payment_form = AddNewPaymentForm(request.form)
-        add_new_payment_form.user_id.choices = [(-1,"NULL")]+[(g.user_id, g.user_id) for g in all_users]
+        add_new_payment_form.user_id.choices = [(-1, "NULL")] + [
+            (g.user_id, g.user_id) for g in all_users
+        ]
         delete_payment_form = DeletePaymentForm(request.form)
-        delete_payment_form.payment_id.choices = [(g.payment_id, g.payment_id) for g in all_payments]
+        delete_payment_form.payment_id.choices = [
+            (g.payment_id, g.payment_id) for g in all_payments
+        ]
         update_payment_form = UpdatePaymentForm(request.form)
-        update_payment_form.user_id.choices = [(-1,"NULL")]+[(g.user_id, g.user_id) for g in all_users]
-        update_payment_form.payment_id.choices = [(g.payment_id, g.payment_id) for g in all_payments]
+        update_payment_form.user_id.choices = [(-1, "NULL")] + [
+            (g.user_id, g.user_id) for g in all_users
+        ]
+        update_payment_form.payment_id.choices = [
+            (g.payment_id, g.payment_id) for g in all_payments
+        ]
         return render_template(
             "payments.html",
             all_payments=all_payments,
@@ -775,11 +769,12 @@ def payments():
     elif request.method == "POST":
         return redirect(url_for("payments"))
 
+
 @app.route("/add_new_user_poll_setting", methods=["POST"])
 def add_new_user_poll_setting():
     # if request.method == "POST" and "add-new-user_poll_setting" in request.form:
     add_new_user_poll_setting_form = AddNewUserPollSettingForm()
-    
+
     connection = db_engine.connect()
     new_user_poll_setting = {
         "user_id": add_new_user_poll_setting_form.user_id.data,
@@ -793,21 +788,27 @@ def add_new_user_poll_setting():
         add_new_user_poll_setting_form.user_permissions_admin.data,
         add_new_user_poll_setting_form.user_permissions_superadmin.data,
     )
-    user_poll_setting_permissions_set = ("collaborator", "poll_creator", "admin", "superadmin")
+    user_poll_setting_permissions_set = (
+        "collaborator",
+        "poll_creator",
+        "admin",
+        "superadmin",
+    )
     first_true = True
     string = ""
     for x in range(len(new_user_poll_setting_permissions_set)):
         if new_user_poll_setting_permissions_set[x]:
-            comma = ("," if not first_true else "")
+            comma = "," if not first_true else ""
             string = f"{string}{comma}{user_poll_setting_permissions_set[x]}"
             first_true = False
-    
+
     # inserting the new user_poll_setting to it's table
     add_new_user_poll_setting_query = f"INSERT INTO User_Poll_Settings (user_id, poll_id, user_permissions) VALUES ({new_user_poll_setting['user_id']}, {new_user_poll_setting['poll_id']}, '{string}')"
     app.logger.debug(add_new_user_poll_setting_query)
     connection.execute(add_new_user_poll_setting_query)
     connection.close()
     return redirect(url_for("user_poll_settings"))
+
 
 @app.route("/delete_user_poll_setting", methods=["POST"])
 def delete_user_poll_setting():
@@ -825,6 +826,7 @@ def delete_user_poll_setting():
     connection.execute(delete_user_poll_setting_query)
     connection.close()
     return redirect(url_for("user_poll_settings"))
+
 
 @app.route("/user_poll_settings/", methods=["GET", "POST"])
 def user_poll_settings():
@@ -844,10 +846,17 @@ def user_poll_settings():
 
         # user_poll_setting forms, and select field population
         add_new_user_poll_setting_form = AddNewUserPollSettingForm(request.form)
-        add_new_user_poll_setting_form.user_id.choices = [(g.user_id, g.user_id) for g in all_users]
-        add_new_user_poll_setting_form.poll_id.choices = [(g.poll_id, g.poll_id) for g in all_polls]
+        add_new_user_poll_setting_form.user_id.choices = [
+            (g.user_id, g.user_id) for g in all_users
+        ]
+        add_new_user_poll_setting_form.poll_id.choices = [
+            (g.poll_id, g.poll_id) for g in all_polls
+        ]
         delete_user_poll_setting_form = DeleteUserPollSettingForm(request.form)
-        delete_user_poll_setting_form.user_poll_setting_id.choices = [(g.user_poll_setting_id, g.user_poll_setting_id) for g in all_user_poll_settings]
+        delete_user_poll_setting_form.user_poll_setting_id.choices = [
+            (g.user_poll_setting_id, g.user_poll_setting_id)
+            for g in all_user_poll_settings
+        ]
 
         return render_template(
             "user_poll_settings.html",
@@ -862,7 +871,6 @@ def user_poll_settings():
 @app.route("/test_db/")
 def test_db():
     """Database test page."""
-    # reflect = db.reflect()
 
     connection = db_engine.connect()
     users_query = "SELECT * FROM Users"
@@ -872,6 +880,4 @@ def test_db():
 
 
 if __name__ == "__main__":
-    # port = int(getenv("PORT"), 8000)
-    # app.run(port = 2386)
     app.run()
