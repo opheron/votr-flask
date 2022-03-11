@@ -211,3 +211,8 @@ in `.env`:
 ```text
 SEND_FILE_MAX_AGE_DEFAULT=31556926  # one year
 ```
+
+## Documentation References
+
+- WTForms: https://wtforms.readthedocs.io/en/3.0.x/
+- Jinja2: https://jinja2docs.readthedocs.io/en/stable/

@@ -5,265 +5,83 @@
     <h1>Votes</h1> 
     <p>a vote made by an end user of Votr in a poll.</p>
   </div>
-          <table class="table table-striped table-dark">
-              <thead>
-                <tr>
-                  <th scope="col">vote_id</th>
-                  <th scope="col">poll_id</th>
-                  <th scope="col">user_id</th>
-                  <th scope="col">vote_values</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">1</td>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>[lima, fava, pinto]</td>
-                </tr>
-                <tr>
-                  <th scope="row">2</td>
-                  <td>1</td>
-                  <td>2</td>
-                  <td>[pinto, lima, fava]</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</td>
-                  <td>1</td>
-                  <td>3</td>
-                  <td>[pinto, fava, lima]</td>
-                </tr>
-                <tr>
-                  <th scope="row">4</td>
-                  <td>1</td>
-                  <td>4</td>
-                  <td>[fava, pinto, lima]</td>
-                </tr>
-                <tr>
-                  <th scope="row">5</td>
-                  <td>2</td>
-                  <td>1</td>
-                  <td>andrew chong</td>
-                </tr>
-                <tr>
-                  <th scope="row">6</td>
-                  <td>2</td>
-                  <td>2</td>
-                  <td>sebastian allen</td>
-                </tr>
-                <tr>
-                  <th scope="row">7</td>
-                  <td>3</td>
-                  <td>1</td>
-                  <td>[science, the wheel, fire, sliced bread]</td>
-                </tr>
-                <tr>
-                  <th scope="row">8</td>
-                  <td>3</td>
-                  <td>2</td>
-                  <td>[fire, science, the wheel, sliced bread]</td>
-                </tr>
-                <tr>
-                  <th scope="row">9</td>
-                  <td>3</td>
-                  <td>4</td>
-                  <td>[sliced bread, the wheel, fire, science]</td>
-                </tr>
-                <tr>
-                  <th scope="row">10</td>
-                  <td>4</td>
-                  <td>3</td>
-                  <td>2</td>
-                </tr>
-              </tbody>
-            </table>
+    <table class="table table-striped table-dark">
+        <thead>
+          <tr>
+            <th scope="col">vote_id</th>
+            <th scope="col">poll_id</th>
+            <th scope="col">user_id</th>
+            <th scope="col">vote_values</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for vote in all_votes %}
+
+          <tr>
+            <th scope="row">{{ vote["vote_id"] }}</th>
+            <td>{{ vote["poll_id"] }}</td>
+            <td>{{ vote["user_id"] }}</td>
+            <td>{{ vote["vote_values"] }}</td>
+          </tr>
+    
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+<div>
+  <form name="add-new-vote" method="POST" action="/add_new_vote">
+    {{ add_new_vote_form.csrf_token }}
+    <h3>Add New Vote</h3>
+    <table class="table table-striped table-dark">
+      <thead>
+        <tr>
+          <th scope="col">vote_id</th>
+          <th scope="col">user_id</th>
+          <th scope="col">poll_id</th>
+          <th scope="col">vote_values</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <th scope="row"><i>auto incremented</i></th>
+          <td>
+            <div class="mb-3 form-group row">
+            <div class="mb-3">
+              <!-- user_id LABEL -->
+              {{ add_new_vote_form.user_id.label(class="form-label", value="1") }}
+              <!-- user_id FIELD -->
+              {{ add_new_vote_form.user_id(class="form-control" ) }}
+              <div id="create-user_id-help" class="form-text">FK</div>
             </div>
-      
-            <div class="container">
-          <form>
-            <h3>Add New Vote</h3>
-            <table class="table table-striped table-dark">
-              <thead>
-                <tr>
-                  <th scope="col">vote_id</th>
-                  <th scope="col">poll_id</th>
-                  <th scope="col">user_id</th>
-                  <th scope="col">vote_values</th>
-                </tr>
-                <tbody>
-                  <tr>
-                    <th scope="row"><i>auto incremented</i></td>
-                    <td>
-                      <div class="mb-3">
-                        <label for="votes-create-vote-poll-id" class="form-label mb-3">poll_id</label>
-                        <select class="form-select" id="votes-create-vote-poll-id" aria-label="create Poll ID">
-                          <option selected>Poll ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                          <option value="1">Poll 1</option> <!--some such select menus will need a null option, this one does not, as no vote will be without a poll-->
-                          <option value="2">Poll 2</option>
-                          <option value="3">Poll 3</option>
-                          <option value="4">Poll 4</option>
-                        </select>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="mb-3">
-                        <label for="votes-create-vote-user-id" class="form-label mb-3">user_id</label>
-                        <select class="form-select" id="votes-create-vote-user-id" aria-label="create User ID">
-                          <option selected>User ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                          <option value="1">User 1</option> <!--some such select menus will need a null option, this one does not, as no vote will be without a poll-->
-                          <option value="2">User 2</option>
-                          <option value="3">User 3</option>
-                          <option value="4">User 4</option>
-                        </select>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="mb-3">
-                        <label for="votes-create-vote-values" class="form-label mb-3">vote_values</label>
-                        <input type="text" class="form-control" id="votes-create-vote-values" aria-describedby="create-vote-values-help" placeholder="Ex: &quot;option 1&quot; AND &quot;option2&quot;"> <!-- not sure what 'type' to use here-->
-                        <div id="create-vote-values-help" class="form-text">json</div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-            </table>
-      
-            <button type="submit" class="btn btn-primary">Create New Vote</button>
-          </form>
-        </div>
-
-<div class="container">
-          <form>
-            <h3>Delete a Vote</h3>
-            <div class="btn-group"> <!--class button-group changes the width, if theres a better way, you can update this-->
-                <select class="form-select" aria-label="Delete Vote ID">
-                  <option selected>Vote ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                  <option value="1">Vote 1</option>
-                  <option value="2">Vote 2</option>
-                  <option value="3">Vote 3</option>
-                  <option value="4">Vote 4</option>
-                  <option value="5">Vote 5</option>
-                  <option value="6">Vote 6</option>
-                  <option value="7">Vote 7</option>
-                  <option value="8">Vote 8</option>
-                  <option value="9">Vote 9</option>
-                  <option value="10">Vote 10</option>
-                </select>
+          </td>
+          <td>
+            <div class="mb-3 form-group row">
+            <div class="mb-3">
+              <!-- poll_id LABEL -->
+              {{ add_new_vote_form.poll_id.label(class="form-label") }}
+              <!-- user_id FIELD -->
+              {{ add_new_vote_form.poll_id(class="form-control" ) }}
+              <div id="create-poll_id-help" class="form-text">FK</div>
             </div>
-
-            <button type="submit" class="btn btn-primary">Delete</button><!--dont know about type here-->
-          </form>      
-        </div>          
-
-        <div class="container">
-          <form>
-            <h3>Search Votes</h3>
-            <div class="btn-group"> <!--class button-group changes the width of the folllowing selects, if theres a better way, you can update this-->
-              <select class="form-select" aria-label="Search Vote ID">
-                <option selected>Vote ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                <option value="1">Vote 1</option>
-                <option value="2">Vote 2</option>
-                <option value="3">Vote 3</option>
-                <option value="4">Vote 4</option>
-                <option value="5">Vote 5</option>
-                <option value="6">Vote 6</option>
-                <option value="7">Vote 7</option>
-                <option value="8">Vote 8</option>
-                <option value="9">Vote 9</option>
-                <option value="10">Vote 10</option>
-              </select>
-              <select class="form-select" aria-label="Search Poll ID">
-                <option selected>Poll ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                <option value="1">Poll 1</option>
-                <option value="2">Poll 2</option>
-                <option value="3">Poll 3</option>
-                <option value="4">Poll 4</option>
-              </select>
-              <select class="form-select" aria-label="Search User ID">
-                <option selected>User ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                <option value="1">User 1</option>
-                <option value="2">User 2</option>
-                <option value="3">User 3</option>
-                <option value="4">User 4</option>
-              </select>
+          </td>
+          <td>
+            <div class="mb-3 form-group row">
+            <div class="mb-3">
+              <!-- user_id LABEL -->
+              {{ add_new_vote_form.vote_values.label(class="form-label") }}
+              <!-- user_id FIELD -->
+              {{ add_new_vote_form.vote_values(class="form-control", placeholder="Ex: 	{\"option1\": o1_value, \"option2\": o2_value, \"option3\": o3_value") }}
+              <div id="create-vote_values-help" class="form-text">JSON Object</div>
             </div>
-            <label for="vote-values-search">vote_values: </label>
-            <input type="text" style="display: inline; width: 20%; padding-bottom:9px;" class="form-control" id="vote-values-search" placeholder="Ex: &quot;option 1&quot; AND &quot;option2&quot;"> <!-- not sure what 'type' to use here--> <!--style part was just to make it inline, if you know a better way you can update, or just add this part to the css-->
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-            <button type="submit" class="btn btn-primary">Search</button><!--dont know about type here-->
-          </form>
-        </div>
-
-        <div class="container">
-          <form>
-            <h3>Update a Vote</h3>
-            <table class="table table-striped table-dark">
-              <thead>
-                <tr>
-                  <th scope="col">vote_id</th>
-                  <th scope="col">poll_id</th>
-                  <th scope="col">user_id</th>
-                  <th scope="col">vote_values</th>
-                </tr>
-                <tbody>
-                  <tr>
-                    <td>
-                      <div class="mb-3">
-                        <label for="votes-update-vote-id" class="form-label mb-3">select vote_id to be updated</label>
-                        <select class="form-select" id="votes-update-vote-id" aria-label="Update Vote ID">
-                          <option selected>Vote ID</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                          <option value="1">Vote 1</option>
-                          <option value="2">Vote 2</option>
-                          <option value="3">Vote 3</option>
-                          <option value="4">Vote 4</option>
-                          <option value="5">Vote 5</option>
-                          <option value="6">Vote 6</option>
-                          <option value="7">Vote 7</option>
-                          <option value="8">Vote 8</option>
-                          <option value="9">Vote 9</option>
-                          <option value="10">Vote 10</option>
-                        </select>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="mb-3">
-                        <label for="votes-update-vote-poll-id" class="form-label mb-3">update to poll_id</label>
-                        <select class="form-select" id="votes-update-vote-poll-id" aria-label="Update Poll ID">
-                          <option selected>No Update</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                          <option value="1">Poll 1</option> <!--some such select menus will need a null option, this one does not, as no vote will be without a poll-->
-                          <option value="2">Poll 2</option>
-                          <option value="3">Poll 3</option>
-                          <option value="4">Poll 4</option>
-                        </select>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="mb-3">
-                        <label for="votes-update-vote-user-id" class="form-label mb-3">update to user_id</label>
-                        <select class="form-select" id="votes-update-vote-user-id" aria-label="Update User ID">
-                          <option selected>No Update</option> <!--i dont know how wer are going to have this automatically populate with the available id's-->
-                          <option value="1">User 1</option> <!--some such select menus will need a null option, this one does not, as no vote will be without a poll-->
-                          <option value="2">User 2</option>
-                          <option value="3">User 3</option>
-                          <option value="4">User 4</option>
-                        </select>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="mb-3">
-                        <label for="votes-update-vote-values" class="form-label mb-3">vote_values</label>
-                        <input type="text" class="form-control" id="votes-update-vote-values" aria-describedby="vote-values-help" placeholder="Ex: &quot;option 1&quot; AND &quot;option2&quot;"> <!-- not sure what 'type' to use here-->
-                        <div id="vote-values-help" class="form-text">json</div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-            </table>
-      
-            <button type="submit" class="btn btn-primary">Update Vote</button>
-          </form>
-      </div>
-
-      </div>
+    <button name="create-new-vote" type="submit" class="btn btn-primary">Create New Vote</button>
+  </form>
+</div>
 
       {% endblock %}
