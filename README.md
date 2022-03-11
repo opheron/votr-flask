@@ -16,15 +16,8 @@ pyenv local 3.10.2
 
 Do:
 
-```
+```zsh
 poetry install
-```
-
-echo 'eval "$(pyenv init --path)"' >> ~/.zprofile
-
-```
-
-
 ```
 
 4. Set Flask variables:
@@ -37,59 +30,12 @@ export FLASK_DEBUG=1
 
 ### Running locally
 
-#
-
-#
-
-#
-
-#
-
-#
-
-#
-
-#
-
-#
-
-#
-
-#
-
-###
-
-The list of `environment:` variables in the `docker-compose.yml` file takes precedence over any variables specified in `.env`.
-
-To run any commands using the `Flask CLI`
-
-```bash
-docker-compose run --rm manage <<COMMAND>>
-```
-
-Therefore, to initialize a database you would run
-
-```bash
-docker-compose run --rm manage db init
-docker-compose run --rm manage db migrate
-docker-compose run --rm manage db upgrade
-```
-
-A docker volume `node-modules` is created to store NPM packages and is reused across the dev and prod versions of the application. For the purposes of DB testing with `sqlite`, the file `dev.db` is mounted to all containers. This volume mount should be removed from `docker-compose.yml` if a production DB server is used.
-
-### Running locally
-
 Run the following commands to bootstrap your environment if you are unable to run the application using Docker
 
 ```bash
-cd votr_cc_flask
+cd votr-flask
 pip install -r requirements/dev.txt
-npm install
-npm run-script build
-npm start  # run the webpack dev server and flask server using concurrently
 ```
-
-Go to `http://localhost:8080`. You will see a pretty welcome screen.
 
 #### Database Initialization (locally)
 
@@ -102,29 +48,18 @@ flask db migrate
 flask db upgrade
 ```
 
-## Deployment
+## Deployment to Heroku with new dev changes
 
-When using Docker, reasonable production defaults are set in `docker-compose.yml`
+Update the lockfile with:
 
-```text
-FLASK_ENV=production
-FLASK_DEBUG=0
+```zsh
+poetry lock --no-update
 ```
 
-Therefore, starting the app in "production" mode is as simple as
+Freeze requirements with:
 
-```bash
-docker-compose up flask-prod
-```
-
-If running without Docker
-
-```bash
-export FLASK_ENV=production
-export FLASK_DEBUG=0
-export DATABASE_URL="<YOUR DATABASE URL>"
-npm run build   # build assets with webpack
-flask run       # start the flask server
+```zsh
+poetry export -f requirements.txt --output requirements.txt
 ```
 
 ## Shell
