@@ -62,6 +62,12 @@ Freeze requirements with:
 poetry export -f requirements.txt --output requirements.txt
 ```
 
+Test the Heroku deploy locally with:
+
+```zsh
+heroku local
+```
+
 ## Shell
 
 To open the interactive shell, run
