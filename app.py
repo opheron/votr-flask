@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import logging
+# from json import dumps
 
 from os import getenv
 
@@ -25,8 +25,6 @@ from wtforms import (
     DecimalField,
 )
 from enum import Enum
-
-# from flask_sqlalchemy import SQLAlchemy
 
 load_dotenv()
 
@@ -301,47 +299,47 @@ class AddNewVoteForm(FlaskForm):
     )
 
 
-@app.route("/users", methods=["GET", "POST"])
-def users():
-    """Users CRUD page"""
-    # create_user_form = CreateUserForm(request.form)
-    if request.method == "GET":
-
-        # TODO: Separate this out into another function
-        # get all users
-
-        # with engine.connect() as connection:
-        # result = connection.execute(text("select username from users"))
-        # for row in result:
-        #     print("username:", row['username'])
-        connection = db_engine.connect()
+def get_all_users_data():
+    """
+    Queries database for all users
+    Returns data as a list of dictionaries
+    """
+    with db_engine.connect() as connection:
         users_query = "SELECT * FROM Users"
         all_users = connection.execute(users_query).fetchall()
-        connection.close()
+        app.logger.debug(all_users)
+        all_users = [dict(user) for user in all_users]
 
-        # add new user form
+        for user in all_users:
+            user["site_permissions"] = user["site_permissions"].split(",")
+
+        return all_users
+
+
+@app.route("/get_all_users", methods=["GET"])
+def get_all_users():
+    """Route that returns all users as a JSON object"""
+    if request.method == "GET":
+        all_users = get_all_users_data()
+        return jsonify(all_users)
+        # app.logger.debug(all_users)
+    else:
+        return redirect(url_for("users"))
+
+
+@app.route("/users", methods=["GET"])
+def users():
+    """Users CRUD page"""
+    if request.method == "GET":
         add_new_user_form = AddNewUserForm()
+
+        all_users = get_all_users_data()
 
         return render_template(
             "users.html", all_users=all_users, add_new_user_form=add_new_user_form
         )
-    elif request.method == "POST":
-        if True:
-            # flash("Created new user!", "success")
-            return redirect(url_for("users"))
-        # if create_user_form.validate_on_submit():
-        #     User.create(
-        #         username=create_user_form.username.data,
-        #         email=create_user_form.email.data,
-        #         password=create_user_form.password.data,
-        #         active=create_user_form,
-        #     )
-        #     flash("Created new user!", "success")
-        #     return redirect(url_for("public.users"))
-        else:
-            flash_errors(create_user_form)
-            return redirect(url_for("public.users"))
-    # return render_template("users.html", create_user_form=create_user_form)
+    else:
+        return redirect(url_for("users"))
 
 
 @app.route("/add_new_user", methods=["POST"])

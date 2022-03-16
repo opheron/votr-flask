@@ -2,9 +2,7 @@ $(document).ready(function () {
   $('[data-toggle="tooltip"]').tooltip();
 });
 
-// TODO: Maybe replace jQuery document.ready with native JS
 $(document).ready(function handleFindUserById() {
-  console.log("working");
   $("#users-find-by-id-btn").click(async function (event) {
     event.preventDefault();
 
@@ -65,4 +63,14 @@ $(document).ready(function handleFindUserById() {
       ).checked = false;
     }
   });
+});
+
+$(document).ready(async function putAllUsersInLocalStorage(event) {
+  let response = await fetch("get_all_users", {
+    method: "GET",
+  });
+
+  let all_users_data = await response.json();
+
+  console.log(all_users_data);
 });
