@@ -1,8 +1,0 @@
-# GRAB THESE COMMANDS
-
-```zsh
-
-
-
-
-```
