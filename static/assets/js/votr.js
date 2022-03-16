@@ -1,9 +1,4 @@
 $(document).ready(() => {
-  window.$ = $;
-  window.jQuery = jQuery;
-});
-
-$(document).ready(function () {
   $('[data-toggle="tooltip"]').tooltip();
 });
 

@@ -5,11 +5,9 @@
   <p>an end user of Votr.</p>
 </div>
 
-<!-- START FOR LOOP -->
-
 <div id="users">
   <div class="col-sm-4">
-  <input class="search form-control mb-3" placeholder="Search" />
+  <input class="search form-control mb-3" placeholder="Search users" />
   </div>
   <table class="table table-striped table-dark">
     <thead>
@@ -105,7 +103,7 @@
             <div class="mb-3 form-group row">
             <div class="mb-3">
               {{ add_new_user_form.username.label(class="form-label") }}
-              {{ add_new_user_form.username( value="newUserOne", placeholder="Ex: personOne") }}
+              {{ add_new_user_form.username(placeholder="Ex: personOne") }}
               <div id="create-username-help" class="form-text">varchar</div>
             </div>
           </td>
@@ -113,7 +111,7 @@
             <div class="mb-3 form-group row">
               {{ add_new_user_form.email_address.label(class="form-label")
               }}
-              {{ add_new_user_form.email_address( class="form-control", value="newUserOne@emailaddress.com",
+              {{ add_new_user_form.email_address( class="form-control",
               placeholder="Ex: personOne@website.com") }}
               <div id="create-email_address-help" class="form-text">
                 varchar
@@ -122,8 +120,8 @@
           </td>
           <td>
             <div class="form-check">
-              {{add_new_user_form.site_permissions_guest(class="form-check-input", checked="")}}
-              {{ add_new_user_form.site_permissions_guest.label(name="guest", class="form-check-label") }}
+              {{add_new_user_form.site_permissions_guest(class="form-check-input")}}
+              {{ add_new_user_form.site_permissions_guest.label(class="form-check-label") }}
             </div>
             <div class="form-check">
               {{add_new_user_form.site_permissions_user(class="form-check-input" )}}
@@ -145,91 +143,6 @@
     </table>
 
     <button name="create-new-user" type="submit" class="btn btn-primary">Create New User</button>
-  </form>
-</div>
-
-
-<div>
-  <form name="find-user-by-id-form" id = "find-user-by-id-form" method="POST" action="/find_user_by_id">
-    <h3>Find User By ID</h3>
-    <table class="table table-striped table-dark">
-      <thead>
-        <tr>
-          <th scope="col">user_id</th>
-          <th scope="col">username</th>
-          <th scope="col">email_address</th>
-          <th
-            scope="col"
-            data-toggle="tooltip"
-            data-placement="top"
-            title="User's site-wide permissions"
-          >
-            site_permissions
-          </th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr mb-3 form-group row>
-          <th scope="row">
-          <select class="form-select" id="users-find-by-id-id" name="users-find-by-id-id" aria-label="Search User ID">
-        <option selected>User ID</option>
-        {% for user in all_users %}
-        <option value="{{ user["user_id"] }}">{{ user["user_id"] }}</option>
-        {% endfor %}
-      </select>
-            
-          </th>
-          <td>
-            <div class="mb-3">
-
-        
-        <input type="text" id="users-find-by-id-username" name="name" class="form-control" size="10" placeholder="Username" readonly>
-
-            </div>
-          </td>
-          <td>
-            <div class="mb-3">
-              <input type="text" id="users-find-by-id-email" name="name" class="form-control" size="10" placeholder="Email" readonly>
-            </div>
-          </td>
-
-
-          <td>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="users-find-by-id-site-permissions-guest" disabled="">
-            <label class="form-check-label" for="flexCheckDefault">
-              guest
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="users-find-by-id-site-permissions-user" disabled="">
-            <label class="form-check-label" for="flexCheckDefault">
-              user
-            </label>
-          </div>
-
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="users-find-by-id-site-permissions-admin" disabled="">
-            <label class="form-check-label" for="flexCheckDefault">
-              admin
-            </label>
-          </div>
-
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="users-find-by-id-site-permissions-superadmin" disabled="">
-            <label class="form-check-label" for="flexCheckDefault">
-              superadmin
-            </label>
-          </div>
-          </td>
-        
-
-        </tr>
-      </tbody>
-    </table>
-
-    <button id="users-find-by-id-btn" type="submit" class="btn btn-primary">Find User</button>
   </form>
 </div>
 

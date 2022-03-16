@@ -32,18 +32,6 @@
       href="{{ url_for('static', filename='assets/css/bootswatch.css') }}"
     />
 
-    <!-- Bootswatch Theme Reference custom CSS -->
-    {% if url_for(request.endpoint, **request.view_args) == "/darkly_reference"
-    %}
-
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static', filename='assets/css/bootswatch_custom.min.css') }}"
-    />
-
-    {% endif %}
-
     <!-- Votr CSS -->
     <link
       href="{{ url_for('static', filename='assets/css/styles.css') }}"
@@ -80,12 +68,6 @@
     <script src="{{url_for('static', filename='assets/js/votr.js') }}"></script>
 
     <script src="{{url_for('static', filename='assets/js/list.min.js') }}"></script>
-
-    <script>
-      $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-      });
-    </script>
 
     {% endblock %}
 

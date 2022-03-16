@@ -1,18 +1,27 @@
 # votr-flask
 
-An example CRUD SQL voting web app built with Flask
+An educational demonstration CRUD SQL voting web app built with [Flask]
+
+## About
+
+votr-flask demonstrates using [Flask] and [MySQL] to make a database management app. It is made for educational purposes only, and is not intended to exemplify production-ready software. Specifically, app.py contains nearly all the back-end logic for this application for ease of reading.
 
 ## Dev Environment Setup
 
-1. Install pyenv if not installed: https://github.com/pyenv/pyenv
-2. Install Python version 3.10.2:
+After you have cloned this repo to your local environment, do the following:
+
+1. Install pyenv if not installed: [pyenv][https://github.com/pyenv/pyenv]
+
+2. Install Python version 3.10.2 and use it:
 
 ```zsh
 pyenv version 3.10.2
 pyenv local 3.10.2
 ```
 
-3. Install Poetry: https://python-poetry.org/docs/#installation
+3. Install [Poetry] for Python dependency management
+
+4. Install Python dependencies
 
 Do:
 
@@ -20,33 +29,50 @@ Do:
 poetry install
 ```
 
-4. Set Flask variables:
+5. Set Flask variables:
 
 ```zsh
 export FLASK_ENV=development
 export FLASK_DEBUG=1
-
 ```
+
+6. Set up database:
+
+Install MySQL: https://dev.mysql.com/
+
+Create a MySQL user:
+
+- username: root
+- password: _no password_
+
+Create a MySQL database with the following parameters:
+
+- port: 3306
+- database name: votr_flask
+
+Run set_up_db.sql to create the necessary tables and add sample data.
 
 ### Running locally
 
-Run the following commands to bootstrap your environment if you are unable to run the application using Docker
+Do:
 
-```bash
-cd votr-flask
-pip install -r requirements/dev.txt
+````zsh
+poetry shell
+python app.py
 ```
 
-#### Database Initialization (locally)
-
-Once you have installed your DBMS, run the following to create your app's
-database tables and perform the initial migration
-
-```bash
-flask db init
-flask db migrate
-flask db upgrade
+You should see the following in your terminal:
 ```
+ * Serving Flask app 'app' (lazy loading)
+ * Environment: development
+ * Debug mode: on
+ * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 126-263-310
+```
+
+Navigate to the URL provided and you should see the app home page.
 
 ## Deployment to Heroku with new dev changes
 
@@ -54,7 +80,7 @@ Update the lockfile with:
 
 ```zsh
 poetry lock --no-update
-```
+````
 
 Freeze requirements with:
 
@@ -68,92 +94,40 @@ Test the Heroku deploy locally with:
 heroku local
 ```
 
-## Shell
+Then do:
 
-To open the interactive shell, run
-
-```bash
-docker-compose run --rm manage db shell
-flask shell # If running locally without Docker
+```zsh
+git push heroku main
 ```
 
-By default, you will have access to the flask `app`.
+## Open Source Credits & Acknowledgements
 
-## Running Tests/Linter
+Thanks to all the open source projects that are used as primary dependencies in this project, including:
 
-To run all tests, run
+### Python
 
-```bash
-docker-compose run --rm manage test
-flask test # If running locally without Docker
-```
+- [Flask][https://flask.palletsprojects.com/]
+- [Poetry][https://python-poetry.org/docs/#installation]
+- [WTForms][https://wtforms.readthedocs.io/en/3.0.x/]
+- [Flask-WTF][https://flask-wtf.readthedocs.io/]
+- [Jinja2][https://jinja2docs.readthedocs.io/en/stable/]
+- [python-dotenv][https://saurabh-kumar.com/python-dotenv/]
 
-To run the linter, run
+### Database & SQL
 
-```bash
-docker-compose run --rm manage lint
-flask lint # If running locally without Docker
-```
+- [MySQL][https://www.mysql.com/]
+- [Flask-SqlAlchemy][https://flask-sqlalchemy.palletsprojects.com/]
+- [PyMySQL][https://pymysql.readthedocs.io/en/latest/]
 
-The `lint` command will attempt to fix any linting/style errors in the code. If you only want to know if the code will pass CI and do not wish for the linter to make changes, add the `--check` argument.
+### Javascript
 
-## Migrations
+- [List.js][https://listjs.com/]
+- [jQuery][https://jquery.com/]
 
-Whenever a database migration needs to be made. Run the following commands
+### HTML & CSS Styling
 
-```bash
-docker-compose run --rm manage db migrate
-flask db migrate # If running locally without Docker
-```
+- [Bootswatch][https://bootswatch.com/] - Darkly Theme
 
-This will generate a new migration script. Then run
+### Production Web Server
 
-```bash
-docker-compose run --rm manage db upgrade
-flask db upgrade # If running locally without Docker
-```
-
-To apply the migration.
-
-For a full migration command reference, run `docker-compose run --rm manage db --help`.
-
-If you will deploy your application remotely (e.g on Heroku) you should add the `migrations` folder to version control.
-You can do this after `flask db migrate` by running the following commands
-
-```bash
-git add migrations/*
-git commit -m "Add migrations"
-```
-
-Make sure folder `migrations/versions` is not empty.
-
-## Asset Management
-
-Files placed inside the `assets` directory and its subdirectories
-(excluding `js` and `css`) will be copied by webpack's
-`file-loader` into the `static/build` directory. In production, the plugin
-`Flask-Static-Digest` zips the webpack content and tags them with a MD5 hash.
-As a result, you must use the `static_url_for` function when including static content,
-as it resolves the correct file name, including the MD5 hash.
-For example
-
-```html
-<link
-  rel="shortcut icon"
-  href="{{static_url_for('static', filename='build/img/favicon.ico') }}"
-/>
-```
-
-If all of your static files are managed this way, then their filenames will change whenever their
-contents do, and you can ask Flask to tell web browsers that they
-should cache all your assets forever by including the following line
-in `.env`:
-
-```text
-SEND_FILE_MAX_AGE_DEFAULT=31556926  # one year
-```
-
-## Documentation References
-
-- WTForms: https://wtforms.readthedocs.io/en/3.0.x/
-- Jinja2: https://jinja2docs.readthedocs.io/en/stable/
+- [Gunicorn][https://gunicorn.org/]

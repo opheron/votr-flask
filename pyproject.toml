@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "votr-flask"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = ["Andrew Chong <i@andrewhchong.com>",
             "Sebastien Allen <allenseb@oregonstate.edu"]
@@ -9,14 +9,11 @@ authors = ["Andrew Chong <i@andrewhchong.com>",
 python = "^3.10"
 Flask = "^2.0.2"
 Flask-SQLAlchemy = "^2.5.1"
-SQLAlchemy = "^1.4.31"
-Flask-Migrate = "^3.1.0"
 gunicorn = "^20.1.0"
 Flask-WTF = "^1.0.0"
-WTForms = "^3.0.1"
-Jinja2 = "^3.0.3"
 python-dotenv = "^0.19.2"
 PyMySQL = "^1.0.2"
+WTForms = "^3.0.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

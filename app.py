@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# from json import dumps
-
 from os import getenv
+
+from enum import Enum
 
 from pymysql import NULL
 
@@ -12,8 +12,7 @@ from flask import Flask, render_template, url_for, request, redirect, jsonify
 
 from dotenv import load_dotenv
 
-from sqlalchemy import create_engine, MetaData, Table, Column, Numeric, Integer, VARCHAR
-from sqlalchemy.engine import result, Engine
+from sqlalchemy import create_engine
 
 from flask_wtf import FlaskForm
 
@@ -24,7 +23,6 @@ from wtforms import (
     EmailField,
     DecimalField,
 )
-from enum import Enum
 
 load_dotenv()
 
@@ -33,10 +31,9 @@ app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 app.config["DEBUG"] = getenv("FLASK_ENV")
 app.config["FLASK_APP"] = getenv("FLASK_APP")
 app.config["SECRET_KEY"] = getenv("SECRET_KEY")
-
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
-# create db engine
+
 if app.config["DEBUG"] == "production":
     db_engine = create_engine(getenv("DATABASE_URL"), echo=True)
 else:
@@ -45,22 +42,25 @@ else:
     )
 
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("404.html")
+
+
+@app.errorhandler(401)
+def page_unauthorized(error):
+    return render_template("401.html")
+
+
+@app.errorhandler(500)
+def page_internal_error(error):
+    return render_template("500.html")
+
+
 @app.route("/")
 def home():
     """Home page."""
     return render_template("home.html")
-
-
-@app.route("/about")
-def about():
-    """About page."""
-    return render_template("about.html")
-
-
-@app.route("/darkly_reference")
-def darkly_reference():
-    """Darkly theme reference."""
-    return render_template("darkly_reference.html")
 
 
 class PollTypes(Enum):
@@ -104,7 +104,6 @@ class AddNewUserForm(FlaskForm):
         id="site_permissions_guest",
         name="guest",
         label="guest",
-        default="checked",
         render_kw={"class": "form-check-input"},
     )
     site_permissions_user = BooleanField(
@@ -119,7 +118,6 @@ class AddNewUserForm(FlaskForm):
         id="site_permissions_superadmin",
         name="superadmin",
         label="superadmin",
-        default="checked",
     )
 
 
@@ -138,7 +136,6 @@ class AddNewPaymentForm(FlaskForm):
         id="payment_purposes_test",
         name="test",
         label="test",
-        default="checked",
         render_kw={"class": "form-check-input"},
     )
     payment_purposes_free_trial = BooleanField(
@@ -176,7 +173,6 @@ class UpdatePaymentForm(FlaskForm):
         id="payment_purposes_test",
         name="test",
         label="test",
-        default="checked",
         render_kw={"class": "form-check-input"},
     )
     payment_purposes_free_trial = BooleanField(
@@ -218,7 +214,6 @@ class AddNewUserPollSettingForm(FlaskForm):
         id="user_permissions_collaborator",
         name="collaborator",
         label="collaborator",
-        default="checked",
         render_kw={"class": "form-check-input"},
     )
     user_permissions_poll_creator = BooleanField(
@@ -256,7 +251,6 @@ class UpdateUserPollSettingForm(FlaskForm):
         id="user_permissions_collaborator",
         name="collaborator",
         label="collaborator",
-        default="checked",
         render_kw={"class": "form-check-input"},
     )
     user_permissions_poll_creator = BooleanField(
@@ -307,7 +301,6 @@ def get_all_users_data():
     with db_engine.connect() as connection:
         users_query = "SELECT * FROM Users"
         all_users = connection.execute(users_query).fetchall()
-        app.logger.debug(all_users)
         all_users = [dict(user) for user in all_users]
 
         for user in all_users:
@@ -343,9 +336,7 @@ def users():
 
 @app.route("/add_new_user", methods=["POST"])
 def add_new_user():
-    # if request.method == "POST" and "add-new-user" in request.form:
     add_new_user_form = AddNewUserForm()
-    # if request.method == "POST":
     if add_new_user_form.validate_on_submit() and (
         add_new_user_form.site_permissions_superadmin.data
         or add_new_user_form.site_permissions_admin.data
@@ -386,9 +377,7 @@ def add_new_user():
                 range(len(new_user_site_permissions_set)),
             )
         )
-        app.logger.debug(
-            f"new_user_permissions_indices: {new_user_permissions_indices}"
-        )
+
         new_user_sqlstr_site_permissions = ""
         match new_user_site_permissions_set.count(True):
             case 0:
@@ -418,16 +407,7 @@ def add_new_user():
                 connection.close()
                 return redirect(url_for("users"))
 
-        app.logger.debug(f"{new_user['site_permissions_guest']}")
-        app.logger.debug(f"{new_user['site_permissions_user']}")
-        app.logger.debug(f"{new_user['site_permissions_admin']}")
-        app.logger.debug(f"{new_user['site_permissions_superadmin']}")
-        app.logger.debug(
-            f"new_user_sqlstr_site_permissions: {new_user_sqlstr_site_permissions}"
-        )
-        app.logger.debug(f"new_user: {new_user}")
         add_new_user_query = f"INSERT INTO Users (username, email_address, site_permissions) VALUES ('{new_user['username']}', '{new_user['email_address']}', '{new_user_sqlstr_site_permissions}')"
-        app.logger.debug(add_new_user_query)
         connection.execute(add_new_user_query)
         connection.close()
         return redirect(url_for("users"))
@@ -435,112 +415,11 @@ def add_new_user():
         return redirect(url_for("users"))
 
 
-def get_user_data_by_id(user_id):
-    """Get user data from db and return data as a dictionary"""
-    with db_engine.connect() as connection:
-        find_user_by_id_query = f"SELECT * FROM Users WHERE user_id = {user_id}"
-        find_user_by_id_query_result = connection.execute(
-            find_user_by_id_query
-        ).fetchone()
-        app.logger.debug(find_user_by_id_query_result)
-        # user_data = dict(
-        #     zip(
-        #         [
-        #             "user_id",
-        #             "username",
-        #             "email",
-        #         ],
-        #         find_user_by_id_query_result[0, 3],
-        #     )
-        # )
-        # user_data["site_permissions"] = {find_user_by_id_query_result.split(",")}
-        # return user_data
-        user_data = dict(find_user_by_id_query_result)
-        user_data["site_permissions"] = user_data["site_permissions"].split(",")
-        app.logger.debug(user_data)
-
-        return user_data
-
-
-@app.route("/find_user_by_id", methods=["POST"])
-def find_user_by_id():
-    """Select user by ID"""
-    if request.method == "POST":
-        app.logger.debug(request.form)
-        user_id = request.form["users-find-by-id-id"]
-
-        # params = request.get_json()
-        # app.logger.debug(f"params: {params}")
-        # app.logger.debug(f"user_id: {user_id}")
-
-        # user_data = {result.meta_key: result.metag_value for result in results}
-
-        user_data = get_user_data_by_id(user_id)
-        app.logger.debug(user_data)
-        # user_data_dict = {kvp.meta_key: kvp.meta_value for kvp in user_data}
-        # user_data_dict = {user_id: user_id, username: username}
-
-        return jsonify(user_data)
-    else:
-        return redirect(url_for("users"))
-
-
-#  add_new_user_form = AddNewUserForm()
-#     # NOTE: Use the next line if you need to test w/out form validation stopping
-#     # if request.method == "POST":
-#     if add_new_user_form.validate_on_submit():
-#         connection = db_engine.connect()
-#         new_user = {
-#             "username": add_new_user_form.username.data,
-#             "email_address": add_new_user_form.email_address.data,
-#         }
-
-# # ###################
-
-#         # Permissions are tricky because of the sql string has to be exact with punctuation like commas and quotes
-#         new_user_site_permissions_set = (
-#             add_new_user_form.site_permissions_guest.data,
-#             add_new_user_form.site_permissions_user.data,
-#             add_new_user_form.site_permissions_admin.data,
-#             add_new_user_form.site_permissions_superadmin.data,
-#         )
-#         new_user[
-#             "site_permissions_guest"
-#         ] = add_new_user_form.site_permissions_guest.data
-#         new_user["site_permissions_user"] = add_new_user_form.site_permissions_user.data
-#         new_user[
-#             "site_permissions_admin"
-#         ] = add_new_user_form.site_permissions_admin.data
-#         new_user[
-#             "site_permissions_superadmin"
-#         ] = add_new_user_form.site_permissions_superadmin.data
-
-#         # Need to make a single proper sql string for site_permissions
-
-#         site_permissions_set = ("guest", "user", "admin", "superadmin")
-#         new_user_sqlstr_site_permissions = ""
-#         new_user_permissions_indices = list(
-#             filter(
-#                 lambda x: new_user_site_permissions_set[x] == True,
-#                 range(len(new_user_site_permissions_set)),
-#             )
-#         )
-#         app.logger.debug(
-#             f"new_user_permissions_indices: {new_user_permissions_indices}"
-#         )
-
-#         connection = db_engine.connect()
-# users_query = "SELECT * FROM Users"
-# all_users = connection.execute(users_query).fetchall()
-# connection.close()
-
-
 @app.route("/add_new_poll", methods=["POST"])
 def add_new_poll():
-    # if request.method == "POST" and "add-new-poll" in request.form:
     add_new_poll_form = AddNewPollForm()
 
-    # validation would be done here, but json arrays are hard to validate
+    # json validation would be done here
     if add_new_poll_form.poll_voting_choices.data != "":
         connection = db_engine.connect()
         new_poll = {
@@ -549,9 +428,8 @@ def add_new_poll():
             "poll_voting_choices": add_new_poll_form.poll_voting_choices.data,
         }
         poll_title = new_poll["poll_title"] if new_poll["poll_title"] != "" else "NULL"
-        # here we add the new poll to the table
+
         add_new_poll_query = f"INSERT INTO Polls (poll_title, poll_type, poll_voting_choices) VALUES ('{poll_title}', {new_poll['poll_type']}, '{new_poll['poll_voting_choices']}')"
-        app.logger.debug(add_new_poll_query)
         connection.execute(add_new_poll_query)
         connection.close()
         return redirect(url_for("polls"))
@@ -562,16 +440,13 @@ def add_new_poll():
 @app.route("/polls/", methods=["GET", "POST"])
 def polls():
     """Polls CRUD page"""
-    # create_poll_form = CreatePollForm(request.form)
     if request.method == "GET":
 
-        # get all Polls
         connection = db_engine.connect()
         polls_query = "SELECT * FROM Polls"
         all_polls = connection.execute(polls_query).fetchall()
         connection.close()
 
-        # add new poll form
         add_new_poll_form = AddNewPollForm(request.form)
 
         return render_template(
@@ -587,7 +462,6 @@ def polls():
 
 @app.route("/add_new_vote", methods=["POST"])
 def add_new_vote():
-    # if request.method == "POST" and "add-new-vote" in request.form:
     add_new_vote_form = AddNewVoteForm()
 
     # minimal validation done here
@@ -601,7 +475,6 @@ def add_new_vote():
 
         # here we add the new vote to the table
         add_new_vote_query = f"INSERT INTO Votes (user_id, poll_id, vote_values) VALUES ({new_vote['user_id']}, {new_vote['poll_id']}, '{new_vote['vote_values']}')"
-        app.logger.debug(add_new_vote_query)
         connection.execute(add_new_vote_query)
         connection.close()
         return redirect(url_for("votes"))
@@ -672,11 +545,9 @@ def add_new_payment():
                 comma = "," if not first_true else ""
                 string = f"{string}{comma}{payment_purposes_set[x]}"
                 first_true = False
-        app.logger.debug(f"new_payment: {new_payment}")
 
         # here we add the new payment to the table
         add_new_payment_query = f"INSERT INTO Payments (user_id, amount_usd, payment_purposes) VALUES ({user_id}, {new_payment['amount_usd']}, '{string}')"
-        app.logger.debug(add_new_payment_query)
         connection.execute(add_new_payment_query)
         connection.close()
         return redirect(url_for("payments"))
@@ -686,7 +557,6 @@ def add_new_payment():
 
 @app.route("/update_payment", methods=["POST"])
 def update_payment():
-    # if request.method == "POST" and "add-new-payment" in request.form:
     update_payment_form = UpdatePaymentForm()
 
     # only validation done is to check if the amount_usd is empty or payment perposes is empty
@@ -720,10 +590,8 @@ def update_payment():
                 comma = "," if not first_true else ""
                 string = f"{string}{comma}{payment_purposes_set[x]}"
                 first_true = False
-        app.logger.debug(f"new_payment: {new_payment}")
         # here we update the payment at payment_id with the new payment data
         update_payment_query = f"UPDATE Payments SET user_id = {user_id}, amount_usd = {new_payment['amount_usd']}, payment_purposes = '{string}' WHERE payment_id = {update_payment_form.payment_id.data}"
-        app.logger.debug(update_payment_query)
         connection.execute(update_payment_query)
         connection.close()
         return redirect(url_for("payments"))
@@ -733,7 +601,6 @@ def update_payment():
 
 @app.route("/delete_payment", methods=["POST"])
 def delete_payment():
-    # if request.method == "POST" and "delete-payment" in request.form:
     delete_payment_form = DeletePaymentForm()
     connection = db_engine.connect()
     # delete the payment at payment_id
@@ -785,7 +652,6 @@ def payments():
 
 @app.route("/add_new_user_poll_setting", methods=["POST"])
 def add_new_user_poll_setting():
-    # if request.method == "POST" and "add-new-user_poll_setting" in request.form:
     add_new_user_poll_setting_form = AddNewUserPollSettingForm()
     if not (
         add_new_user_poll_setting_form.user_permissions_collaborator.data
@@ -823,7 +689,6 @@ def add_new_user_poll_setting():
 
     # inserting the new user_poll_setting to it's table
     add_new_user_poll_setting_query = f"INSERT INTO User_Poll_Settings (user_id, poll_id, user_permissions) VALUES ({new_user_poll_setting['user_id']}, {new_user_poll_setting['poll_id']}, '{string}')"
-    app.logger.debug(add_new_user_poll_setting_query)
     connection.execute(add_new_user_poll_setting_query)
     connection.close()
     return redirect(url_for("user_poll_settings"))
@@ -831,7 +696,6 @@ def add_new_user_poll_setting():
 
 @app.route("/delete_user_poll_setting", methods=["POST"])
 def delete_user_poll_setting():
-    # if request.method == "POST" and "delete-user_poll_setting" in request.form:
     delete_user_poll_setting_form = DeleteUserPollSettingForm()
     connection = db_engine.connect()
 
@@ -850,7 +714,6 @@ def delete_user_poll_setting():
 @app.route("/user_poll_settings/", methods=["GET", "POST"])
 def user_poll_settings():
     """User_Poll_Settings CRUD page"""
-    # create_user_poll_setting_form = CreateUserPollSettingForm(request.form)
     if request.method == "GET":
 
         # get all User_Poll_Settings, and users and polls to fill dynamic 'select fields'
