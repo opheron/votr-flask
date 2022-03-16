@@ -1,20 +1,5 @@
 {% extends "layout.html" %} {% block content %}
 
-<!-- START USERS SEARCH/FILTER SCRIPT -->
-
-<script type="text/javascript" language="javascript">
-/*
-var options = {
-  valueNames: [ 'user_id', 'username', 'email_address' ]
-};
-
-var userList = new List('users', options);
-*/
-
-</script>
-
-<!-- END USERS SEARCH/FILTER SCRIPT -->
-
 <div class="alert alert-light">
   <h1>Users</h1>
   <p>an end user of Votr.</p>
@@ -92,10 +77,6 @@ var userList = new List('users', options);
   </table>
 </div>
 
-<!-- END FOR LOOP -->
-
-<!-- UPDATED ADD NEW USER -->
-
 <div>
   <form name="add-new-user" method="POST" action="/add_new_user">
     {{ add_new_user_form.csrf_token }}
@@ -121,31 +102,17 @@ var userList = new List('users', options);
         <tr>
           <th scope="row"><i>auto incremented</i></th>
           <td>
-            {# TODO: Decide if aria-describedby is useful #} {#
-            ####################################### #} {# Old Input:
-            <input
-              type="text"
-              class="form-control"
-              id="users-create-username"
-              aria-describedby="create-username-help"
-              placeholder="Ex: personOne"
-            />
-            #}
             <div class="mb-3 form-group row">
             <div class="mb-3">
-              <!-- USERNAME LABEL -->
               {{ add_new_user_form.username.label(class="form-label") }}
-              <!-- USERNAME FIELD -->
               {{ add_new_user_form.username( value="newUserOne", placeholder="Ex: personOne") }}
               <div id="create-username-help" class="form-text">varchar</div>
             </div>
           </td>
           <td>
             <div class="mb-3 form-group row">
-              <!-- EMAIL ADDRESS LABEL -->
               {{ add_new_user_form.email_address.label(class="form-label")
               }}
-              <!-- EMAIL ADDRESS FIELD -->
               {{ add_new_user_form.email_address( class="form-control", value="newUserOne@emailaddress.com",
               placeholder="Ex: personOne@website.com") }}
               <div id="create-email_address-help" class="form-text">
@@ -155,27 +122,19 @@ var userList = new List('users', options);
           </td>
           <td>
             <div class="form-check">
-              <!-- FIELD -->
               {{add_new_user_form.site_permissions_guest(class="form-check-input", checked="")}}
-              <!-- LABEL -->
               {{ add_new_user_form.site_permissions_guest.label(name="guest", class="form-check-label") }}
             </div>
             <div class="form-check">
-              <!-- FIELD -->
               {{add_new_user_form.site_permissions_user(class="form-check-input" )}}
-              <!-- LABEL -->
               {{ add_new_user_form.site_permissions_user.label(class="form-check-label") }}
             </div>
             <div class="form-check">
-              <!-- FIELD -->
               {{add_new_user_form.site_permissions_admin(class="form-check-input")}}
-              <!-- LABEL -->
               {{ add_new_user_form.site_permissions_admin.label(class="form-check-label") }}
             </div>
             <div class="form-check">
-              <!-- FIELD -->
               {{add_new_user_form.site_permissions_superadmin(class="form-check-input")}}
-              <!-- LABEL -->
               {{ add_new_user_form.site_permissions_superadmin.label(class="form-check-label") }}
             </div>
             <div id="users-site_permissions-help" class="form-text">set</div>
@@ -189,44 +148,6 @@ var userList = new List('users', options);
   </form>
 </div>
 
-<!-- END UPDATED ADD NEW USER -->
-
-{#
-<div>
-  <form>
-    <h3>Search Users</h3>
-    <div class="btn-group">
-      <!--class button-group changes the width of the folllowing selects, if theres a better way, you can update this-->
-      <select class="form-select" aria-label="Search User ID">
-        <option selected>User ID</option>
-        <!--i dont know how wer are going to have this automatically populate with the available id's-->
-        {% for user in all_users %}
-        <option value="{{ user["user_id"] }}">{{ user["user_id"] }}</option>
-        {% endfor %}
-      </select>
-      <select class="form-select" aria-label="Search Username">
-        <option selected>Username</option>
-        {% for user in all_users %}
-        <option value="{{ user["username"] }}">{{ user["username"] }}</option>
-        {% endfor %}
-      </select>
-      <select class="form-select" aria-label="Search Email Address">
-        <option selected>Email</option>
-        {% for user in all_users %}
-        <option value="{{ user["username"] }}">{{ user["email_address"] }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <!--style part was just to make it inline, if you know a better way you can update, or just add this part to the css-->
-
-    <button type="submit" class="btn btn-primary">Search</button
-    ><!--dont know about type here-->
-  </form>
-</div>
-#}
-
-
-<!-- START NEW SEARCH USERS FORM  -->
 
 <div>
   <form name="find-user-by-id-form" id = "find-user-by-id-form" method="POST" action="/find_user_by_id">
@@ -262,7 +183,7 @@ var userList = new List('users', options);
           <td>
             <div class="mb-3">
 
-        <!-- Username -->
+        
         <input type="text" id="users-find-by-id-username" name="name" class="form-control" size="10" placeholder="Username" readonly>
 
             </div>
@@ -273,7 +194,6 @@ var userList = new List('users', options);
             </div>
           </td>
 
-          <!-- START NEW SITE PERMISSIONS -->
 
           <td>
           <div class="form-check">
@@ -305,37 +225,6 @@ var userList = new List('users', options);
           </td>
         
 
-<!-- END NEW SITE PERMISSIONS -->
-{#
-          <td>
-            <div class="form-check">
-              <!-- FIELD -->
-              <input type="checkbox" id="scales" name="search-user-by-id-site-permissions-guest" readonly>
-              <!-- LABEL -->
-              <label class="form-label form-control" for="email_address">guest</label>
-            </div>
-            <div class="form-check">
-              <!-- FIELD -->
-              {{add_new_user_form.site_permissions_user(class="form-check-input" )}}
-              <!-- LABEL -->
-              {{ add_new_user_form.site_permissions_user.label(class="form-check-label") }}
-            </div>
-            <div class="form-check">
-              <!-- FIELD -->
-              {{add_new_user_form.site_permissions_admin(class="form-check-input")}}
-              <!-- LABEL -->
-              {{ add_new_user_form.site_permissions_admin.label(class="form-check-label") }}
-            </div>
-            <div class="form-check">
-              <!-- FIELD -->
-              {{add_new_user_form.site_permissions_superadmin(class="form-check-input")}}
-              <!-- LABEL -->
-              {{ add_new_user_form.site_permissions_superadmin.label(class="form-check-label") }}
-            </div>
-            <div id="users-site_permissions-help" class="form-text">set</div>
-            </div>
-          </td>
-          #}
         </tr>
       </tbody>
     </table>
@@ -344,36 +233,4 @@ var userList = new List('users', options);
   </form>
 </div>
 
-
-<!-- END NEW SEARCH USERS FORM -->
-
-
-{#
-<div class="container-narrow">
-  <h1 class="mt-5">Create New User</h1>
-
-  <form
-    id="createUserForm"
-    class="form form-register"
-    method="POST"
-    action=""
-    role="form"
-  >
-    {{ create_user_form.csrf_token }}
-    <div class="form-group">
-      {{create_user_form.poll_id.label}}
-      {{create_user_form.poll_id(placeholder="poll_id", class_="form-control")}}
-    </div>
-    <div class="form-group">
-      {{create_user_form.user_id.label}}
-      {{create_user_form.user_id(placeholder="user_id", class_="form-control")}}
-    </div>
-    <div class="form-group">
-      {{create_user_form.vote_values.label}}
-      {{create_user_form.vote_values(placeholder="vote_values",
-      class_="form-control")}}
-    </div>
-    <p><input class="btn btn-primary" type="submit" value="Register" /></p>
-  </form>
-</div>
-#} {% endblock %}
+{% endblock %}
