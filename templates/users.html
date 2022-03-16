@@ -2,8 +2,14 @@
 
 <!-- START USERS SEARCH/FILTER SCRIPT -->
 
- <script type="text/javascript" language="javascript">  
+<script type="text/javascript" language="javascript">
+/*
+var options = {
+  valueNames: [ 'user_id', 'username', 'email_address' ]
+};
 
+var userList = new List('users', options);
+*/
 
 </script>
 
@@ -16,7 +22,10 @@
 
 <!-- START FOR LOOP -->
 
-<div>
+<div id="users">
+  <div class="col-sm-4">
+  <input class="search form-control mb-3" placeholder="Search" />
+  </div>
   <table class="table table-striped table-dark">
     <thead>
       <tr>
@@ -33,13 +42,13 @@
         </th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="list">
       {% for user in all_users %}
 
       <tr>
-        <th scope="row">{{ user["user_id"] }}</th>
-        <td>{{ user["username"] }}</td>
-        <td>{{ user["email_address"] }}</td>
+        <td scope="row" class="user_id">{{ user["user_id"] }}</td>
+        <td class="username">{{ user["username"] }}</td>
+        <td class="email_address">{{ user["email_address"] }}</td>
         <td>
           <div class="form-check">
             <input class="form-check-input" type="checkbox" value=""
