@@ -19,7 +19,12 @@
     
           <tr>
             <th scope="row">{{ payment["payment_id"] }}</th>
-            <td>{{ payment["user_id"] }}</td>
+            <td>
+              {% if payment.user_id %}
+                {{ payment.user_id }}
+              {% else %}
+                NULL
+              {% endif %}</td>
             <td>{{ payment["amount_usd"] }}</td>
             <td>
               <div class="form-check">
