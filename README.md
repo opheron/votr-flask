@@ -138,9 +138,10 @@ Thanks to all the open source projects that are used as primary dependencies in 
 - [List.js][https://listjs.com/]
 - [jQuery][https://jquery.com/]
 
-### HTML & CSS Styling
+### Design & HTML & CSS Styling
 
 - [Bootswatch][https://bootswatch.com/] - Darkly Theme
+- [Material Design][https://materialdesignicons.com/] - check-circle icon
 
 ### Production Web Server
 
