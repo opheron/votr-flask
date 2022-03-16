@@ -322,7 +322,6 @@ def get_all_users():
     if request.method == "GET":
         all_users = get_all_users_data()
         return jsonify(all_users)
-        # app.logger.debug(all_users)
     else:
         return redirect(url_for("users"))
 
@@ -346,7 +345,6 @@ def users():
 def add_new_user():
     # if request.method == "POST" and "add-new-user" in request.form:
     add_new_user_form = AddNewUserForm()
-    # NOTE: Use the next line if you need to test w/out form validation stopping
     # if request.method == "POST":
     if add_new_user_form.validate_on_submit() and (
         add_new_user_form.site_permissions_superadmin.data
@@ -580,14 +578,11 @@ def polls():
             "polls.html", all_polls=all_polls, add_new_poll_form=add_new_poll_form
         )
     elif request.method == "POST":
-        # TODO: get forms working
         if True:
-            # flash("Created new poll!", "success")
             return redirect(url_for("polls"))
         else:
             flash_errors(create_user_form)
             return redirect(url_for("public.users"))
-    # return render_template("users.html", create_user_form=create_user_form)
 
 
 @app.route("/add_new_vote", methods=["POST"])
@@ -595,7 +590,7 @@ def add_new_vote():
     # if request.method == "POST" and "add-new-vote" in request.form:
     add_new_vote_form = AddNewVoteForm()
 
-    # TODO update validation for json objects
+    # minimal validation done here
     if add_new_vote_form.vote_values.data != "":
         connection = db_engine.connect()
         new_vote = {
@@ -646,7 +641,7 @@ def add_new_payment():
     # if request.method == "POST" and "add-new-payment" in request.form:
     add_new_payment_form = AddNewPaymentForm()
 
-    # only validation done is to check if the amount_usd is empty (it is the only field that can be empty on the page)
+    # only validation done is to check if the amount_usd is empty or payment purposes is empty
     if add_new_payment_form.amount_usd.data != None and (
         add_new_payment_form.payment_purposes_test.data
         or add_new_payment_form.payment_purposes_free_trial.data
@@ -694,7 +689,7 @@ def update_payment():
     # if request.method == "POST" and "add-new-payment" in request.form:
     update_payment_form = UpdatePaymentForm()
 
-    # only validation done is to check if the amount_usd is empty (it is the only field that can be empty on the page)
+    # only validation done is to check if the amount_usd is empty or payment perposes is empty
     if update_payment_form.amount_usd.data != None and (
         update_payment_form.payment_purposes_test.data
         or update_payment_form.payment_purposes_free_trial.data
