@@ -52,8 +52,13 @@
 
           <div class="form-check">
             <input class="form-check-input" type="checkbox" value=""
-            id="flexCheckDefault" {% if "admin" in user_poll_setting["user_permissions"] %}
-            checked="" {% endif %} disabled />
+            id="flexCheckDefault" 
+            {% if "admin,superadmin" in user_poll_setting["user_permissions"] %}
+              checked="" 
+            {% elif "superadmin" in user_poll_setting["user_permissions"]  and "admin,superadmin" not in user_poll_setting["user_permissions"] %} 
+            {% elif "admin" in user_poll_setting["user_permissions"] %} 
+              checked="" 
+            {% endif %} disabled />
             <label class="form-check-label" for="flexCheckDefault">
               admin
             </label>
