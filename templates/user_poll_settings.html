@@ -52,8 +52,13 @@
 
           <div class="form-check">
             <input class="form-check-input" type="checkbox" value=""
-            id="flexCheckDefault" {% if "admin" in user_poll_setting["user_permissions"] %}
-            checked="" {% endif %} disabled />
+            id="flexCheckDefault" 
+            {% if "admin,superadmin" in user_poll_setting["user_permissions"] %}
+              checked="" 
+            {% elif "superadmin" in user_poll_setting["user_permissions"]  and "admin,superadmin" not in user_poll_setting["user_permissions"] %} 
+            {% elif "admin" in user_poll_setting["user_permissions"] %} 
+              checked="" 
+            {% endif %} disabled />
             <label class="form-check-label" for="flexCheckDefault">
               admin
             </label>
@@ -172,14 +177,14 @@
               {{ delete_user_poll_setting_form.user_poll_setting_id.label(class="form-label") }}
               <!-- user_poll_setting_id FIELD -->
               {{ delete_user_poll_setting_form.user_poll_setting_id(class="form-control" ) }}
-              <div id="create-payment_id-help" class="form-text">PK</div>
+              <div id="create-setting_id-help" class="form-text">PK</div>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <button name="delete-payment" type="submit" class="btn btn-primary">Delete Payment</button>
+    <button name="delete-setting" type="submit" class="btn btn-primary">Delete Setting</button>
   </form>
 </div>
 
