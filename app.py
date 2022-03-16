@@ -9,10 +9,14 @@ from pymysql import NULL
 from forms import *
 
 from flask import Flask, render_template, url_for, request, redirect, jsonify
+from click import argument
+
+from sqlparse import split as sqlparse_split
 
 from dotenv import load_dotenv
 
 from sqlalchemy import create_engine
+from sqlalchemy.sql import text
 
 from flask_wtf import FlaskForm
 
@@ -26,20 +30,42 @@ from wtforms import (
 
 load_dotenv()
 
-app = Flask(__name__)
-app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
-app.config["DEBUG"] = getenv("FLASK_ENV")
-app.config["FLASK_APP"] = getenv("FLASK_APP")
-app.config["SECRET_KEY"] = getenv("SECRET_KEY")
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+
+def create_app():
+    app = Flask(__name__)
+    app.config["DEBUG"] = getenv("FLASK_ENV")
+    app.config["FLASK_APP"] = getenv("FLASK_APP")
+    app.config["SECRET_KEY"] = getenv("SECRET_KEY")
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+
+    return app
 
 
-if app.config["DEBUG"] == "production":
-    db_engine = create_engine(getenv("DATABASE_URL"), echo=True)
-else:
-    db_engine = create_engine(
-        "mysql+pymysql://root:@localhost:3306/votr_flask", echo=True
-    )
+def create_db_engine():
+    if app.config["DEBUG"] == "production":
+        db_engine = create_engine(getenv("DATABASE_URL"), echo=True)
+    else:
+        db_engine = create_engine(
+            "mysql+pymysql://root:@localhost:3306/votr_flask", echo=True
+        )
+    return db_engine
+
+
+app = create_app()
+db_engine = create_db_engine()
+
+
+@app.cli.command("reset-db")
+def reset_db():
+    with db_engine.connect() as connection:
+        with open("sql/set_up_db.sql") as db_setup_script:
+            db_setup_sql_statements = sqlparse_split(db_setup_script)
+            app.logger.info(f"Database resetting with output:")
+            for sql_statement in db_setup_sql_statements:
+                app.logger.info(f"SQL statement: {sql_statement}")
+                result = connection.execute(sql_statement)
+                app.logger.info(f"Result: {result}")
+            return True
 
 
 @app.errorhandler(404)
@@ -511,7 +537,6 @@ def votes():
 
 @app.route("/add_new_payment", methods=["POST"])
 def add_new_payment():
-    # if request.method == "POST" and "add-new-payment" in request.form:
     add_new_payment_form = AddNewPaymentForm()
 
     # only validation done is to check if the amount_usd is empty or payment purposes is empty

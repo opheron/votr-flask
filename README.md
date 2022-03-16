@@ -56,13 +56,14 @@ Run set_up_db.sql to create the necessary tables and add sample data.
 
 Do:
 
-````zsh
+```zsh
 poetry shell
-python app.py
+flask run
 ```
 
 You should see the following in your terminal:
-```
+
+```zsh
  * Serving Flask app 'app' (lazy loading)
  * Environment: development
  * Debug mode: on
@@ -74,13 +75,24 @@ You should see the following in your terminal:
 
 Navigate to the URL provided and you should see the app home page.
 
+### Reset DB
+
+The following command will reset the database by dropping tables and re-creating them, then seeding them with sample data.
+
+```zsh
+flask reset-db
+
+```
+
 ## Deployment to Heroku with new dev changes
+
+Set up your Heroku instance with the necessary env variables.
 
 Update the lockfile with:
 
 ```zsh
 poetry lock --no-update
-````
+```
 
 Freeze requirements with:
 
@@ -93,6 +105,8 @@ Test the Heroku deploy locally with:
 ```zsh
 heroku local
 ```
+
+Verify that the app works locally.
 
 Then do:
 
