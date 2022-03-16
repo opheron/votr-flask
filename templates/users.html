@@ -42,7 +42,6 @@
         <td>{{ user["email_address"] }}</td>
         <td>
           <div class="form-check">
-            {{ user["site_permissions"] }}
             <input class="form-check-input" type="checkbox" value=""
             id="flexCheckDefault" {% if "guest" in user["site_permissions"] %}
             checked="" {% endif %} disabled />
