@@ -348,7 +348,12 @@ def add_new_user():
     add_new_user_form = AddNewUserForm()
     # NOTE: Use the next line if you need to test w/out form validation stopping
     # if request.method == "POST":
-    if add_new_user_form.validate_on_submit() and (add_new_user_form.site_permissions_superadmin.data or add_new_user_form.site_permissions_admin.data or add_new_user_form.site_permissions_user.data or add_new_user_form.site_permissions_guest.data):
+    if add_new_user_form.validate_on_submit() and (
+        add_new_user_form.site_permissions_superadmin.data
+        or add_new_user_form.site_permissions_admin.data
+        or add_new_user_form.site_permissions_user.data
+        or add_new_user_form.site_permissions_guest.data
+    ):
         connection = db_engine.connect()
         new_user = {
             "username": add_new_user_form.username.data,
@@ -545,7 +550,7 @@ def add_new_poll():
             "poll_type": add_new_poll_form.poll_type.data,
             "poll_voting_choices": add_new_poll_form.poll_voting_choices.data,
         }
-        poll_title = new_poll['poll_title'] if new_poll['poll_title'] != "" else "NULL"
+        poll_title = new_poll["poll_title"] if new_poll["poll_title"] != "" else "NULL"
         # here we add the new poll to the table
         add_new_poll_query = f"INSERT INTO Polls (poll_title, poll_type, poll_voting_choices) VALUES ('{poll_title}', {new_poll['poll_type']}, '{new_poll['poll_voting_choices']}')"
         app.logger.debug(add_new_poll_query)
@@ -590,7 +595,7 @@ def add_new_vote():
     # if request.method == "POST" and "add-new-vote" in request.form:
     add_new_vote_form = AddNewVoteForm()
 
-    # TODO update validation for json objects 
+    # TODO update validation for json objects
     if add_new_vote_form.vote_values.data != "":
         connection = db_engine.connect()
         new_vote = {
@@ -642,7 +647,12 @@ def add_new_payment():
     add_new_payment_form = AddNewPaymentForm()
 
     # only validation done is to check if the amount_usd is empty (it is the only field that can be empty on the page)
-    if add_new_payment_form.amount_usd.data != None and (add_new_payment_form.payment_purposes_test.data or add_new_payment_form.payment_purposes_free_trial.data or add_new_payment_form.payment_purposes_subscription.data or add_new_payment_form.payment_purposes_donation.data):
+    if add_new_payment_form.amount_usd.data != None and (
+        add_new_payment_form.payment_purposes_test.data
+        or add_new_payment_form.payment_purposes_free_trial.data
+        or add_new_payment_form.payment_purposes_subscription.data
+        or add_new_payment_form.payment_purposes_donation.data
+    ):
         connection = db_engine.connect()
         new_payment = {
             "user_id": add_new_payment_form.user_id.data,
@@ -685,7 +695,12 @@ def update_payment():
     update_payment_form = UpdatePaymentForm()
 
     # only validation done is to check if the amount_usd is empty (it is the only field that can be empty on the page)
-    if update_payment_form.amount_usd.data != None and (update_payment_form.payment_purposes_test.data or update_payment_form.payment_purposes_free_trial.data or update_payment_form.payment_purposes_subscription.data or update_payment_form.payment_purposes_donation.data):
+    if update_payment_form.amount_usd.data != None and (
+        update_payment_form.payment_purposes_test.data
+        or update_payment_form.payment_purposes_free_trial.data
+        or update_payment_form.payment_purposes_subscription.data
+        or update_payment_form.payment_purposes_donation.data
+    ):
         connection = db_engine.connect()
         new_payment = {
             "user_id": update_payment_form.user_id.data,
@@ -777,7 +792,12 @@ def payments():
 def add_new_user_poll_setting():
     # if request.method == "POST" and "add-new-user_poll_setting" in request.form:
     add_new_user_poll_setting_form = AddNewUserPollSettingForm()
-    if not (add_new_user_poll_setting_form.user_permissions_collaborator.data or add_new_user_poll_setting_form.user_permissions_poll_creator.data or add_new_user_poll_setting_form.user_permissions_admin.data or add_new_user_poll_setting_form.user_permissions_superadmin.data):
+    if not (
+        add_new_user_poll_setting_form.user_permissions_collaborator.data
+        or add_new_user_poll_setting_form.user_permissions_poll_creator.data
+        or add_new_user_poll_setting_form.user_permissions_admin.data
+        or add_new_user_poll_setting_form.user_permissions_superadmin.data
+    ):
         return redirect(url_for("user_poll_settings"))
     connection = db_engine.connect()
     new_user_poll_setting = {
