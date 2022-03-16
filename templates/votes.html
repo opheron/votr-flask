@@ -61,7 +61,7 @@
             <div class="mb-3">
               <!-- poll_id LABEL -->
               {{ add_new_vote_form.poll_id.label(class="form-label") }}
-              <!-- user_id FIELD -->
+              <!-- poll_id FIELD -->
               {{ add_new_vote_form.poll_id(class="form-control" ) }}
               <div id="create-poll_id-help" class="form-text">FK</div>
             </div>
@@ -69,9 +69,9 @@
           <td>
             <div class="mb-3 form-group row">
             <div class="mb-3">
-              <!-- user_id LABEL -->
+              <!-- vote_values LABEL -->
               {{ add_new_vote_form.vote_values.label(class="form-label") }}
-              <!-- user_id FIELD -->
+              <!-- vote_values FIELD -->
               {{ add_new_vote_form.vote_values(class="form-control", placeholder="Ex: 	{\"option1\": o1_value, \"option2\": o2_value, \"option3\": o3_value") }}
               <div id="create-vote_values-help" class="form-text">JSON Object</div>
             </div>
